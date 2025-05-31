@@ -9,6 +9,35 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     
+    <!-- Fallback for Mapbox loading issues -->
+    <script>
+        // Detect if Mapbox failed to load after 5 seconds
+        window.mapboxLoadTimeout = setTimeout(function() {
+            if (typeof mapboxgl === 'undefined') {
+                console.error('Mapbox failed to load after timeout');
+                document.getElementById('map').innerHTML = `
+                    <div class="error-container">
+                        <div class="error-content">
+                            <div class="error-title">Map Loading Error</div>
+                            <div class="error-message">
+                                <p>The map library could not be loaded. This might be due to:</p>
+                                <ul style="text-align: left; margin: 1rem 0;">
+                                    <li>Network connectivity issues</li>
+                                    <li>Content blocking by browser extensions</li>
+                                    <li>Firewall or proxy settings</li>
+                                </ul>
+                                <p>Please check your internet connection and try again.</p>
+                            </div>
+                            <button class="retry-button" onclick="location.reload()">
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }, 5000);
+    </script>
+    
     <!-- Meta Tags for Social Sharing -->
     <meta name="description" content="The most reliable grilling guide for Berlin expats. Manually verified locations with expat-specific tips.">
     <meta property="og:title" content="GrillMaps Berlin - Verified Grilling Spots">
@@ -69,6 +98,17 @@
             width: 100%;
             height: calc(100vh - 100px);
             position: relative;
+            z-index: 1; /* Ensure proper stacking context */
+        }
+        
+        /* Canvas styling for Mapbox */
+        .mapboxgl-canvas-container,
+        .mapboxgl-canvas {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         /* Loading State */
@@ -352,7 +392,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.0.2 • Updated May 31, 2025</div>
+        <div class="version-display">v1.0.4 • Updated May 31, 2025</div>
     </div>
     
     <div id="map">
@@ -387,8 +427,13 @@
             const currentDomain = window.location.hostname;
             console.log('Current domain:', currentDomain);
             
-            // Configure Mapbox token
-            mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Bobers' Mapbox token
+            // Configure Mapbox token - try public token as fallback if needed
+            try {
+                mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Bobers' Mapbox token
+            } catch (tokenError) {
+                console.error('Failed to set primary token:', tokenError);
+                // No fallback - just log the error
+            }
             
             console.log('Mapbox token configured:', mapboxgl.accessToken);
             console.log('Mapbox version:', mapboxgl.version);
@@ -421,6 +466,12 @@
         // Initialize Application
         async function initializeApp() {
             console.log('App initialization started...');
+            
+            // Clear the Mapbox loading timeout since we've reached this point
+            if (window.mapboxLoadTimeout) {
+                clearTimeout(window.mapboxLoadTimeout);
+                console.log('Mapbox load timeout cleared - library loaded successfully');
+            }
             
             try {
                 showLoading(true);
@@ -494,9 +545,21 @@
                     if (document.querySelector('.loading-overlay').style.display !== 'none') {
                         console.warn('Map load timeout - map.load event may not have fired');
                         console.log('Current map state:', map);
-                        // Don't hide the loading spinner yet, as it might still be working
+                        
+                        // Force hide the loading spinner and show an error message
+                        showLoading(false);
+                        showError(`
+                            <p>The map is taking too long to load. This could be due to:</p>
+                            <ul style="text-align: left; margin: 1rem 0;">
+                                <li>Mapbox token URL restrictions not including this domain</li>
+                                <li>Network connectivity issues</li>
+                                <li>Browser security settings blocking Mapbox</li>
+                            </ul>
+                            <p>Current domain: <strong>${window.location.hostname}</strong></p>
+                            <p>Please check the browser console for more details.</p>
+                        `);
                     }
-                }, 10000); // 10 second timeout
+                }, 8000); // 8 second timeout
                 
             } catch (error) {
                 console.error('App initialization failed:', error);
@@ -543,6 +606,19 @@
                 });
                 
                 console.log('Map instance created successfully');
+                console.log('Map center:', mapInstance.getCenter());
+                console.log('Map zoom:', mapInstance.getZoom());
+                console.log('Map style:', mapInstance.getStyle() ? 'Style loaded' : 'Style not loaded');
+                
+                // Try to force a repaint of the map
+                setTimeout(() => {
+                    try {
+                        mapInstance.resize();
+                        console.log('Map resize triggered');
+                    } catch (resizeError) {
+                        console.error('Map resize error:', resizeError);
+                    }
+                }, 1000);
                 
                 // Add specific error handling for map creation
                 mapInstance.on('error', (e) => {
