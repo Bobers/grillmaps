@@ -375,12 +375,41 @@
         // Mapbox Token Configuration
         // For static HTML deployment, hardcode your URL-restricted token here
         // Security comes from Mapbox URL restrictions, not hiding the token
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Replace with your actual token
+        try {
+            console.log('Initializing Mapbox...');
+            if (typeof mapboxgl === 'undefined') {
+                console.error('ERROR: mapboxgl is undefined. The Mapbox library failed to load.');
+                showError('Mapbox library failed to load. Please check your internet connection.');
+                return;
+            }
+            
+            // Check current domain to display helpful error for URL restrictions
+            const currentDomain = window.location.hostname;
+            console.log('Current domain:', currentDomain);
+            
+            // Configure Mapbox token
+            mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Bobers' Mapbox token
+            
+            console.log('Mapbox token configured:', mapboxgl.accessToken);
+            console.log('Mapbox version:', mapboxgl.version);
 
-        // Verify token is configured
-        if (!mapboxgl.accessToken || mapboxgl.accessToken.startsWith('pk.eyJ1IjoieW91ci1hY3R1YWwtdG9rZW4')) {
-            console.error('Please replace the Mapbox token with your actual token from mapbox.com');
-            showError('Mapbox token not configured. Please update the token in index.html');
+            // Verify token is configured
+            if (!mapboxgl.accessToken) {
+                console.error('Please replace the Mapbox token with your actual token from mapbox.com');
+                showError('Mapbox token not configured. Please update the token in index.html');
+                return;
+            }
+            
+            // Show common domains for token URL restrictions
+            console.log('Note: If using Vercel, your Mapbox token may need URL restrictions for:');
+            console.log('- localhost');
+            console.log('- 127.0.0.1');
+            console.log('- *.vercel.app');
+            console.log('- Your custom domain (if using one)');
+            
+        } catch (error) {
+            console.error('Mapbox initialization error:', error);
+            showError('Failed to initialize Mapbox. Error: ' + error.message);
             return;
         }
 
@@ -391,33 +420,87 @@
 
         // Initialize Application
         async function initializeApp() {
+            console.log('App initialization started...');
+            
             try {
                 showLoading(true);
                 
+                // Add referrer information to help with debugging Mapbox token issues
+                console.log('Page URL:', window.location.href);
+                console.log('Referrer:', document.referrer);
+                
                 // Load location data
+                console.log('Loading location data...');
                 locations = await loadLocationData();
+                console.log('Location data loaded successfully');
                 
                 // Initialize map
+                console.log('Initializing map...');
                 map = createMap();
+                console.log('Map initialized');
                 
                 // Add map controls
-                addMapControls(map);
+                console.log('Adding map controls...');
+                try {
+                    addMapControls(map);
+                    console.log('Map controls added successfully');
+                } catch (controlError) {
+                    console.error('Failed to add map controls:', controlError);
+                    // Continue anyway, as this is not critical
+                }
                 
                 // Add markers after map loads
+                console.log('Setting up map load handler...');
                 map.on('load', () => {
-                    addMarkersToMap(map, locations);
-                    showLoading(false);
+                    console.log('Map loaded event fired');
+                    try {
+                        addMarkersToMap(map, locations);
+                        console.log('Markers added successfully');
+                        showLoading(false);
+                    } catch (markerError) {
+                        console.error('Failed to add markers:', markerError);
+                        showError('Failed to add location markers: ' + markerError.message);
+                    }
                 });
                 
                 // Handle map load errors
                 map.on('error', (e) => {
-                    console.error('Map error:', e);
+                    console.error('Map error event fired:', e);
+                    if (e.error && e.error.status) {
+                        console.error(`Map error status: ${e.error.status}, message: ${e.error.message}`);
+                        
+                        // Check for common token URL restriction issues
+                        if (e.error.status === 401) {
+                            const currentDomain = window.location.hostname;
+                            const errorMessage = `
+                                <p>Mapbox token error. Your token may not be authorized for this domain: <strong>${currentDomain}</strong></p>
+                                <p>Please update your token URL restrictions in the Mapbox dashboard to include:</p>
+                                <ul style="text-align: left; margin: 1rem 0;">
+                                    <li>localhost</li>
+                                    <li>127.0.0.1</li>
+                                    <li>*.vercel.app</li>
+                                    <li>Your custom domain (if using one)</li>
+                                </ul>
+                            `;
+                            showError(errorMessage);
+                            return;
+                        }
+                    }
                     showError('Map failed to load. Please check your internet connection and Mapbox token.');
                 });
                 
+                // Set a timeout to detect if the map load event never fires
+                setTimeout(() => {
+                    if (document.querySelector('.loading-overlay').style.display !== 'none') {
+                        console.warn('Map load timeout - map.load event may not have fired');
+                        console.log('Current map state:', map);
+                        // Don't hide the loading spinner yet, as it might still be working
+                    }
+                }, 10000); // 10 second timeout
+                
             } catch (error) {
                 console.error('App initialization failed:', error);
-                showError(error.message);
+                showError('Application failed to initialize: ' + error.message);
             }
         }
 
@@ -449,13 +532,33 @@
 
         // Map Creation and Configuration
         function createMap() {
-            return new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [13.4050, 52.5200], // Berlin center
-                zoom: 11,
-                attributionControl: true
-            });
+            console.log('Creating map...');
+            try {
+                const mapInstance = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [13.4050, 52.5200], // Berlin center
+                    zoom: 11,
+                    attributionControl: true
+                });
+                
+                console.log('Map instance created successfully');
+                
+                // Add specific error handling for map creation
+                mapInstance.on('error', (e) => {
+                    console.error('Mapbox map error:', e);
+                    if (e.error && e.error.status === 401) {
+                        console.error('Token error: Your Mapbox token might not be valid for this domain.');
+                        showError('Mapbox token error. Make sure your token is configured with proper URL restrictions.');
+                    }
+                });
+                
+                return mapInstance;
+            } catch (error) {
+                console.error('Failed to create map instance:', error);
+                showError('Map creation failed: ' + error.message);
+                throw error; // Re-throw to be caught by the main error handler
+            }
         }
 
         function addMapControls(map) {
@@ -628,17 +731,22 @@
         }
 
         function showError(message) {
+            const isHTML = message.includes('<') && message.includes('>');
+            
             document.getElementById('map').innerHTML = `
                 <div class="error-container">
                     <div class="error-content">
                         <div class="error-title">Oops! Something went wrong</div>
-                        <div class="error-message">${escapeHtml(message)}</div>
+                        <div class="error-message">${isHTML ? message : escapeHtml(message)}</div>
                         <button class="retry-button" onclick="location.reload()">
                             Try Again
                         </button>
                     </div>
                 </div>
             `;
+            
+            // Also log the error to console to help with debugging
+            console.error('Error displayed to user:', message);
         }
 
         // Initialize app when page loads
