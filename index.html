@@ -68,7 +68,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.2.1 • Updated May 31, 2025</div>
+        <div class="version-display">v1.2.3 • Updated May 31, 2025</div>
     </div>
     
     <div id="map"></div>
@@ -87,69 +87,15 @@
             container: 'map',
             style: 'mapbox://styles/bobers/cmbcnbi7a002e01s5cppo401f', // Your custom style
             center: [13.4050, 52.5200], // Berlin center
-            zoom: 11
+            zoom: 11,
+            projection: 'mercator' // Set projection to Mercator
         });
         
-        // Load location data
-        map.on('load', async () => {
-            try {
-                // Load the locations from JSON file
-                const response = await fetch('./data/locations.json');
-                if (!response.ok) {
-                    throw new Error('Failed to load location data');
-                }
-                
-                const data = await response.json();
-                const locations = data.locations;
-                
-                // Add markers for each location
-                locations.forEach(location => {
-                    // Create a popup
-                    const popup = new mapboxgl.Popup({ offset: 25 })
-                        .setHTML(`
-                            <h3>${location.name}</h3>
-                            <p>${location.description}</p>
-                            <p><strong>Address:</strong> ${location.address}</p>
-                            <p><strong>Status:</strong> ${location.status}</p>
-                        `);
-                    
-                    // Create a marker
-                    new mapboxgl.Marker({
-                        color: location.status === 'verified' ? '#22c55e' : '#f59e0b'
-                    })
-                        .setLngLat(location.coordinates)
-                        .setPopup(popup)
-                        .addTo(map);
-                });
-                
-                // Try to add custom tileset if available
-                try {
-                    map.addSource('custom-data', {
-                        type: 'vector',
-                        url: 'mapbox://bobers.6n88b6w7' // Your tileset ID
-                    });
-                    
-                    // Try common source layer naming patterns
-                    const sourceLayer = 'bobers6n88b6w7';
-                    
-                    map.addLayer({
-                        'id': 'custom-layer',
-                        'type': 'fill',
-                        'source': 'custom-data',
-                        'source-layer': sourceLayer,
-                        'paint': {
-                            'fill-color': '#22c55e',
-                            'fill-opacity': 0.4
-                        }
-                    });
-                } catch (tilesetError) {
-                    console.log('Note: Custom tileset could not be added', tilesetError);
-                    // Continue without the custom tileset
-                }
-                
-            } catch (error) {
-                console.error('Error loading locations:', error);
-            }
+        // Focus exclusively on loading the custom style first
+        map.on('load', () => {
+            console.log('Map loaded successfully!');
+            
+            // Once the map loads successfully, we can add markers, etc. in a future update
         });
         
         // Add navigation controls
