@@ -68,7 +68,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.2.9 • Updated May 31, 2025</div>
+        <div class="version-display">v1.3.0 • Updated May 31, 2025</div>
     </div>
     
     <div id="map"></div>
@@ -105,51 +105,42 @@
         map.on('load', () => {
             console.log('Map loaded successfully!');
             
-            // Check if style is loaded
-            if (map.isStyleLoaded()) {
-                console.log('Map style is loaded successfully');
-            } else {
-                console.log('Map style is not fully loaded yet');
-                // Force style reload
-                map.once('styledata', () => {
-                    console.log('Style finally loaded after retry');
-                });
-            }
-            
-            // Check style layers to debug
-            try {
-                const layers = map.getStyle().layers;
-                console.log('Map has', layers.length, 'layers');
-                
-                // Log some specific layers to see if they're present
-                const importantLayers = ['land', 'water', 'road', 'building'];
-                importantLayers.forEach(layerType => {
-                    const found = layers.some(layer => layer.id.includes(layerType));
-                    console.log(`Found ${layerType} layers:`, found);
-                });
-                
-                // Add location markers to see if they appear
-                fetch('./data/locations.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(`Adding ${data.locations.length} markers`);
+            // Add the markers for grilling locations
+            fetch('./data/locations.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`Adding ${data.locations.length} grilling location markers`);
+                    
+                    // Add each location marker
+                    data.locations.forEach(location => {
+                        // Create a popup with location details
+                        const popup = new mapboxgl.Popup({ offset: 25 })
+                            .setHTML(`
+                                <div style="padding: 10px;">
+                                    <h3 style="margin-top: 0; color: #22c55e; font-weight: 600;">${location.name}</h3>
+                                    <p style="margin-bottom: 8px;">${location.description}</p>
+                                    <p style="margin-bottom: 8px;"><strong>Address:</strong> ${location.address}</p>
+                                    <p style="margin-bottom: 0;"><strong>Status:</strong> ${location.status}</p>
+                                </div>
+                            `);
                         
-                        data.locations.forEach(location => {
-                            new mapboxgl.Marker({
-                                color: '#22c55e'
-                            })
-                            .setLngLat(location.coordinates)
-                            .addTo(map);
-                            
-                            console.log(`Added marker at ${location.coordinates}`);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error loading locations:', error);
+                        // Create marker with color based on status
+                        const markerColor = location.status === 'verified' ? '#22c55e' : '#f59e0b';
+                        
+                        // Add marker to map
+                        new mapboxgl.Marker({
+                            color: markerColor
+                        })
+                        .setLngLat(location.coordinates)
+                        .setPopup(popup)
+                        .addTo(map);
                     });
-            } catch (err) {
-                console.error('Error checking style layers:', err);
-            }
+                    
+                    console.log('All markers added successfully');
+                })
+                .catch(error => {
+                    console.error('Error loading locations:', error);
+                });
         });
         
         // Add navigation controls
