@@ -68,7 +68,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.2.3 • Updated May 31, 2025</div>
+        <div class="version-display">v1.2.4 • Updated May 31, 2025</div>
     </div>
     
     <div id="map"></div>
@@ -85,17 +85,52 @@
         
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/bobers/cmbcnbi7a002e01s5cppo401f', // Your custom style
+            style: 'mapbox://styles/mapbox/streets-v12', // Using a standard style to test
             center: [13.4050, 52.5200], // Berlin center
             zoom: 11,
-            projection: 'mercator' // Set projection to Mercator
+            projection: 'mercator', // Set projection to Mercator
+            transformRequest: (url, resourceType) => {
+                console.log('Resource request:', resourceType, url);
+                return {
+                    url: url
+                };
+            }
         });
         
-        // Focus exclusively on loading the custom style first
+        // Add style event listeners for debugging
+        map.on('styledata', (e) => {
+            console.log('Style data loaded:', e);
+        });
+        
+        map.on('styledataloading', (e) => {
+            console.log('Style data loading:', e);
+        });
+        
+        // Handle map load event
         map.on('load', () => {
             console.log('Map loaded successfully!');
             
-            // Once the map loads successfully, we can add markers, etc. in a future update
+            // Check if style is loaded
+            if (map.isStyleLoaded()) {
+                console.log('Map style is loaded successfully');
+            } else {
+                console.log('Map style is not fully loaded yet');
+                // Force style reload
+                map.once('styledata', () => {
+                    console.log('Style finally loaded after retry');
+                });
+            }
+            
+            // Check style layers to debug
+            try {
+                const layers = map.getStyle().layers;
+                console.log('Map has', layers.length, 'layers');
+                layers.forEach(layer => {
+                    console.log('Layer:', layer.id, 'Type:', layer.type);
+                });
+            } catch (err) {
+                console.error('Error checking style layers:', err);
+            }
         });
         
         // Add navigation controls
