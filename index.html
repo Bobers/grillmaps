@@ -6,8 +6,8 @@
     <title>GrillMaps Berlin - Verified Grilling Spots for Expats</title>
     
     <!-- Mapbox GL JS - Exact Version for Stability -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js' crossorigin="anonymous" onerror="console.error('Failed to load Mapbox GL JS')"></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' crossorigin="anonymous" onerror="console.error('Failed to load Mapbox GL CSS')" />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     
     <!-- Meta Tags for Social Sharing -->
     <meta name="description" content="The most reliable grilling guide for Berlin expats. Manually verified locations with expat-specific tips.">
@@ -353,14 +353,12 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div id="version-indicator">Last update: <span id="build-time">Loading...</span></div>
     </div>
     
     <div id="map">
         <div class="loading-overlay" id="loadingOverlay">
             <div class="loading-spinner"></div>
             <div>Loading Berlin grilling spots...</div>
-            <div id="debug-info" style="margin-top: 20px; font-size: 12px; color: #666;"></div>
         </div>
     </div>
 
@@ -377,10 +375,10 @@
         // Mapbox Token Configuration
         // For static HTML deployment, hardcode your URL-restricted token here
         // Security comes from Mapbox URL restrictions, not hiding the token
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Bobers' Mapbox token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Replace with your actual token
 
         // Verify token is configured
-        if (!mapboxgl.accessToken) {
+        if (!mapboxgl.accessToken || mapboxgl.accessToken.startsWith('pk.eyJ1IjoieW91ci1hY3R1YWwtdG9rZW4')) {
             console.error('Please replace the Mapbox token with your actual token from mapbox.com');
             showError('Mapbox token not configured. Please update the token in index.html');
             return;
@@ -394,40 +392,31 @@
         // Initialize Application
         async function initializeApp() {
             try {
-                updateDebugInfo('App initialization started');
                 showLoading(true);
                 
                 // Load location data
-                updateDebugInfo('Fetching location data...');
                 locations = await loadLocationData();
-                updateDebugInfo(`Loaded ${locations.length} locations successfully`);
                 
                 // Initialize map
                 map = createMap();
-                updateDebugInfo('Map created');
                 
                 // Add map controls
                 addMapControls(map);
-                updateDebugInfo('Map controls added');
                 
                 // Add markers after map loads
                 map.on('load', () => {
-                    updateDebugInfo('Map loaded, adding markers');
                     addMarkersToMap(map, locations);
-                    updateDebugInfo('Markers added');
                     showLoading(false);
                 });
                 
                 // Handle map load errors
                 map.on('error', (e) => {
                     console.error('Map error:', e);
-                    updateDebugInfo('ERROR: Map failed to load: ' + e.message);
                     showError('Map failed to load. Please check your internet connection and Mapbox token.');
                 });
                 
             } catch (error) {
                 console.error('App initialization failed:', error);
-                updateDebugInfo('ERROR: ' + error.message);
                 showError(error.message);
             }
         }
@@ -435,58 +424,38 @@
         // Data Loading Functions
         async function loadLocationData() {
             try {
-                updateDebugInfo('Fetching location data...');
-                
-                // Using relative path as per project structure
                 const response = await fetch('./data/locations.json');
-                updateDebugInfo('Fetch response status: ' + response.status);
                 
                 if (!response.ok) {
                     throw new Error(`Failed to load location data (${response.status})`);
                 }
                 
                 const data = await response.json();
-                updateDebugInfo('JSON data parsed successfully');
                 
                 if (!data.locations || !Array.isArray(data.locations)) {
                     throw new Error('Invalid location data format');
                 }
                 
-                updateDebugInfo(`Loaded ${data.locations.length} grilling locations`);
-                updateDebugInfo(`Last updated: ${data.meta.last_updated}`);
+                console.log(`Loaded ${data.locations.length} grilling locations`);
+                console.log(`Last updated: ${data.meta.last_updated}`);
                 
                 return data.locations;
                 
             } catch (error) {
                 console.error('Data loading failed:', error);
-                updateDebugInfo('ERROR loading data: ' + error.message);
                 throw new Error('Unable to load grilling locations. Please try again later.');
             }
         }
 
         // Map Creation and Configuration
         function createMap() {
-            try {
-                console.log('Creating map with token:', mapboxgl.accessToken);
-                
-                if (!mapboxgl) {
-                    console.error('mapboxgl is not defined! Check if Mapbox GL JS library loaded correctly.');
-                    showError('Map library failed to load. Please check your internet connection.');
-                    return null;
-                }
-                
-                return new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/streets-v11',
-                    center: [13.4050, 52.5200], // Berlin center
-                    zoom: 11,
-                    attributionControl: true
-                });
-            } catch (e) {
-                console.error('Map creation failed:', e);
-                showError('Failed to create map: ' + e.message);
-                return null;
-            }
+            return new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [13.4050, 52.5200], // Berlin center
+                zoom: 11,
+                attributionControl: true
+            });
         }
 
         function addMapControls(map) {
@@ -672,43 +641,9 @@
             `;
         }
 
-        // Set build time
-        function setBuildTime() {
-            const buildTime = new Date().toLocaleString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-            document.getElementById('build-time').textContent = buildTime;
-        }
-
-        // Debug info display
-        function updateDebugInfo(message) {
-            const debugEl = document.getElementById('debug-info');
-            if (debugEl) {
-                debugEl.innerHTML += message + '<br>';
-            }
-            console.log(message);
-        }
 
         // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            updateDebugInfo('DOM loaded, initializing app...');
-            setBuildTime();
-            
-            // Check if Mapbox is loaded
-            if (typeof mapboxgl === 'undefined') {
-                updateDebugInfo('ERROR: Mapbox GL JS not loaded!');
-                showError('Map library failed to load. Please check your internet connection.');
-                return;
-            }
-            
-            updateDebugInfo('Mapbox GL JS loaded successfully');
-            initializeApp();
-        });
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
