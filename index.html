@@ -365,10 +365,10 @@
         // Mapbox Token Configuration
         // For static HTML deployment, hardcode your URL-restricted token here
         // Security comes from Mapbox URL restrictions, not hiding the token
-        mapboxgl.accessToken = 'pk.eyJ1IjoieW91ci1hY3R1YWwtdG9rZW4taGVyZSIsImEiOiJjbHIyMzRlazkwMDRlMnFxbmZ0MmgzZHgxIn0.7_qGHNwTpDmEIYP-ZB-9ZA'; // Replace with your actual token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg'; // Bobers' Mapbox token
 
         // Verify token is configured
-        if (!mapboxgl.accessToken || mapboxgl.accessToken.includes('your-actual-token-here')) {
+        if (!mapboxgl.accessToken) {
             console.error('Please replace the Mapbox token with your actual token from mapbox.com');
             showError('Mapbox token not configured. Please update the token in index.html');
             return;
