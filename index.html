@@ -352,7 +352,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.1.0 • Updated May 31, 2025</div>
+        <div class="version-display">v1.1.1 • Updated May 31, 2025</div>
     </div>
     
     <div id="map">
@@ -374,6 +374,33 @@
     <script>
         // Following official Mapbox GL JS implementation guidelines
         console.log('Initializing GrillMaps with Mapbox GL JS');
+        
+        // Check for WebGL compatibility first
+        function checkWebGLSupport() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            
+            if (!gl) {
+                console.error('WebGL not supported');
+                showError('Your browser does not support WebGL, which is required for the map to display.');
+                return false;
+            }
+            
+            console.log('WebGL supported');
+            return true;
+        }
+        
+        // Exit early if WebGL isn't supported
+        if (!checkWebGLSupport()) {
+            return;
+        }
+        
+        // Check if Mapbox is supported
+        if (typeof mapboxgl !== 'undefined' && !mapboxgl.supported()) {
+            console.error('Mapbox GL not supported by this browser');
+            showError('Your browser does not support Mapbox GL JS. Please try a different browser.');
+            return;
+        }
         
         // Mapbox Token Configuration - per official guidelines
         // Using an explicitly public token with correct URL restrictions
@@ -457,10 +484,48 @@
                 setTimeout(() => {
                     if (document.querySelector('.loading-overlay').style.display !== 'none') {
                         console.warn('Map load timeout - load event may not have fired');
+                        
+                        // Check map status
+                        try {
+                            if (map) {
+                                console.log('Map object exists but load event did not fire');
+                                console.log('Map center:', map.getCenter());
+                                console.log('Map style status:', map.isStyleLoaded() ? 'Style loaded' : 'Style not loaded');
+                                console.log('Map loaded status:', map.loaded() ? 'Map loaded' : 'Map not loaded');
+                                
+                                // Try to force style load
+                                if (!map.isStyleLoaded()) {
+                                    console.log('Attempting to force style reload...');
+                                    map.setStyle('mapbox://styles/mapbox/streets-v12');
+                                }
+                                
+                                // Try to complete the load even without the event
+                                if (map.loaded() && locations) {
+                                    console.log('Map is loaded, adding markers manually...');
+                                    addMarkersToMap(map, locations);
+                                    showLoading(false);
+                                    return;
+                                }
+                            }
+                        } catch (diagError) {
+                            console.error('Diagnostic error:', diagError);
+                        }
+                        
+                        // If we get here, something is definitely wrong
                         showLoading(false);
-                        showError('The map is taking too long to load. Please check your internet connection and browser console for details.');
+                        showError(`
+                            <p>Map loading timed out. This could be due to:</p>
+                            <ul style="text-align: left; margin: 0.5rem 0 1rem 0;">
+                                <li>Network connectivity issues</li>
+                                <li>Mapbox token URL restrictions</li>
+                                <li>Browser compatibility issues</li>
+                                <li>Style not found or inaccessible</li>
+                            </ul>
+                            <p>Current domain: <strong>${window.location.hostname}</strong></p>
+                            <p>Check the browser console (F12) for detailed error messages.</p>
+                        `);
                     }
-                }, 8000);
+                }, 12000); // Increased timeout to 12 seconds
                 
             } catch (error) {
                 console.error('App initialization failed:', error);
@@ -498,11 +563,14 @@
         function createMap() {
             console.log('Creating map...');
             try {
+                // Try with a standard Mapbox style first
                 const mapInstance = new mapboxgl.Map({
                     container: 'map',
-                    style: 'mapbox://styles/bobers/cmbcnbi7a002e01s5cppo401f', // Custom style provided by user
+                    style: 'mapbox://styles/mapbox/light-v11', // Using a standard style as fallback
                     center: [13.4050, 52.5200], // Berlin center
-                    zoom: 11
+                    zoom: 11,
+                    attributionControl: true,
+                    localIdeographFontFamily: "'Noto Sans', 'Noto Sans CJK SC', sans-serif"
                 });
                 
                 console.log('Map instance created successfully');
