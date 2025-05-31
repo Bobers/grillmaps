@@ -392,7 +392,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.0.5 • Updated May 31, 2025</div>
+        <div class="version-display">v1.0.6 • Updated May 31, 2025</div>
     </div>
     
     <div id="map">
@@ -412,6 +412,21 @@
     </div>
 
     <script>
+        // Force reload if page was loaded from cache
+        // This can help with map initialization issues
+        if (performance && performance.navigation && performance.navigation.type === 1) {
+            console.log('Page reloaded normally');
+        } else if (document.readyState === 'complete') {
+            console.log('Page was loaded from cache, forcing fresh reload');
+            if (sessionStorage.getItem('freshLoad') !== 'true') {
+                sessionStorage.setItem('freshLoad', 'true');
+                location.reload(true); // Force reload from server, not cache
+            } else {
+                console.log('Already attempted a fresh reload, continuing normally');
+                sessionStorage.removeItem('freshLoad');
+            }
+        }
+        
         // Mapbox Token Configuration
         // For static HTML deployment, hardcode your URL-restricted token here
         // Security comes from Mapbox URL restrictions, not hiding the token
@@ -487,6 +502,21 @@
                 
                 // Initialize map
                 console.log('Initializing map...');
+                
+                // Clear the map container to ensure a clean start
+                const mapContainer = document.getElementById('map');
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                
+                // Temporarily store the loading overlay
+                const tempOverlay = loadingOverlay.cloneNode(true);
+                
+                // Clear the map div completely
+                mapContainer.innerHTML = '';
+                
+                // Add back the loading overlay
+                mapContainer.appendChild(tempOverlay);
+                
+                // Create the map
                 map = createMap();
                 console.log('Map initialized');
                 
@@ -546,116 +576,20 @@
                         console.warn('Map load timeout - map.load event may not have fired');
                         console.log('Current map state:', map);
                         
-                        // Try to load a static map image as fallback
-                        try {
-                            console.log('Attempting to load static map as fallback...');
-                            loadStaticMapFallback();
-                        } catch (fallbackError) {
-                            console.error('Static map fallback failed:', fallbackError);
-                            
-                            // If fallback fails, show error message
-                            showLoading(false);
-                            showError(`
-                                <p>The map is taking too long to load. This could be due to:</p>
-                                <ul style="text-align: left; margin: 1rem 0;">
-                                    <li>Mapbox token URL restrictions not including this domain</li>
-                                    <li>Network connectivity issues</li>
-                                    <li>Browser security settings blocking Mapbox</li>
-                                </ul>
-                                <p>Current domain: <strong>${window.location.hostname}</strong></p>
-                                <p>Please check the browser console for more details.</p>
-                            `);
-                        }
+                        // Force hide the loading spinner and show a clear error message
+                        showLoading(false);
+                        showError(`
+                            <p>The map is taking too long to load. This could be due to:</p>
+                            <ul style="text-align: left; margin: 1rem 0;">
+                                <li>Mapbox token URL restrictions not including this domain</li>
+                                <li>Network connectivity issues</li>
+                                <li>Browser security settings blocking Mapbox</li>
+                            </ul>
+                            <p>Current domain: <strong>${window.location.hostname}</strong></p>
+                            <p>Please check the browser console for more details.</p>
+                        `);
                     }
                 }, 8000); // 8 second timeout
-                
-                // Function to load a static map as fallback
-                function loadStaticMapFallback() {
-                    const mapContainer = document.getElementById('map');
-                    const loadingOverlay = document.getElementById('loadingOverlay');
-                    
-                    // Hide loading overlay
-                    loadingOverlay.style.display = 'none';
-                    
-                    // Create static map container
-                    const staticMapContainer = document.createElement('div');
-                    staticMapContainer.className = 'static-map-container';
-                    staticMapContainer.style.position = 'relative';
-                    staticMapContainer.style.width = '100%';
-                    staticMapContainer.style.height = '100%';
-                    staticMapContainer.style.overflow = 'hidden';
-                    
-                    // Add notice about static mode
-                    const noticeElement = document.createElement('div');
-                    noticeElement.className = 'static-map-notice';
-                    noticeElement.style.position = 'absolute';
-                    noticeElement.style.top = '10px';
-                    noticeElement.style.left = '10px';
-                    noticeElement.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                    noticeElement.style.padding = '8px 12px';
-                    noticeElement.style.borderRadius = '4px';
-                    noticeElement.style.fontSize = '14px';
-                    noticeElement.style.fontWeight = 'bold';
-                    noticeElement.style.zIndex = '1000';
-                    noticeElement.innerHTML = '⚠️ Using static map mode - Interactive features disabled';
-                    
-                    // Create map image (uses Mapbox Static Images API)
-                    const staticMapImg = document.createElement('img');
-                    staticMapImg.style.width = '100%';
-                    staticMapImg.style.height = 'auto';
-                    staticMapImg.style.objectFit = 'cover';
-                    
-                    // Construct static map URL
-                    const width = Math.min(1200, Math.floor(window.innerWidth));
-                    const height = Math.min(1200, Math.floor(window.innerHeight - 100));
-                    const zoom = 11;
-                    const center = '13.4050,52.5200'; // Berlin center
-                    
-                    // Get markers for static map
-                    let markerString = '';
-                    if (locations && locations.length > 0) {
-                        markerString = locations.map(loc => {
-                            // Green pin marker for each location
-                            return `pin-m+22c55e(${loc.coordinates[0]},${loc.coordinates[1]})`;
-                        }).join(',');
-                    }
-                    
-                    // Full URL for static map
-                    staticMapImg.src = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${markerString}/${center},${zoom}/${width}x${height}?access_token=${mapboxgl.accessToken}`;
-                    
-                    // Add explanation text
-                    const explanationElement = document.createElement('div');
-                    explanationElement.style.padding = '15px';
-                    explanationElement.style.backgroundColor = '#f8f9fa';
-                    explanationElement.style.margin = '10px';
-                    explanationElement.style.borderRadius = '4px';
-                    explanationElement.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                    explanationElement.innerHTML = `
-                        <h3 style="margin-top:0;color:#22c55e">📌 Static Map View</h3>
-                        <p>We've loaded a static map because the interactive map couldn't be displayed. 
-                        The markers show the verified grilling locations in Berlin.</p>
-                        <p>For the full interactive experience with location details, please try:</p>
-                        <ul>
-                            <li>Using a different browser</li>
-                            <li>Disabling content blockers or VPN</li>
-                            <li>Checking your network connection</li>
-                        </ul>
-                        <button onclick="location.reload()" style="background:#22c55e;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:500;">
-                            Try Interactive Map Again
-                        </button>
-                    `;
-                    
-                    // Add elements to the DOM
-                    staticMapContainer.appendChild(staticMapImg);
-                    staticMapContainer.appendChild(noticeElement);
-                    staticMapContainer.appendChild(explanationElement);
-                    
-                    // Replace map container content
-                    mapContainer.innerHTML = '';
-                    mapContainer.appendChild(staticMapContainer);
-                    
-                    console.log('Static map fallback loaded successfully');
-                }
                 
             } catch (error) {
                 console.error('App initialization failed:', error);
@@ -693,12 +627,20 @@
         function createMap() {
             console.log('Creating map...');
             try {
+                // Force Mapbox to use a specific render mode that might be more compatible
+                mapboxgl.prewarm();
+                
                 const mapInstance = new mapboxgl.Map({
                     container: 'map',
                     style: 'mapbox://styles/mapbox/streets-v11',
                     center: [13.4050, 52.5200], // Berlin center
                     zoom: 11,
-                    attributionControl: true
+                    attributionControl: true,
+                    preserveDrawingBuffer: true, // Helps with some rendering issues
+                    antialias: true,            // Better quality
+                    maxZoom: 18,
+                    minZoom: 9,
+                    hash: false
                 });
                 
                 console.log('Map instance created successfully');
