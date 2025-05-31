@@ -68,7 +68,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.2.4 • Updated May 31, 2025</div>
+        <div class="version-display">v1.2.9 • Updated May 31, 2025</div>
     </div>
     
     <div id="map"></div>
@@ -83,18 +83,13 @@
         mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
         console.log('Token set:', mapboxgl.accessToken);
         
+        // Initialize the map using the token per Mapbox guidelines
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v12', // Using a standard style to test
+            style: 'mapbox://styles/mapbox/streets-v12', // Standard Mapbox streets style
             center: [13.4050, 52.5200], // Berlin center
             zoom: 11,
-            projection: 'mercator', // Set projection to Mercator
-            transformRequest: (url, resourceType) => {
-                console.log('Resource request:', resourceType, url);
-                return {
-                    url: url
-                };
-            }
+            projection: 'mercator' // Force 2D view instead of 3D globe
         });
         
         // Add style event listeners for debugging
@@ -125,9 +120,33 @@
             try {
                 const layers = map.getStyle().layers;
                 console.log('Map has', layers.length, 'layers');
-                layers.forEach(layer => {
-                    console.log('Layer:', layer.id, 'Type:', layer.type);
+                
+                // Log some specific layers to see if they're present
+                const importantLayers = ['land', 'water', 'road', 'building'];
+                importantLayers.forEach(layerType => {
+                    const found = layers.some(layer => layer.id.includes(layerType));
+                    console.log(`Found ${layerType} layers:`, found);
                 });
+                
+                // Add location markers to see if they appear
+                fetch('./data/locations.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(`Adding ${data.locations.length} markers`);
+                        
+                        data.locations.forEach(location => {
+                            new mapboxgl.Marker({
+                                color: '#22c55e'
+                            })
+                            .setLngLat(location.coordinates)
+                            .addTo(map);
+                            
+                            console.log(`Added marker at ${location.coordinates}`);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error loading locations:', error);
+                    });
             } catch (err) {
                 console.error('Error checking style layers:', err);
             }
