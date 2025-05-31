@@ -352,7 +352,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.1.1 • Updated May 31, 2025</div>
+        <div class="version-display">v1.1.2 • Updated May 31, 2025</div>
     </div>
     
     <div id="map">
@@ -442,8 +442,88 @@
                     })
                 );
                 
-                // Add markers after map loads
+                // Add markers and custom tileset after map loads
                 map.on('load', () => {
+                    // First add your custom tileset
+                    console.log('Adding custom tileset...');
+                    try {
+                        // Add the custom tileset source
+                        map.addSource('custom-data', {
+                            type: 'vector',
+                            url: 'mapbox://bobers.6n88b6w7' // Your tileset ID
+                        });
+                        
+                        // Try to detect the source layer name
+                        console.log('Attempting to detect source layers...');
+                        
+                        // Wait a moment for the source to be fully loaded
+                        setTimeout(() => {
+                            try {
+                                const source = map.getSource('custom-data');
+                                if (source) {
+                                    // The source exists, try to inspect it
+                                    console.log('Custom source loaded:', source);
+                                    
+                                    // Try to query the tile at the current view
+                                    const bounds = map.getBounds();
+                                    const center = map.getCenter();
+                                    const zoom = map.getZoom();
+                                    
+                                    console.log('Map bounds:', bounds);
+                                    console.log('Querying features at center point...');
+                                    
+                                    // Attempt to find features and layers
+                                    const features = map.querySourceFeatures('custom-data');
+                                    console.log('Source features:', features);
+                                    
+                                    if (features && features.length > 0) {
+                                        // Found features, extract the source layer
+                                        const sourceLayer = features[0].sourceLayer;
+                                        console.log('Detected source layer:', sourceLayer);
+                                        
+                                        // Add the layer with the detected source layer
+                                        addCustomLayer(sourceLayer);
+                                    } else {
+                                        // No features found, try a default name
+                                        console.log('No features detected, using default source layer name');
+                                        addCustomLayer('bobers6n88b6w7'); // Typical default format
+                                    }
+                                } else {
+                                    console.error('Custom source not found');
+                                }
+                            } catch (detectionError) {
+                                console.error('Error detecting source layer:', detectionError);
+                                // Try with a default layer name
+                                addCustomLayer('bobers6n88b6w7');
+                            }
+                        }, 1000); // Wait 1 second for source to load
+                        
+                        // Function to add the custom layer
+                        function addCustomLayer(sourceLayer) {
+                            console.log('Adding custom layer with source layer:', sourceLayer);
+                            
+                            // Add a layer for the tileset data
+                            map.addLayer({
+                                'id': 'custom-layer',
+                                'type': 'fill', // This could be 'circle', 'line', etc. depending on your data
+                                'source': 'custom-data',
+                                'source-layer': sourceLayer,
+                                'paint': {
+                                    'fill-color': '#22c55e', // Green fill color
+                                    'fill-opacity': 0.4
+                                }
+                            });
+                            
+                            console.log('Custom layer added successfully');
+                        }
+                        
+                        console.log('Custom tileset added successfully');
+                    } catch (tilesetError) {
+                        console.error('Error adding custom tileset:', tilesetError);
+                        // Continue with markers even if tileset fails
+                    }
+                    
+                    // Then add markers as before
                     addMarkersToMap(map, locations);
                     showLoading(false);
                 });
@@ -571,6 +651,11 @@
                     zoom: 11,
                     attributionControl: true,
                     localIdeographFontFamily: "'Noto Sans', 'Noto Sans CJK SC', sans-serif"
+                });
+                
+                // Add handler for style.load event to help diagnose issues
+                mapInstance.on('style.load', () => {
+                    console.log('Map style loaded successfully');
                 });
                 
                 console.log('Map instance created successfully');
