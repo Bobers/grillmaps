@@ -1,350 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>GrillMaps Berlin - Verified Grilling Spots for Expats</title>
-    
-    <!-- Mapbox GL JS - Using Latest Stable Version per Official Guidelines -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css' rel='stylesheet' />
-    
-    <!-- Meta Tags for Social Sharing -->
-    <meta name="description" content="The most reliable grilling guide for Berlin expats. Manually verified locations with expat-specific tips.">
-    <meta property="og:title" content="GrillMaps Berlin - Verified Grilling Spots">
-    <meta property="og:description" content="Find legal grilling spots in Berlin. Curated for expats, by expats.">
-    <meta property="og:type" content="website">
-    
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
-    
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
     <style>
-        /* CSS Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
-            background: #f5f5f5;
-            line-height: 1.4;
-        }
-
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        
         /* Header Styles */
         .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             color: white;
             padding: 1rem;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: relative;
             z-index: 10;
         }
 
         .header h1 {
             font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.5rem 0;
             font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
 
         .header p {
             opacity: 0.9;
             font-size: 0.9rem;
             font-weight: 400;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
 
-        /* ADD THIS RIGHT AFTER THE ABOVE: */
         .version-display {
             font-size: 0.75rem;
             opacity: 0.8;
             margin-top: 0.25rem;
             font-weight: 400;
             color: rgba(255, 255, 255, 0.9);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
-
-        /* Map Container */
-        #map {
-            width: 100%;
-            height: calc(100vh - 100px);
-            position: relative;
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            flex-direction: column;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #22c55e;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Custom Popup Styles */
-        .mapboxgl-popup-content {
-            padding: 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-family: inherit;
-            max-width: 320px;
-        }
-
-        .grillmap-popup {
-            padding: 1rem;
-        }
-
-        .popup-header {
-            margin-bottom: 0.75rem;
-        }
-
-        .popup-title {
-            color: #22c55e;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            line-height: 1.2;
-        }
-
-        .trust-indicator {
-            background: #dcfce7;
-            color: #166534;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            display: inline-block;
-            font-weight: 500;
-        }
-
-        .popup-content {
-            margin-bottom: 0.75rem;
-        }
-
-        .equipment-info {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .description {
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #374151;
-        }
-
-        .expat-notes {
-            background: #fef3c7;
-            border-left: 3px solid #f59e0b;
-            padding: 0.5rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .expat-notes strong {
-            color: #92400e;
-        }
-
-        .address-section {
-            margin-bottom: 0.75rem;
-        }
-
-        .address-label {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 0.9rem;
-        }
-
-        .address-text {
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            background: #f3f4f6;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-
-        .copy-button {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            width: 100%;
-        }
-
-        .copy-button:hover {
-            background: #16a34a;
-        }
-
-        .copy-button:active {
-            transform: translateY(1px);
-        }
-
-        .popup-footer {
-            border-top: 1px solid #e5e7eb;
-            padding-top: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .official-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .official-link:hover {
-            text-decoration: underline;
-        }
-
-        .meta-info {
-            font-size: 0.75rem;
-            color: #6b7280;
-            text-align: right;
-        }
-
-        /* Copy Feedback */
-        .copy-feedback {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #22c55e;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            z-index: 10000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        /* Error State */
-        .error-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            background: #f9fafb;
-            padding: 2rem;
-        }
-
-        .error-content {
-            text-align: center;
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 400px;
-        }
-
-        .error-title {
-            color: #ef4444;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .error-message {
-            color: #6b7280;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .retry-button {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .retry-button:hover {
-            background: #16a34a;
-        }
-
+        
         /* Footer */
         .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: white;
-            padding: 1rem;
+            padding: 0.5rem;
             text-align: center;
             border-top: 1px solid #e5e7eb;
             font-size: 0.8rem;
             color: #6b7280;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-            
-            .header p {
-                font-size: 0.8rem;
-            }
-            
-            #map {
-                height: calc(100vh - 80px);
-            }
-            
-            .grillmap-popup {
-                padding: 0.75rem;
-            }
-            
-            .popup-title {
-                font-size: 0.9rem;
-            }
-            
-            .mapboxgl-popup-content {
-                max-width: 280px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                padding: 0.75rem;
-            }
-            
-            #map {
-                height: calc(100vh - 70px);
-            }
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
     </style>
 </head>
@@ -352,499 +68,90 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.1.2 • Updated May 31, 2025</div>
+        <div class="version-display">v1.2.0 • Updated May 31, 2025</div>
     </div>
     
-    <div id="map">
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-spinner"></div>
-            <div>Loading Berlin grilling spots...</div>
-        </div>
-    </div>
-
+    <div id="map"></div>
+    
     <div class="footer">
-        <p>Information verified as of latest update. Always check current local regulations before grilling. 
-        Fire bans may be in effect during dry periods. <strong>GrillMaps provides information for convenience only.</strong></p>
+        <p>Information verified as of latest update. Always check current local regulations before grilling.</p>
     </div>
     
-    <div class="copy-feedback" id="copyFeedback">
-        📋 Address copied to clipboard!
-    </div>
-
     <script>
         // Following official Mapbox GL JS implementation guidelines
-        console.log('Initializing GrillMaps with Mapbox GL JS');
-        
-        // Check for WebGL compatibility first
-        function checkWebGLSupport() {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            
-            if (!gl) {
-                console.error('WebGL not supported');
-                showError('Your browser does not support WebGL, which is required for the map to display.');
-                return false;
-            }
-            
-            console.log('WebGL supported');
-            return true;
-        }
-        
-        // Exit early if WebGL isn't supported
-        if (!checkWebGLSupport()) {
-            return;
-        }
-        
-        // Check if Mapbox is supported
-        if (typeof mapboxgl !== 'undefined' && !mapboxgl.supported()) {
-            console.error('Mapbox GL not supported by this browser');
-            showError('Your browser does not support Mapbox GL JS. Please try a different browser.');
-            return;
-        }
-        
-        // Mapbox Token Configuration - per official guidelines
-        // Using an explicitly public token with correct URL restrictions
         mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
         
-        // Uncomment and replace with your new token if needed
-        // mapboxgl.accessToken = 'YOUR_NEW_MAPBOX_TOKEN';
-        console.log('Mapbox token configured:', mapboxgl.accessToken);
-
-        // Application State
-        let map = null;
-        let currentPopup = null;
-        let locations = [];
-
-        // Initialize Application - Following official Mapbox GL JS guidelines
-        async function initializeApp() {
-            console.log('App initialization started');
-            
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [13.4050, 52.5200], // Berlin center
+            zoom: 11
+        });
+        
+        // Load location data
+        map.on('load', async () => {
             try {
-                showLoading(true);
-                
-                // Load location data
-                console.log('Loading location data');
-                locations = await loadLocationData();
-                
-                // Initialize map - following Mapbox GL JS guidelines
-                map = createMap();
-                
-                // Add navigation controls
-                map.addControl(new mapboxgl.NavigationControl());
-                
-                // Add geolocate control
-                map.addControl(
-                    new mapboxgl.GeolocateControl({
-                        positionOptions: {
-                            enableHighAccuracy: true
-                        },
-                        trackUserLocation: true
-                    })
-                );
-                
-                // Add markers and custom tileset after map loads
-                map.on('load', () => {
-                    // First add your custom tileset
-                    console.log('Adding custom tileset...');
-                    try {
-                        // Add the custom tileset source
-                        map.addSource('custom-data', {
-                            type: 'vector',
-                            url: 'mapbox://bobers.6n88b6w7' // Your tileset ID
-                        });
-                        
-                        // Try to detect the source layer name
-                        console.log('Attempting to detect source layers...');
-                        
-                        // Wait a moment for the source to be fully loaded
-                        setTimeout(() => {
-                            try {
-                                const source = map.getSource('custom-data');
-                                if (source) {
-                                    // The source exists, try to inspect it
-                                    console.log('Custom source loaded:', source);
-                                    
-                                    // Try to query the tile at the current view
-                                    const bounds = map.getBounds();
-                                    const center = map.getCenter();
-                                    const zoom = map.getZoom();
-                                    
-                                    console.log('Map bounds:', bounds);
-                                    console.log('Querying features at center point...');
-                                    
-                                    // Attempt to find features and layers
-                                    const features = map.querySourceFeatures('custom-data');
-                                    console.log('Source features:', features);
-                                    
-                                    if (features && features.length > 0) {
-                                        // Found features, extract the source layer
-                                        const sourceLayer = features[0].sourceLayer;
-                                        console.log('Detected source layer:', sourceLayer);
-                                        
-                                        // Add the layer with the detected source layer
-                                        addCustomLayer(sourceLayer);
-                                    } else {
-                                        // No features found, try a default name
-                                        console.log('No features detected, using default source layer name');
-                                        addCustomLayer('bobers6n88b6w7'); // Typical default format
-                                    }
-                                } else {
-                                    console.error('Custom source not found');
-                                }
-                            } catch (detectionError) {
-                                console.error('Error detecting source layer:', detectionError);
-                                // Try with a default layer name
-                                addCustomLayer('bobers6n88b6w7');
-                            }
-                        }, 1000); // Wait 1 second for source to load
-                        
-                        // Function to add the custom layer
-                        function addCustomLayer(sourceLayer) {
-                            console.log('Adding custom layer with source layer:', sourceLayer);
-                            
-                            // Add a layer for the tileset data
-                            map.addLayer({
-                                'id': 'custom-layer',
-                                'type': 'fill', // This could be 'circle', 'line', etc. depending on your data
-                                'source': 'custom-data',
-                                'source-layer': sourceLayer,
-                                'paint': {
-                                    'fill-color': '#22c55e', // Green fill color
-                                    'fill-opacity': 0.4
-                                }
-                            });
-                            
-                            console.log('Custom layer added successfully');
-                        }
-                        
-                        console.log('Custom tileset added successfully');
-                    } catch (tilesetError) {
-                        console.error('Error adding custom tileset:', tilesetError);
-                        // Continue with markers even if tileset fails
-                    }
-                    
-                    // Then add markers as before
-                    addMarkersToMap(map, locations);
-                    showLoading(false);
-                });
-                
-                // Handle map errors with detailed diagnostics
-                map.on('error', (e) => {
-                    console.error('Map error:', e);
-                    
-                    // Detailed error handling
-                    let errorMessage = 'Map failed to load.';
-                    
-                    // Check for specific error types
-                    if (e.error) {
-                        console.error('Error details:', e.error);
-                        
-                        if (e.error.status === 401) {
-                            errorMessage = `Token authorization error (401). Your token may not be authorized for domain: ${window.location.hostname}. Check URL restrictions in your Mapbox account.`;
-                        } else if (e.error.status === 404) {
-                            errorMessage = 'Resource not found (404). The map style or resource might not exist.';
-                        } else if (e.error.status === 429) {
-                            errorMessage = 'Rate limit exceeded (429). Your account may have hit usage limits.';
-                        } else if (e.error.message) {
-                            errorMessage = `Error: ${e.error.message}`;
-                        }
-                    }
-                    
-                    // Show the error to the user
-                    showError(errorMessage);
-                    
-                    // Additional diagnostic information
-                    console.log('Browser information:', navigator.userAgent);
-                    console.log('Page URL:', window.location.href);
-                    console.log('Mapbox token:', mapboxgl.accessToken.substring(0, 10) + '...');
-                    console.log('Mapbox version:', mapboxgl.version);
-                });
-                
-                // Set a timeout to detect if map doesn't load
-                setTimeout(() => {
-                    if (document.querySelector('.loading-overlay').style.display !== 'none') {
-                        console.warn('Map load timeout - load event may not have fired');
-                        
-                        // Check map status
-                        try {
-                            if (map) {
-                                console.log('Map object exists but load event did not fire');
-                                console.log('Map center:', map.getCenter());
-                                console.log('Map style status:', map.isStyleLoaded() ? 'Style loaded' : 'Style not loaded');
-                                console.log('Map loaded status:', map.loaded() ? 'Map loaded' : 'Map not loaded');
-                                
-                                // Try to force style load
-                                if (!map.isStyleLoaded()) {
-                                    console.log('Attempting to force style reload...');
-                                    map.setStyle('mapbox://styles/mapbox/streets-v12');
-                                }
-                                
-                                // Try to complete the load even without the event
-                                if (map.loaded() && locations) {
-                                    console.log('Map is loaded, adding markers manually...');
-                                    addMarkersToMap(map, locations);
-                                    showLoading(false);
-                                    return;
-                                }
-                            }
-                        } catch (diagError) {
-                            console.error('Diagnostic error:', diagError);
-                        }
-                        
-                        // If we get here, something is definitely wrong
-                        showLoading(false);
-                        showError(`
-                            <p>Map loading timed out. This could be due to:</p>
-                            <ul style="text-align: left; margin: 0.5rem 0 1rem 0;">
-                                <li>Network connectivity issues</li>
-                                <li>Mapbox token URL restrictions</li>
-                                <li>Browser compatibility issues</li>
-                                <li>Style not found or inaccessible</li>
-                            </ul>
-                            <p>Current domain: <strong>${window.location.hostname}</strong></p>
-                            <p>Check the browser console (F12) for detailed error messages.</p>
-                        `);
-                    }
-                }, 12000); // Increased timeout to 12 seconds
-                
-            } catch (error) {
-                console.error('App initialization failed:', error);
-                showError(error.message);
-            }
-        }
-
-        // Data Loading Functions
-        async function loadLocationData() {
-            try {
+                // Load the locations from JSON file
                 const response = await fetch('./data/locations.json');
-                
                 if (!response.ok) {
-                    throw new Error(`Failed to load location data (${response.status})`);
+                    throw new Error('Failed to load location data');
                 }
                 
                 const data = await response.json();
+                const locations = data.locations;
                 
-                if (!data.locations || !Array.isArray(data.locations)) {
-                    throw new Error('Invalid location data format');
-                }
-                
-                console.log(`Loaded ${data.locations.length} grilling locations`);
-                console.log(`Last updated: ${data.meta.last_updated}`);
-                
-                return data.locations;
-                
-            } catch (error) {
-                console.error('Data loading failed:', error);
-                throw new Error('Unable to load grilling locations. Please try again later.');
-            }
-        }
-
-        // Map Creation and Configuration - following official guidelines
-        function createMap() {
-            console.log('Creating map...');
-            try {
-                // Try with a standard Mapbox style first
-                const mapInstance = new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/light-v11', // Using a standard style as fallback
-                    center: [13.4050, 52.5200], // Berlin center
-                    zoom: 11,
-                    attributionControl: true,
-                    localIdeographFontFamily: "'Noto Sans', 'Noto Sans CJK SC', sans-serif"
-                });
-                
-                // Add handler for style.load event to help diagnose issues
-                mapInstance.on('style.load', () => {
-                    console.log('Map style loaded successfully');
-                });
-                
-                console.log('Map instance created successfully');
-                return mapInstance;
-                
-            } catch (error) {
-                console.error('Failed to create map instance:', error);
-                throw error;
-            }
-        }
-
-        // Marker and Popup Functions
-        function addMarkersToMap(map, locations) {
-            if (!locations || locations.length === 0) {
-                showError('No grilling locations available. Please check back soon!');
-                return;
-            }
-
-            locations.forEach(location => {
-                try {
-                    // Create popup content
-                    const popupContent = createPopupHTML(location);
-                    const popup = new mapboxgl.Popup({ 
-                        offset: 25,
-                        closeButton: true,
-                        closeOnClick: false
-                    }).setHTML(popupContent);
-
-                    // Create marker with status-based color
-                    const markerColor = getMarkerColor(location.status);
+                // Add markers for each location
+                locations.forEach(location => {
+                    // Create a popup
+                    const popup = new mapboxgl.Popup({ offset: 25 })
+                        .setHTML(`
+                            <h3>${location.name}</h3>
+                            <p>${location.description}</p>
+                            <p><strong>Address:</strong> ${location.address}</p>
+                            <p><strong>Status:</strong> ${location.status}</p>
+                        `);
                     
-                    new mapboxgl.Marker({ color: markerColor })
+                    // Create a marker
+                    new mapboxgl.Marker({
+                        color: location.status === 'verified' ? '#22c55e' : '#f59e0b'
+                    })
                         .setLngLat(location.coordinates)
                         .setPopup(popup)
                         .addTo(map);
-                        
-                } catch (error) {
-                    console.error(`Failed to add marker for location ${location.id}:`, error);
+                });
+                
+                // Try to add custom tileset if available
+                try {
+                    map.addSource('custom-data', {
+                        type: 'vector',
+                        url: 'mapbox://bobers.6n88b6w7' // Your tileset ID
+                    });
+                    
+                    // Try common source layer naming patterns
+                    const sourceLayer = 'bobers6n88b6w7';
+                    
+                    map.addLayer({
+                        'id': 'custom-layer',
+                        'type': 'fill',
+                        'source': 'custom-data',
+                        'source-layer': sourceLayer,
+                        'paint': {
+                            'fill-color': '#22c55e',
+                            'fill-opacity': 0.4
+                        }
+                    });
+                } catch (tilesetError) {
+                    console.log('Note: Custom tileset could not be added', tilesetError);
+                    // Continue without the custom tileset
                 }
-            });
-        }
-
-        function createPopupHTML(location) {
-            const equipmentDisplay = formatEquipmentType(location.equipment);
-            const accessibilityInfo = formatAccessibility(location.accessibility);
-            
-            return `
-                <div class="grillmap-popup">
-                    <div class="popup-header">
-                        <h3 class="popup-title">${escapeHtml(location.name)}</h3>
-                        <div class="trust-indicator">✅ Verified by GrillMaps</div>
-                    </div>
-                    
-                    <div class="popup-content">
-                        <div class="equipment-info">🔥 ${equipmentDisplay}</div>
-                        <div class="description">${escapeHtml(location.description)}</div>
-                        
-                        ${location.expat_notes ? `
-                            <div class="expat-notes">
-                                <strong>💡 Expat Tips:</strong> ${escapeHtml(location.expat_notes)}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="address-section">
-                            <div class="address-label">📍 Address:</div>
-                            <div class="address-text">${escapeHtml(location.address)}</div>
-                            <button class="copy-button" onclick="copyAddress('${escapeHtml(location.address)}')">
-                                📋 Copy Address for Navigation
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="popup-footer">
-                        ${location.source_url ? `
-                            <a href="${escapeHtml(location.source_url)}" target="_blank" rel="noopener noreferrer" class="official-link">
-                                Official Source →
-                            </a>
-                        ` : ''}
-                        <div class="meta-info">
-                            Updated: ${location.last_updated}<br>
-                            Status: ${location.status} | ${accessibilityInfo}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Utility Functions
-        function getMarkerColor(status) {
-            switch(status) {
-                case 'verified': return '#22c55e'; // Green
-                case 'seasonal': return '#f59e0b'; // Orange  
-                case 'needs_check': return '#ef4444'; // Red
-                default: return '#6b7280'; // Gray
+                
+            } catch (error) {
+                console.error('Error loading locations:', error);
             }
-        }
-
-        function formatEquipmentType(equipment) {
-            switch(equipment) {
-                case 'charcoal_gas_ok': return 'Charcoal & Gas OK';
-                case 'gas_only': return 'Gas Only';
-                case 'charcoal_only': return 'Charcoal Only';
-                default: return 'Check Rules On-Site';
-            }
-        }
-
-        function formatAccessibility(accessibility) {
-            switch(accessibility) {
-                case 'wheelchair_friendly': return '♿ Accessible';
-                case 'limited_access': return '⚠️ Limited Access';
-                case 'stairs_only': return '🚶 Stairs Required';
-                default: return 'Access Info Unknown';
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Address Copying Function
-        function copyAddress(address) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(address)
-                    .then(() => showCopyFeedback())
-                    .catch(() => fallbackCopyAddress(address));
-            } else {
-                fallbackCopyAddress(address);
-            }
-        }
-
-        function fallbackCopyAddress(address) {
-            // Simple fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = address;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                showCopyFeedback();
-            } catch (err) {
-                // Final fallback - show address for manual copying
-                prompt('Copy this address manually:', address);
-            }
-            
-            document.body.removeChild(textArea);
-        }
-
-        function showCopyFeedback() {
-            const feedback = document.getElementById('copyFeedback');
-            feedback.style.opacity = '1';
-            setTimeout(() => {
-                feedback.style.opacity = '0';
-            }, 2000);
-        }
-
-        // UI State Management
-        function showLoading(show) {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = show ? 'flex' : 'none';
-        }
-
-        function showError(message) {
-            const isHTML = message.includes('<') && message.includes('>');
-            
-            document.getElementById('map').innerHTML = `
-                <div class="error-container">
-                    <div class="error-content">
-                        <div class="error-title">Oops! Something went wrong</div>
-                        <div class="error-message">${isHTML ? message : escapeHtml(message)}</div>
-                        <button class="retry-button" onclick="location.reload()">
-                            Try Again
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // Also log the error to console to help with debugging
-            console.error('Error displayed to user:', message);
-        }
-
-        // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        });
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
     </script>
 </body>
 </html>
