@@ -414,13 +414,16 @@
         // Data Loading Functions
         async function loadLocationData() {
             try {
+                console.log('Fetching location data...');
                 const response = await fetch('./data/locations.json');
                 
+                console.log('Fetch response status:', response.status);
                 if (!response.ok) {
                     throw new Error(`Failed to load location data (${response.status})`);
                 }
                 
                 const data = await response.json();
+                console.log('Parsed JSON data:', data);
                 
                 if (!data.locations || !Array.isArray(data.locations)) {
                     throw new Error('Invalid location data format');
@@ -632,7 +635,10 @@
         }
 
         // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing app...');
+            initializeApp();
+        });
     </script>
 </body>
 </html>
