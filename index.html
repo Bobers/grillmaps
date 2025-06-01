@@ -48,6 +48,38 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
         
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: inline-block;
+        }
+        
         /* Footer */
         .footer {
             position: absolute;
@@ -68,13 +100,28 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.3.0 • Updated May 31, 2025</div>
+        <div class="version-display">v1.4.0 • Updated June 1, 2025 • Now with OpenStreetMap data</div>
     </div>
     
     <div id="map"></div>
     
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #22c55e;"></span>
+            <span>Manually Verified</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #3b82f6;"></span>
+            <span>OpenStreetMap Data</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #3b82f6; opacity: 0.3; border-radius: 0; width: 20px; height: 8px;"></span>
+            <span>Grilling Area</span>
+        </div>
+    </div>
+    
     <div class="footer">
-        <p>Information verified as of latest update. Always check current local regulations before grilling.</p>
+        <p>Information verified as of latest update. Green markers: manually verified. Blue markers: OpenStreetMap data, updated daily.</p>
     </div>
     
     <script>
@@ -105,14 +152,17 @@
         map.on('load', () => {
             console.log('Map loaded successfully!');
             
-            // Add the markers for grilling locations
-            fetch('./data/locations.json')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(`Adding ${data.locations.length} grilling location markers`);
+            // Fetch both our manually curated locations and OSM data
+            const fetchStaticLocations = fetch('./data/locations.json').then(response => response.json());
+            const fetchOSMLocations = fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json').then(response => response.json());
+            
+            // Process both data sources
+            Promise.all([fetchStaticLocations, fetchOSMLocations])
+                .then(([staticData, osmData]) => {
+                    console.log(`Adding ${staticData.locations.length} manual locations and ${osmData.features.length} OSM locations`);
                     
-                    // Add each location marker
-                    data.locations.forEach(location => {
+                    // 1. Add manually curated locations first
+                    staticData.locations.forEach(location => {
                         // Create a popup with location details
                         const popup = new mapboxgl.Popup({ offset: 25 })
                             .setHTML(`
@@ -136,10 +186,136 @@
                         .addTo(map);
                     });
                     
-                    console.log('All markers added successfully');
+                    // 2. Add OSM data locations
+                    osmData.features.forEach(feature => {
+                        // Only process features with Point geometry (skip polygons for now)
+                        if (feature.geometry.type === 'Point') {
+                            const props = feature.properties;
+                            const coords = feature.geometry.coordinates;
+                            
+                            // Create popup with OSM data
+                            const popup = new mapboxgl.Popup({ offset: 25 })
+                                .setHTML(`
+                                    <div style="padding: 10px;">
+                                        <h3 style="margin-top: 0; color: #3b82f6; font-weight: 600;">${props.name}</h3>
+                                        <p style="margin-bottom: 8px;">Type: ${props.grill_type === 'fixed' ? 'Fixed BBQ Grill' : 'Bring Your Own Grill'}</p>
+                                        ${props.address ? `<p style="margin-bottom: 8px;"><strong>Address:</strong> ${props.address}</p>` : ''}
+                                        <p style="margin-bottom: 8px;"><strong>District:</strong> ${props.district}</p>
+                                        ${props.wheelchair_accessible ? `<p style="margin-bottom: 8px;"><strong>Wheelchair:</strong> ${props.wheelchair_accessible === true ? 'Accessible' : 'Limited access'}</p>` : ''}
+                                        <p style="margin-bottom: 0;"><strong>Source:</strong> OpenStreetMap</p>
+                                    </div>
+                                `);
+                            
+                            // Use blue color for OSM locations
+                            new mapboxgl.Marker({
+                                color: '#3b82f6'  // Blue for OSM locations
+                            })
+                            .setLngLat(coords)
+                            .setPopup(popup)
+                            .addTo(map);
+                        }
+                        
+                        // For polygon areas, add a fill layer instead
+                        if (feature.geometry.type === 'Polygon') {
+                            // Generate a unique ID for this feature
+                            const id = `area-${feature.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
+                            
+                            // Add source for this polygon
+                            map.addSource(id, {
+                                'type': 'geojson',
+                                'data': feature
+                            });
+                            
+                            // Add fill layer
+                            map.addLayer({
+                                'id': id,
+                                'type': 'fill',
+                                'source': id,
+                                'layout': {},
+                                'paint': {
+                                    'fill-color': '#3b82f6',
+                                    'fill-opacity': 0.3
+                                }
+                            });
+                            
+                            // Add outline layer
+                            map.addLayer({
+                                'id': `${id}-outline`,
+                                'type': 'line',
+                                'source': id,
+                                'layout': {},
+                                'paint': {
+                                    'line-color': '#3b82f6',
+                                    'line-width': 2
+                                }
+                            });
+                            
+                            // Add click handler for polygon
+                            map.on('click', id, (e) => {
+                                const props = feature.properties;
+                                const coordinates = e.lngLat;
+                                
+                                new mapboxgl.Popup()
+                                    .setLngLat(coordinates)
+                                    .setHTML(`
+                                        <div style="padding: 10px;">
+                                            <h3 style="margin-top: 0; color: #3b82f6; font-weight: 600;">${props.name}</h3>
+                                            <p style="margin-bottom: 8px;">Type: ${props.grill_type === 'fixed' ? 'Fixed BBQ Area' : 'Designated Grilling Area'}</p>
+                                            ${props.address ? `<p style="margin-bottom: 8px;"><strong>Address:</strong> ${props.address}</p>` : ''}
+                                            <p style="margin-bottom: 8px;"><strong>District:</strong> ${props.district}</p>
+                                            <p style="margin-bottom: 0;"><strong>Source:</strong> OpenStreetMap</p>
+                                        </div>
+                                    `)
+                                    .addTo(map);
+                            });
+                            
+                            // Change cursor to pointer when over polygon
+                            map.on('mouseenter', id, () => {
+                                map.getCanvas().style.cursor = 'pointer';
+                            });
+                            
+                            map.on('mouseleave', id, () => {
+                                map.getCanvas().style.cursor = '';
+                            });
+                        }
+                    });
+                    
+                    console.log('All markers and polygons added successfully');
                 })
                 .catch(error => {
                     console.error('Error loading locations:', error);
+                    
+                    // Fallback to static locations if OSM data fails
+                    console.log('Falling back to static locations only');
+                    fetch('./data/locations.json')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(`Adding ${data.locations.length} static location markers`);
+                            
+                            data.locations.forEach(location => {
+                                const popup = new mapboxgl.Popup({ offset: 25 })
+                                    .setHTML(`
+                                        <div style="padding: 10px;">
+                                            <h3 style="margin-top: 0; color: #22c55e; font-weight: 600;">${location.name}</h3>
+                                            <p style="margin-bottom: 8px;">${location.description}</p>
+                                            <p style="margin-bottom: 8px;"><strong>Address:</strong> ${location.address}</p>
+                                            <p style="margin-bottom: 0;"><strong>Status:</strong> ${location.status}</p>
+                                        </div>
+                                    `);
+                                
+                                const markerColor = location.status === 'verified' ? '#22c55e' : '#f59e0b';
+                                
+                                new mapboxgl.Marker({
+                                    color: markerColor
+                                })
+                                .setLngLat(location.coordinates)
+                                .setPopup(popup)
+                                .addTo(map);
+                            });
+                        })
+                        .catch(err => {
+                            console.error('Fatal error loading any locations:', err);
+                        });
                 });
         });
         
