@@ -7,10 +7,8 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
     <style>
-        body { margin: 0; padding: 0; }
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-        
-        /* Header Styles */
         .header {
             position: absolute;
             top: 0;
@@ -23,32 +21,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             z-index: 10;
         }
-
-        .header h1 {
-            font-size: 1.5rem;
-            margin: 0 0 0.5rem 0;
-            font-weight: 700;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 0.9rem;
-            font-weight: 400;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
-        }
-
-        .version-display {
-            font-size: 0.75rem;
-            opacity: 0.8;
-            margin-top: 0.25rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
-        }
-        
-        /* Legend */
+        .header h1 { margin: 0; font-size: 1.5rem; }
         .legend {
             position: absolute;
             bottom: 40px;
@@ -56,427 +29,145 @@
             background: rgba(255,255,255,0.9);
             padding: 10px;
             border-radius: 5px;
-            z-index: 10;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            font-size: 0.8rem;
         }
-        
         .legend-item {
             display: flex;
             align-items: center;
             margin-bottom: 5px;
-            font-size: 0.8rem;
         }
-        
-        .legend-item:last-child {
-            margin-bottom: 0;
-        }
-        
         .legend-color {
             width: 12px;
             height: 12px;
-            border-radius: 50%;
             margin-right: 8px;
             display: inline-block;
-        }
-        
-        /* Footer */
-        .footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 0.5rem;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-            font-size: 0.8rem;
-            color: #6b7280;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
-        <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v3.0.1 • Updated March 6, 2025 • Fixed syntax error</div>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.1.0 • Updated March 6, 2025 • Simplified version</div>
     </div>
-    
     <div id="map"></div>
     
     <div class="legend">
-        <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.85rem;">Districts:</div>
+        <div style="font-weight: 600; margin-bottom: 8px;">Districts:</div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; opacity: 0.15; border-radius: 0; width: 20px; height: 8px; border: 1px solid #22c55e;"></span>
+            <span class="legend-color" style="background-color: #22c55e; opacity: 0.4;"></span>
             <span>BBQ Allowed</span>
         </div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #fbbf24; opacity: 0.15; border-radius: 0; width: 20px; height: 8px; border: 1px solid #fbbf24;"></span>
+            <span class="legend-color" style="background-color: #fbbf24; opacity: 0.4;"></span>
             <span>Limited BBQ</span>
         </div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #dc2626; opacity: 0.15; border-radius: 0; width: 20px; height: 8px; border: 1px solid #dc2626;"></span>
+            <span class="legend-color" style="background-color: #dc2626; opacity: 0.4;"></span>
             <span>BBQ Prohibited</span>
         </div>
-        <div style="margin-top: 10px; border-top: 1px solid #e5e7eb; padding-top: 8px; font-weight: 600; font-size: 0.85rem;">Markers:</div>
+        <div style="margin-top: 10px; font-weight: 600;">Markers:</div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e;"></span>
-            <span>Manually Verified</span>
+            <span class="legend-color" style="background-color: #22c55e; border-radius: 50%;"></span>
+            <span>Verified Spots</span>
         </div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #3b82f6;"></span>
-            <span>OpenStreetMap Data</span>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <p>Information verified as of latest update. Green markers: manually verified. Blue markers: OpenStreetMap data, updated daily.</p>
     </div>
     
     <script>
-        // Following official Mapbox GL JS implementation guidelines
-        console.log('Initializing Mapbox with token');
         mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
-        console.log('Token set:', mapboxgl.accessToken);
         
-        // Initialize the map using the token per Mapbox guidelines
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v12', // Standard Mapbox streets style
-            center: [13.4050, 52.5200], // Berlin center
-            zoom: 11,
-            projection: 'mercator' // Force 2D view instead of 3D globe
-        });
-        
-        // Add style event listeners for debugging
-        map.on('styledata', (e) => {
-            console.log('Style data loaded:', e);
-        });
-        
-        map.on('styledataloading', (e) => {
-            console.log('Style data loading:', e);
-        });
-        
-        // Handle map load event
-        map.on('load', () => {
-            console.log('Map loaded successfully!');
-            
-            // Fetch all data sources
-            const fetchStaticLocations = fetch('./data/locations.json').then(response => response.json());
-            const fetchOSMLocations = fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json').then(response => response.json());
-            const fetchBerlinDistricts = fetch('./data/berlin-districts-nominatim.json')
-                .then(response => response.json())
-                .catch(() => null); // Fallback if districts file doesn't exist
-            
-            // Process all data sources
-            Promise.all([fetchStaticLocations, fetchOSMLocations, fetchBerlinDistricts])
-                .then(([staticData, osmData, berlinDistricts]) => {
-                    console.log('Loading map data...');
-                    
-                    // 1. Add Berlin districts (EXACT COPY from working test page)
-                    if (berlinDistricts && berlinDistricts.features) {
-                        console.log(`Adding ${berlinDistricts.features.length} Berlin districts`);
-                        
-                        // Add each district
-                        berlinDistricts.features.forEach((district, index) => {
-                            const id = `district-${district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
-                            
-                            // Add source
-                            map.addSource(id, {
-                                'type': 'geojson',
-                                'data': district
-                            });
-                            
-                            const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
-                                            district.properties.bbq_status === 'limited' ? '#fbbf24' : 
-                                            district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
-                            
-                            // Add fill layer ON TOP
-                            map.addLayer({
-                                'id': id,
-                                'type': 'fill',
-                                'source': id,
-                                'paint': {
-                                    'fill-color': fillColor,
-                                    'fill-opacity': 0.4
-                                }
-                            });
-                            
-                            // Add outline
-                            map.addLayer({
-                                'id': `${id}-outline`,
-                                'type': 'line',
-                                'source': id,
-                                'paint': {
-                                    'line-color': fillColor,
-                                    'line-width': 2
-                                }
-                            });
-                            
-                            console.log(`Added ${district.properties.name} (${fillColor})`);
-                        });
-                        
-                        console.log('All districts added!');
-                    } else {
-                        console.warn('No district data found or districts failed to load');
-                    }
-                    
-                    // 2. Add manually curated locations
-                    staticData.locations.forEach(location => {
-                        // Create a popup with location details
-                        const popup = new mapboxgl.Popup({ offset: 25 })
-                            .setHTML(`
-                                <div style="padding: 10px;">
-                                    <h3 style="margin-top: 0; color: #22c55e; font-weight: 600;">${location.name}</h3>
-                                    <p style="margin-bottom: 8px;">${location.description}</p>
-                                    <p style="margin-bottom: 8px;"><strong>Address:</strong> ${location.address}</p>
-                                    <p style="margin-bottom: 0;"><strong>Status:</strong> ${location.status}</p>
-                                </div>
-                            `);
-                        
-                        // Create marker with color based on status
-                        const markerColor = location.status === 'verified' ? '#22c55e' : '#f59e0b';
-                        
-                        // Add marker to map
-                        new mapboxgl.Marker({
-                            color: markerColor
-                        })
-                        .setLngLat(location.coordinates)
-                        .setPopup(popup)
-                        .addTo(map);
-                    });
-                    
-                    // 3. Add OSM data locations
-                    osmData.features.forEach(feature => {
-                        // Only process features with Point geometry (skip polygons for now)
-                        if (feature.geometry.type === 'Point') {
-                            const props = feature.properties;
-                            const coords = feature.geometry.coordinates;
-                            
-                            // Create popup with OSM data
-                            const popup = new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(`
-                                    <div style="padding: 10px;">
-                                        <h3 style="margin-top: 0; color: #3b82f6; font-weight: 600;">${props.name}</h3>
-                                        <p style="margin-bottom: 8px;">Type: ${props.grill_type === 'fixed' ? 'Fixed BBQ Grill' : 'Bring Your Own Grill'}</p>
-                                        ${props.address ? `<p style="margin-bottom: 8px;"><strong>Address:</strong> ${props.address}</p>` : ''}
-                                        <p style="margin-bottom: 8px;"><strong>District:</strong> ${props.district}</p>
-                                        ${props.wheelchair_accessible ? `<p style="margin-bottom: 8px;"><strong>Wheelchair:</strong> ${props.wheelchair_accessible === true ? 'Accessible' : 'Limited access'}</p>` : ''}
-                                        <p style="margin-bottom: 0;"><strong>Source:</strong> OpenStreetMap</p>
-                                    </div>
-                                `);
-                            
-                            // Use blue color for OSM locations
-                            new mapboxgl.Marker({
-                                color: '#3b82f6'  // Blue for OSM locations
-                            })
-                            .setLngLat(coords)
-                            .setPopup(popup)
-                            .addTo(map);
-                        }
-                        
-                        // For polygon areas, add a fill layer instead
-                        if (feature.geometry.type === 'Polygon') {
-                            // Generate a unique ID for this feature
-                            const id = `area-${feature.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
-                            
-                            // Add source for this polygon
-                            map.addSource(id, {
-                                'type': 'geojson',
-                                'data': feature
-                            });
-                            
-                            // Add fill layer
-                            map.addLayer({
-                                'id': id,
-                                'type': 'fill',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'fill-color': '#3b82f6',
-                                    'fill-opacity': 0.3
-                                }
-                            });
-                            
-                            // Add outline layer
-                            map.addLayer({
-                                'id': `${id}-outline`,
-                                'type': 'line',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'line-color': '#3b82f6',
-                                    'line-width': 2
-                                }
-                            });
-                            
-                            // Add click handler for polygon
-                            map.on('click', id, (e) => {
-                                const props = feature.properties;
-                                const coordinates = e.lngLat;
-                                
-                                new mapboxgl.Popup()
-                                    .setLngLat(coordinates)
-                                    .setHTML(`
-                                        <div style="padding: 10px;">
-                                            <h3 style="margin-top: 0; color: #3b82f6; font-weight: 600;">${props.name}</h3>
-                                            <p style="margin-bottom: 8px;">Type: ${props.grill_type === 'fixed' ? 'Fixed BBQ Area' : 'Designated Grilling Area'}</p>
-                                            ${props.address ? `<p style="margin-bottom: 8px;"><strong>Address:</strong> ${props.address}</p>` : ''}
-                                            <p style="margin-bottom: 8px;"><strong>District:</strong> ${props.district}</p>
-                                            <p style="margin-bottom: 0;"><strong>Source:</strong> OpenStreetMap</p>
-                                        </div>
-                                    `)
-                                    .addTo(map);
-                            });
-                            
-                            // Change cursor to pointer when over polygon
-                            map.on('mouseenter', id, () => {
-                                map.getCanvas().style.cursor = 'pointer';
-                            });
-                            
-                            map.on('mouseleave', id, () => {
-                                map.getCanvas().style.cursor = '';
-                            });
-                        }
-                    });
-                    
-                    // 3. Add district restriction overlays
-                    if (districtRestrictions && districtRestrictions.features) {
-                        console.log(`Adding ${districtRestrictions.features.length} district restriction(s)`);
-                        
-                        districtRestrictions.features.forEach(restriction => {
-                            const id = `restriction-${restriction.properties.id}`;
-                            const style = restriction.properties.style;
-                            
-                            // Add source for restriction polygon
-                            map.addSource(id, {
-                                'type': 'geojson',
-                                'data': restriction
-                            });
-                            
-                            // Add fill layer with styling from JSON
-                            map.addLayer({
-                                'id': id,
-                                'type': 'fill',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'fill-color': style.fillColor,
-                                    'fill-opacity': style.fillOpacity
-                                }
-                            });
-                            
-                            // Add outline layer with dashed border
-                            map.addLayer({
-                                'id': `${id}-outline`,
-                                'type': 'line',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'line-color': style.strokeColor,
-                                    'line-width': style.strokeWidth,
-                                    'line-dasharray': style.strokeDashArray
-                                }
-                            });
-                            
-                            // Add click handler for restriction polygon
-                            map.on('click', id, (e) => {
-                                const props = restriction.properties;
-                                const coordinates = e.lngLat;
-                                
-                                new mapboxgl.Popup()
-                                    .setLngLat(coordinates)
-                                    .setHTML(`
-                                        <div style="padding: 15px; max-width: 300px;">
-                                            <h3 style="margin-top: 0; color: #dc2626; font-weight: 600;">${props.title}</h3>
-                                            <h4 style="margin: 8px 0; color: #666;">${props.name} District</h4>
-                                            <p style="margin-bottom: 10px;">${props.description}</p>
-                                            <p style="margin-bottom: 10px; font-size: 0.9em; color: #555;">${props.details}</p>
-                                            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
-                                            <p style="margin-bottom: 0; font-style: italic; color: #059669;">💡 ${props.alternative_suggestion}</p>
-                                        </div>
-                                    `)
-                                    .addTo(map);
-                            });
-                            
-                            // Change cursor to pointer when over restriction polygon
-                            map.on('mouseenter', id, () => {
-                                map.getCanvas().style.cursor = 'pointer';
-                            });
-                            
-                            map.on('mouseleave', id, () => {
-                                map.getCanvas().style.cursor = '';
-                            });
-                        });
-                    }
-                    
-                    // Count what we added
-                    const allLayers = map.getStyle().layers;
-                    const districtLayers = allLayers.filter(l => l.id.includes('district')).length;
-                    const osmLayers = allLayers.filter(l => l.id.includes('area-')).length;
-                    console.log(`Summary: ${districtLayers} district layers, ${osmLayers} OSM area layers`);
-                    console.log('All markers and polygons added successfully');
-                })
-                .catch(error => {
-                    console.error('Error loading locations:', error);
-                    console.error('Full error details:', error.stack);
-                    
-                    // Fallback to static locations if OSM data fails
-                    console.log('Falling back to static locations only');
-                    fetch('./data/locations.json')
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(`Adding ${data.locations.length} static location markers`);
-                            
-                            data.locations.forEach(location => {
-                                const popup = new mapboxgl.Popup({ offset: 25 })
-                                    .setHTML(`
-                                        <div style="padding: 10px;">
-                                            <h3 style="margin-top: 0; color: #22c55e; font-weight: 600;">${location.name}</h3>
-                                            <p style="margin-bottom: 8px;">${location.description}</p>
-                                            <p style="margin-bottom: 8px;"><strong>Address:</strong> ${location.address}</p>
-                                            <p style="margin-bottom: 0;"><strong>Status:</strong> ${location.status}</p>
-                                        </div>
-                                    `);
-                                
-                                const markerColor = location.status === 'verified' ? '#22c55e' : '#f59e0b';
-                                
-                                new mapboxgl.Marker({
-                                    color: markerColor
-                                })
-                                .setLngLat(location.coordinates)
-                                .setPopup(popup)
-                                .addTo(map);
-                            });
-                        })
-                        .catch(err => {
-                            console.error('Fatal error loading any locations:', err);
-                        });
-                });
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [13.4050, 52.5200],
+            zoom: 10.5,
+            projection: 'mercator'
         });
         
         // Add navigation controls
         map.addControl(new mapboxgl.NavigationControl());
         
-        // Add error and style load handlers
-        map.on('error', (e) => {
-            console.error('Map error:', e);
-            if (e.error && e.error.status === 401) {
-                console.error('AUTHORIZATION ERROR: Token may not be valid for this domain');
-            } else if (e.error && e.error.status === 404) {
-                console.error('NOT FOUND ERROR: Style or resource not found');
+        map.on('load', async () => {
+            console.log('Map loaded - loading ONLY districts');
+            
+            try {
+                // Load ONLY districts
+                const response = await fetch('./data/berlin-districts-nominatim.json');
+                const berlinDistricts = await response.json();
+                
+                console.log(`Loaded ${berlinDistricts.features.length} districts`);
+                
+                // Add each district
+                berlinDistricts.features.forEach((district, index) => {
+                    const id = `district-${district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
+                    
+                    // Add source
+                    map.addSource(id, {
+                        'type': 'geojson',
+                        'data': district
+                    });
+                    
+                    const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
+                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : 
+                                    district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
+                    
+                    // Add fill layer ON TOP
+                    map.addLayer({
+                        'id': id,
+                        'type': 'fill',
+                        'source': id,
+                        'paint': {
+                            'fill-color': fillColor,
+                            'fill-opacity': 0.4
+                        }
+                    });
+                    
+                    // Add outline
+                    map.addLayer({
+                        'id': `${id}-outline`,
+                        'type': 'line',
+                        'source': id,
+                        'paint': {
+                            'line-color': fillColor,
+                            'line-width': 2
+                        }
+                    });
+                    
+                    console.log(`Added ${district.properties.name} (${fillColor})`);
+                });
+                
+                console.log('All districts added!');
+                
+                // Load manual locations
+                const locationsResponse = await fetch('./data/locations.json');
+                const locationsData = await locationsResponse.json();
+                
+                locationsData.locations.forEach(location => {
+                    const popup = new mapboxgl.Popup({ offset: 25 })
+                        .setHTML(`
+                            <div style="padding: 10px;">
+                                <h3 style="margin-top: 0; color: #22c55e; font-weight: 600;">${location.name}</h3>
+                                <p style="margin-bottom: 8px;">${location.description}</p>
+                                <p style="margin-bottom: 8px;"><strong>Address:</strong> ${location.address}</p>
+                                <p style="margin-bottom: 0;"><strong>Status:</strong> ${location.status}</p>
+                            </div>
+                        `);
+                    
+                    new mapboxgl.Marker({
+                        color: location.status === 'verified' ? '#22c55e' : '#f59e0b'
+                    })
+                    .setLngLat(location.coordinates)
+                    .setPopup(popup)
+                    .addTo(map);
+                });
+                
+                console.log(`Added ${locationsData.locations.length} manual locations`);
+                
+            } catch (error) {
+                console.error('Error:', error);
             }
         });
-        
-        map.on('style.load', () => {
-            console.log('Style loaded successfully');
-        });
-        
-        map.on('styledata', (e) => {
-            console.log('Style data:', e);
-        });
-        
     </script>
 </body>
 </html>
