@@ -1,22 +1,24 @@
 {
   "type": "FeatureCollection",
   "metadata": {
-    "title": "Berlin District BBQ Restrictions",
-    "description": "District-wide grilling prohibition areas in Berlin",
+    "title": "Special BBQ Restriction Areas",
+    "description": "Specific areas within Berlin with special grilling restrictions",
     "last_updated": "2025-02-06",
-    "version": "1.0.0"
+    "version": "1.1.0",
+    "note": "For district-wide restrictions, see berlin-districts.json"
   },
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "id": "treptow-koepenick",
-        "name": "Treptow-Köpenick",
-        "restriction_type": "complete_ban",
-        "title": "No BBQ Areas Available",
-        "description": "This entire district has no designated public grilling areas. BBQ is prohibited in all public spaces.",
-        "details": "Despite being Berlin's largest district with extensive green spaces, Treptow-Köpenick does not permit public grilling due to fire safety regulations and nature conservation efforts.",
-        "alternative_suggestion": "Consider nearby districts like Neukölln (Tempelhofer Feld) or Friedrichshain-Kreuzberg (Görlitzer Park) for legal grilling options.",
+        "id": "grunewald-forest",
+        "name": "Grunewald Forest",
+        "district": "Charlottenburg-Wilmersdorf / Steglitz-Zehlendorf",
+        "restriction_type": "fire_hazard",
+        "title": "Forest Fire Protection Zone",
+        "description": "BBQ strictly prohibited in all forest areas due to fire hazard.",
+        "details": "The Grunewald forest is a protected area with high fire risk, especially during dry seasons. Open flames and BBQs are strictly forbidden.",
+        "alternative_suggestion": "Use designated BBQ areas at nearby Schlachtensee or in urban parks.",
         "style": {
           "fillColor": "#dc2626",
           "fillOpacity": 0.25,
@@ -27,17 +29,31 @@
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[
-          [13.5741, 52.4580],
-          [13.6800, 52.4580],
-          [13.7600, 52.4200],
-          [13.7600, 52.3800],
-          [13.6800, 52.3400],
-          [13.5500, 52.3400],
-          [13.4800, 52.3800],
-          [13.4800, 52.4200],
-          [13.5741, 52.4580]
-        ]]
+        "coordinates": [[[13.19, 52.49], [13.26, 52.49], [13.26, 52.44], [13.19, 52.44], [13.19, 52.49]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "nature-reserves",
+        "name": "Naturschutzgebiet Karower Teiche",
+        "district": "Pankow",
+        "restriction_type": "nature_protection",
+        "title": "Nature Protection Area",
+        "description": "Protected wetland area - BBQ and open fires prohibited.",
+        "details": "This nature reserve protects important wetland habitats. All recreational fires including BBQs are forbidden to protect wildlife.",
+        "alternative_suggestion": "Visit Bürgerpark Pankow or Volkspark Prenzlauer Berg for BBQ areas.",
+        "style": {
+          "fillColor": "#dc2626",
+          "fillOpacity": 0.25,
+          "strokeColor": "#dc2626",
+          "strokeWidth": 2,
+          "strokeDashArray": [5, 5]
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[13.46, 52.61], [13.48, 52.61], [13.48, 52.59], [13.46, 52.59], [13.46, 52.61]]]
       }
     }
   ]
