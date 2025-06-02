@@ -46,7 +46,7 @@
             
             try {
                 // Load ONLY districts
-                const response = await fetch('./data/berlin-districts-proper.json');
+                const response = await fetch('./data/berlin-districts-nominatim.json');
                 const berlinDistricts = await response.json();
                 
                 console.log(`Loaded ${berlinDistricts.features.length} districts`);
