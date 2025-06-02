@@ -100,7 +100,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.9.0 • Updated March 6, 2025 • Fixed district rendering</div>
+        <div class="version-display">v1.9.1 • Updated March 6, 2025 • Added district debugging</div>
     </div>
     
     <div id="map"></div>
@@ -178,15 +178,18 @@
                     if (berlinDistricts && berlinDistricts.features) {
                         console.log(`Adding ${berlinDistricts.features.length} Berlin districts`);
                         console.log('District data:', berlinDistricts);
+                        console.log('First district:', berlinDistricts.features[0]);
                         
                         berlinDistricts.features.forEach((district, index) => {
                             const id = `district-${district.properties.name ? district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase() : index}`;
                             
                             // Add source for district polygon
-                            map.addSource(id, {
-                                'type': 'geojson',
-                                'data': district
-                            });
+                            try {
+                                map.addSource(id, {
+                                    'type': 'geojson',
+                                    'data': district
+                                });
+                                console.log(`Added source for ${district.properties.name}`);
                             
                             // Add fill layer with color based on BBQ status
                             const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
@@ -203,6 +206,7 @@
                                     'fill-opacity': 0.15
                                 }
                             });
+                            console.log(`Added fill layer for ${district.properties.name} with color ${fillColor}`);
                             
                             // Add outline layer
                             map.addLayer({
@@ -271,6 +275,10 @@
                             map.on('mouseleave', id, () => {
                                 map.getCanvas().style.cursor = '';
                             });
+                            
+                            } catch (error) {
+                                console.error(`Error adding district ${district.properties.name}:`, error);
+                            }
                         });
                     } else {
                         console.warn('No district data found or districts failed to load');
