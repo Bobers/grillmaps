@@ -112,8 +112,10 @@ const req = https.request(options, (res) => {
             });
             
             // Save the real district data
+            const path = require('path');
+            const outputPath = path.join(__dirname, '..', 'data', 'berlin-districts-real.json');
             fs.writeFileSync(
-                '../data/berlin-districts-real.json',
+                outputPath,
                 JSON.stringify(geojson, null, 2)
             );
             
