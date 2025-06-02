@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Districts Loading</title>
+    <script>
+        // Test if districts file loads
+        fetch('./data/berlin-districts-real.json')
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Districts loaded:', data);
+                console.log('Number of features:', data.features.length);
+                console.log('First district:', data.features[0].properties.name);
+                console.log('File size OK!');
+            })
+            .catch(error => {
+                console.error('Error loading districts:', error);
+            });
+    </script>
+</head>
+<body>
+    <h1>Check Console (F12) for district loading test</h1>
+</body>
+</html>

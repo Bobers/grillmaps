@@ -100,7 +100,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.8.0 • Updated March 6, 2025 • Real district boundaries from OSM</div>
+        <div class="version-display">v1.9.0 • Updated March 6, 2025 • Fixed district rendering</div>
     </div>
     
     <div id="map"></div>
@@ -165,7 +165,7 @@
             // Fetch all data sources
             const fetchStaticLocations = fetch('./data/locations.json').then(response => response.json());
             const fetchOSMLocations = fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json').then(response => response.json());
-            const fetchBerlinDistricts = fetch('./data/berlin-districts-real.json')
+            const fetchBerlinDistricts = fetch('./data/berlin-districts-fixed.json')
                 .then(response => response.json())
                 .catch(() => null); // Fallback if districts file doesn't exist
             
