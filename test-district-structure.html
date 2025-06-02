@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test District Structure</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
+        
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [13.4050, 52.5200],
+            zoom: 10
+        });
+        
+        map.on('load', async () => {
+            console.log('Map loaded');
+            
+            // Load actual district data
+            const response = await fetch('./data/berlin-districts-fixed.json');
+            const data = await response.json();
+            const firstDistrict = data.features[0];
+            
+            console.log('First district:', firstDistrict.properties.name);
+            console.log('District structure:', {
+                type: firstDistrict.type,
+                hasProperties: !!firstDistrict.properties,
+                geometryType: firstDistrict.geometry.type,
+                coordinatesDepth: JSON.stringify(firstDistrict.geometry.coordinates).split('[').length - 1
+            });
+            
+            // Test 1: Add district exactly as it is
+            try {
+                map.addSource('test-district-raw', {
+                    'type': 'geojson',
+                    'data': firstDistrict
+                });
+                
+                map.addLayer({
+                    'id': 'test-district-raw-fill',
+                    'type': 'fill',
+                    'source': 'test-district-raw',
+                    'paint': {
+                        'fill-color': '#ff0000',
+                        'fill-opacity': 0.5
+                    }
+                });
+                console.log('SUCCESS: Added district as-is');
+            } catch (e) {
+                console.error('FAILED: District as-is:', e);
+            }
+            
+            // Test 2: Add as FeatureCollection
+            try {
+                map.addSource('test-district-collection', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': [firstDistrict]
+                    }
+                });
+                
+                map.addLayer({
+                    'id': 'test-district-collection-fill',
+                    'type': 'fill',
+                    'source': 'test-district-collection',
+                    'paint': {
+                        'fill-color': '#00ff00',
+                        'fill-opacity': 0.5
+                    }
+                });
+                console.log('SUCCESS: Added district as FeatureCollection');
+            } catch (e) {
+                console.error('FAILED: District as FeatureCollection:', e);
+            }
+            
+            // Zoom to district
+            const bounds = new mapboxgl.LngLatBounds();
+            firstDistrict.geometry.coordinates[0].forEach(coord => {
+                bounds.extend(coord);
+            });
+            map.fitBounds(bounds, { padding: 50 });
+        });
+    </script>
+</body>
+</html>
