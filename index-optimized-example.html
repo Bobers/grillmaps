@@ -1,0 +1,108 @@
+<!-- Example of optimized implementation -->
+<script>
+// OPTIMIZED APPROACH - Following Mapbox Best Practices
+
+mapboxgl.accessToken = 'your-token-here';
+
+const map = new mapboxgl.Map({
+    container: 'map',
+    // Use a custom style that includes your district tileset
+    style: 'mapbox://styles/bobers/your-custom-style-id', // This style includes districts
+    center: [13.4050, 52.5200],
+    zoom: 11,
+    projection: 'mercator'
+});
+
+map.on('load', () => {
+    // 1. Districts are already loaded via the custom style (tileset)
+    // No need to fetch or add districts - they're part of the map style!
+    
+    // 2. Only load dynamic data at runtime
+    const loadDynamicData = async () => {
+        try {
+            // Load manually curated locations (small, changes frequently)
+            const locationsResponse = await fetch('./data/locations.json');
+            const locationsData = await locationsResponse.json();
+            
+            // Load OSM data (updates daily)
+            const osmResponse = await fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json');
+            const osmData = await osmResponse.json();
+            
+            // Add locations as markers (current approach is fine for points)
+            addLocationMarkers(locationsData.locations);
+            addOSMFeatures(osmData.features);
+            
+        } catch (error) {
+            console.error('Error loading dynamic data:', error);
+        }
+    };
+    
+    // 3. Style districts using the tileset layers
+    // Districts are styled in Mapbox Studio, but can be modified at runtime
+    map.setPaintProperty('districts-fill', 'fill-opacity', 0.15);
+    
+    // 4. Add interactivity to district tileset layer
+    map.on('click', 'districts-fill', (e) => {
+        const properties = e.features[0].properties;
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(createDistrictPopup(properties))
+            .addTo(map);
+    });
+    
+    // Change cursor on hover
+    map.on('mouseenter', 'districts-fill', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    
+    map.on('mouseleave', 'districts-fill', () => {
+        map.getCanvas().style.cursor = '';
+    });
+    
+    // Load dynamic data
+    loadDynamicData();
+});
+
+// Helper functions remain the same
+function addLocationMarkers(locations) {
+    locations.forEach(location => {
+        // Same implementation as before
+    });
+}
+
+function addOSMFeatures(features) {
+    features.forEach(feature => {
+        // Same implementation as before
+    });
+}
+
+// ALTERNATIVE: If you can't use Mapbox Studio, use vector tiles from URL
+map.on('load', () => {
+    // Add districts as vector tile source
+    map.addSource('districts', {
+        'type': 'vector',
+        'tiles': ['https://your-tile-server.com/districts/{z}/{x}/{y}.pbf'],
+        'minzoom': 6,
+        'maxzoom': 14
+    });
+    
+    // Add styling layers
+    map.addLayer({
+        'id': 'districts-fill',
+        'type': 'fill',
+        'source': 'districts',
+        'source-layer': 'districts', // Layer name in the tileset
+        'paint': {
+            'fill-color': [
+                'match',
+                ['get', 'bbq_status'],
+                'allowed', '#22c55e',
+                'limited', '#fbbf24',
+                'prohibited', '#dc2626',
+                '#e5e7eb'
+            ],
+            'fill-opacity': 0.15
+        }
+    });
+});
+</script>
