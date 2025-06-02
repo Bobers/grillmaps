@@ -100,7 +100,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v2.1.0 • Updated March 6, 2025 • Districts with street style</div>
+        <div class="version-display">v2.2.0 • Updated March 6, 2025 • Districts on top layer</div>
     </div>
     
     <div id="map"></div>
@@ -196,17 +196,7 @@
                                            district.properties.bbq_status === 'limited' ? '#fbbf24' : 
                                            district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
                             
-                            // Find the first label layer in the style
-                            const layers = map.getStyle().layers;
-                            let firstSymbolId;
-                            for (const layer of layers) {
-                                if (layer.type === 'symbol') {
-                                    firstSymbolId = layer.id;
-                                    break;
-                                }
-                            }
-                            
-                            // Add fill layer BEFORE labels so it appears under them
+                            // Add fill layer ON TOP of everything
                             map.addLayer({
                                 'id': id,
                                 'type': 'fill',
@@ -214,9 +204,9 @@
                                 'layout': {},
                                 'paint': {
                                     'fill-color': fillColor,
-                                    'fill-opacity': 0.3
+                                    'fill-opacity': 0.4
                                 }
-                            }, firstSymbolId);
+                            }); // No second parameter = add on top
                             console.log(`Added fill layer for ${district.properties.name} with color ${fillColor}`);
                             
                             // Verify layer was added
@@ -227,17 +217,17 @@
                                 console.log(`SUCCESS: Layer ${id} exists on map`);
                             }
                             
-                            // Add outline layer (also before labels)
+                            // Add outline layer ON TOP
                             map.addLayer({
                                 'id': `${id}-outline`,
                                 'type': 'line',
                                 'source': id,
                                 'layout': {},
                                 'paint': {
-                                    'line-color': '#9ca3af',
-                                    'line-width': 1
+                                    'line-color': fillColor,
+                                    'line-width': 2
                                 }
-                            }, firstSymbolId);
+                            }); // No second parameter = add on top
                             
                             // Add label for district name
                             if (district.properties.name) {
