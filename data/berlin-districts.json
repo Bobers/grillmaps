@@ -4,187 +4,164 @@
     "title": "Berlin Administrative Districts",
     "description": "The 12 districts (Bezirke) of Berlin with BBQ regulation status",
     "last_updated": "2025-02-06",
-    "version": "1.0.0"
+    "version": "1.1.0",
+    "note": "Simplified district boundaries for demonstration"
   },
   "features": [
     {
       "type": "Feature",
       "properties": {
         "name": "Mitte",
-        "name_en": "Mitte",
         "bbq_status": "limited",
-        "bbq_areas": ["Monbijoupark", "James-Simon-Park"],
-        "population": 385748,
-        "area_km2": 39.47
+        "bbq_areas": ["Monbijoupark", "James-Simon-Park", "Tiergarten"],
+        "population": 385748
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.340, 52.540], [13.420, 52.540], [13.420, 52.500], [13.340, 52.500], [13.340, 52.540]]]
+        "coordinates": [[[13.33, 52.54], [13.42, 52.54], [13.42, 52.49], [13.33, 52.49], [13.33, 52.54]]]
       }
     },
     {
-      "type": "Feature", 
+      "type": "Feature",
       "properties": {
         "name": "Friedrichshain-Kreuzberg",
-        "name_en": "Friedrichshain-Kreuzberg",
         "bbq_status": "allowed",
-        "bbq_areas": ["Görlitzer Park", "Volkspark Friedrichshain"],
-        "population": 289762,
-        "area_km2": 20.16
+        "bbq_areas": ["Görlitzer Park", "Volkspark Friedrichshain", "Park am Gleisdreieck"],
+        "population": 289762
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.420, 52.520], [13.480, 52.520], [13.480, 52.480], [13.420, 52.480], [13.420, 52.520]]]
+        "coordinates": [[[13.38, 52.52], [13.47, 52.52], [13.47, 52.48], [13.38, 52.48], [13.38, 52.52]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Pankow",
-        "name_en": "Pankow", 
         "bbq_status": "limited",
-        "bbq_areas": ["Volkspark Prenzlauer Berg", "Bürgerpark Pankow"],
-        "population": 410716,
-        "area_km2": 103.01
+        "bbq_areas": ["Volkspark Prenzlauer Berg", "Bürgerpark Pankow", "Schlosspark"],
+        "population": 410716
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.380, 52.600], [13.480, 52.600], [13.480, 52.540], [13.380, 52.540], [13.380, 52.600]]]
+        "coordinates": [[[13.35, 52.63], [13.50, 52.63], [13.50, 52.54], [13.35, 52.54], [13.35, 52.63]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Charlottenburg-Wilmersdorf",
-        "name_en": "Charlottenburg-Wilmersdorf",
         "bbq_status": "limited",
-        "bbq_areas": ["Lietzenseepark", "Preußenpark"],
-        "population": 342332,
-        "area_km2": 64.72
+        "bbq_areas": ["Lietzenseepark", "Preußenpark", "Volkspark Wilmersdorf"],
+        "population": 342332
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.250, 52.520], [13.340, 52.520], [13.340, 52.480], [13.250, 52.480], [13.250, 52.520]]]
+        "coordinates": [[[13.20, 52.54], [13.33, 52.54], [13.33, 52.48], [13.20, 52.48], [13.20, 52.54]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Spandau",
-        "name_en": "Spandau",
         "bbq_status": "limited",
-        "bbq_areas": ["Spektepark", "Bullengraben"],
-        "population": 245197,
-        "area_km2": 91.91
+        "bbq_areas": ["Spektepark", "Bullengraben", "Zitadellenpark"],
+        "population": 245197
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.120, 52.540], [13.250, 52.540], [13.250, 52.480], [13.120, 52.480], [13.120, 52.540]]]
+        "coordinates": [[[13.09, 52.58], [13.20, 52.58], [13.20, 52.48], [13.09, 52.48], [13.09, 52.58]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Steglitz-Zehlendorf",
-        "name_en": "Steglitz-Zehlendorf",
         "bbq_status": "limited",
-        "bbq_areas": ["Stadtpark Steglitz", "Schlosspark Glienicke"],
-        "population": 308697,
-        "area_km2": 102.50
+        "bbq_areas": ["Stadtpark Steglitz", "Schlachtensee", "Krumme Lanke"],
+        "population": 308697
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.250, 52.450], [13.340, 52.450], [13.340, 52.400], [13.250, 52.400], [13.250, 52.450]]]
+        "coordinates": [[[13.20, 52.48], [13.35, 52.48], [13.35, 52.40], [13.20, 52.40], [13.20, 52.48]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Tempelhof-Schöneberg",
-        "name_en": "Tempelhof-Schöneberg",
         "bbq_status": "allowed",
-        "bbq_areas": ["Tempelhofer Feld", "Volkspark Mariendorf"],
-        "population": 351644,
-        "area_km2": 53.09
+        "bbq_areas": ["Tempelhofer Feld", "Volkspark Mariendorf", "Insulaner"],
+        "population": 351644
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.340, 52.480], [13.420, 52.480], [13.420, 52.430], [13.340, 52.430], [13.340, 52.480]]]
+        "coordinates": [[[13.35, 52.48], [13.44, 52.48], [13.44, 52.43], [13.35, 52.43], [13.35, 52.48]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Neukölln",
-        "name_en": "Neukölln",
         "bbq_status": "allowed",
-        "bbq_areas": ["Volkspark Hasenheide", "Britzer Garten"],
-        "population": 329691,
-        "area_km2": 44.93
+        "bbq_areas": ["Volkspark Hasenheide", "Britzer Garten", "Körnerpark"],
+        "population": 329691
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.420, 52.480], [13.500, 52.480], [13.500, 52.430], [13.420, 52.430], [13.420, 52.480]]]
+        "coordinates": [[[13.41, 52.48], [13.52, 52.48], [13.52, 52.42], [13.41, 52.42], [13.41, 52.48]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Treptow-Köpenick",
-        "name_en": "Treptow-Köpenick",
         "bbq_status": "prohibited",
         "bbq_areas": [],
-        "population": 276165,
-        "area_km2": 168.42
+        "population": 276165
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.500, 52.480], [13.650, 52.480], [13.650, 52.400], [13.500, 52.400], [13.500, 52.480]]]
+        "coordinates": [[[13.45, 52.48], [13.76, 52.48], [13.76, 52.34], [13.45, 52.34], [13.45, 52.48]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Marzahn-Hellersdorf",
-        "name_en": "Marzahn-Hellersdorf",
         "bbq_status": "limited",
         "bbq_areas": ["Gärten der Welt", "Kienbergpark"],
-        "population": 268548,
-        "area_km2": 61.74
+        "population": 268548
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.500, 52.540], [13.650, 52.540], [13.650, 52.480], [13.500, 52.480], [13.500, 52.540]]]
+        "coordinates": [[[13.50, 52.58], [13.68, 52.58], [13.68, 52.48], [13.50, 52.48], [13.50, 52.58]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Lichtenberg",
-        "name_en": "Lichtenberg",
         "bbq_status": "limited",
         "bbq_areas": ["Fennpfuhlpark", "Stadtpark Lichtenberg"],
-        "population": 291452,
-        "area_km2": 52.29
+        "population": 291452
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.480, 52.540], [13.550, 52.540], [13.550, 52.500], [13.480, 52.500], [13.480, 52.540]]]
+        "coordinates": [[[13.44, 52.54], [13.56, 52.54], [13.56, 52.48], [13.44, 52.48], [13.44, 52.54]]]
       }
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Reinickendorf",
-        "name_en": "Reinickendorf",
         "bbq_status": "limited",
-        "bbq_areas": ["Tegeler See", "Schäfersee"],
-        "population": 265225,
-        "area_km2": 89.46
+        "bbq_areas": ["Tegeler See", "Schäfersee", "Volkspark Rehberge"],
+        "population": 265225
       },
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[13.250, 52.600], [13.380, 52.600], [13.380, 52.540], [13.250, 52.540], [13.250, 52.600]]]
+        "coordinates": [[[13.20, 52.67], [13.40, 52.67], [13.40, 52.58], [13.20, 52.58], [13.20, 52.67]]]
       }
     }
   ]

@@ -178,6 +178,7 @@
                     // 1. Add Berlin districts as base layer FIRST
                     if (berlinDistricts && berlinDistricts.features) {
                         console.log(`Adding ${berlinDistricts.features.length} Berlin districts`);
+                        console.log('District data:', berlinDistricts);
                         
                         berlinDistricts.features.forEach((district, index) => {
                             const id = `district-${district.properties.name ? district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase() : index}`;
@@ -272,6 +273,8 @@
                                 map.getCanvas().style.cursor = '';
                             });
                         });
+                    } else {
+                        console.warn('No district data found or districts failed to load');
                     }
                     
                     // 2. Add district restrictions on top of base districts
