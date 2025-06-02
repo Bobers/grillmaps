@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "Berlin District BBQ Restrictions",
+    "description": "District-wide grilling prohibition areas in Berlin",
+    "last_updated": "2025-02-06",
+    "version": "1.0.0"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "treptow-koepenick",
+        "name": "Treptow-Köpenick",
+        "restriction_type": "complete_ban",
+        "title": "No BBQ Areas Available",
+        "description": "This entire district has no designated public grilling areas. BBQ is prohibited in all public spaces.",
+        "details": "Despite being Berlin's largest district with extensive green spaces, Treptow-Köpenick does not permit public grilling due to fire safety regulations and nature conservation efforts.",
+        "alternative_suggestion": "Consider nearby districts like Neukölln (Tempelhofer Feld) or Friedrichshain-Kreuzberg (Görlitzer Park) for legal grilling options.",
+        "style": {
+          "fillColor": "#dc2626",
+          "fillOpacity": 0.25,
+          "strokeColor": "#dc2626",
+          "strokeWidth": 2,
+          "strokeDashArray": [5, 5]
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [13.5741, 52.4580],
+          [13.6800, 52.4580],
+          [13.7600, 52.4200],
+          [13.7600, 52.3800],
+          [13.6800, 52.3400],
+          [13.5500, 52.3400],
+          [13.4800, 52.3800],
+          [13.4800, 52.4200],
+          [13.5741, 52.4580]
+        ]]
+      }
+    }
+  ]
+}

@@ -118,6 +118,10 @@
             <span class="legend-color" style="background-color: #3b82f6; opacity: 0.3; border-radius: 0; width: 20px; height: 8px;"></span>
             <span>Grilling Area</span>
         </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #dc2626; opacity: 0.25; border-radius: 0; width: 20px; height: 8px; border: 1px dashed #dc2626;"></span>
+            <span>BBQ Restricted</span>
+        </div>
     </div>
     
     <div class="footer">
@@ -155,10 +159,11 @@
             // Fetch both our manually curated locations and OSM data
             const fetchStaticLocations = fetch('./data/locations.json').then(response => response.json());
             const fetchOSMLocations = fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json').then(response => response.json());
+            const fetchDistrictRestrictions = fetch('./data/district-restrictions.json').then(response => response.json());
             
             // Process both data sources
-            Promise.all([fetchStaticLocations, fetchOSMLocations])
-                .then(([staticData, osmData]) => {
+            Promise.all([fetchStaticLocations, fetchOSMLocations, fetchDistrictRestrictions])
+                .then(([staticData, osmData, districtRestrictions]) => {
                     console.log(`Adding ${staticData.locations.length} manual locations and ${osmData.features.length} OSM locations`);
                     
                     // 1. Add manually curated locations first
@@ -279,6 +284,76 @@
                             });
                         }
                     });
+                    
+                    // 3. Add district restriction overlays
+                    if (districtRestrictions && districtRestrictions.features) {
+                        console.log(`Adding ${districtRestrictions.features.length} district restriction(s)`);
+                        
+                        districtRestrictions.features.forEach(restriction => {
+                            const id = `restriction-${restriction.properties.id}`;
+                            const style = restriction.properties.style;
+                            
+                            // Add source for restriction polygon
+                            map.addSource(id, {
+                                'type': 'geojson',
+                                'data': restriction
+                            });
+                            
+                            // Add fill layer with styling from JSON
+                            map.addLayer({
+                                'id': id,
+                                'type': 'fill',
+                                'source': id,
+                                'layout': {},
+                                'paint': {
+                                    'fill-color': style.fillColor,
+                                    'fill-opacity': style.fillOpacity
+                                }
+                            });
+                            
+                            // Add outline layer with dashed border
+                            map.addLayer({
+                                'id': `${id}-outline`,
+                                'type': 'line',
+                                'source': id,
+                                'layout': {},
+                                'paint': {
+                                    'line-color': style.strokeColor,
+                                    'line-width': style.strokeWidth,
+                                    'line-dasharray': style.strokeDashArray
+                                }
+                            });
+                            
+                            // Add click handler for restriction polygon
+                            map.on('click', id, (e) => {
+                                const props = restriction.properties;
+                                const coordinates = e.lngLat;
+                                
+                                new mapboxgl.Popup()
+                                    .setLngLat(coordinates)
+                                    .setHTML(`
+                                        <div style="padding: 15px; max-width: 300px;">
+                                            <h3 style="margin-top: 0; color: #dc2626; font-weight: 600;">${props.title}</h3>
+                                            <h4 style="margin: 8px 0; color: #666;">${props.name} District</h4>
+                                            <p style="margin-bottom: 10px;">${props.description}</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9em; color: #555;">${props.details}</p>
+                                            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
+                                            <p style="margin-bottom: 0; font-style: italic; color: #059669;">💡 ${props.alternative_suggestion}</p>
+                                        </div>
+                                    `)
+                                    .addTo(map);
+                            });
+                            
+                            // Change cursor to pointer when over restriction polygon
+                            map.on('mouseenter', id, () => {
+                                map.getCanvas().style.cursor = 'pointer';
+                            });
+                            
+                            map.on('mouseleave', id, () => {
+                                map.getCanvas().style.cursor = '';
+                            });
+                        });
+                    }
                     
                     console.log('All markers and polygons added successfully');
                 })
