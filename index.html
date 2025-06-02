@@ -100,7 +100,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v3.0.0 • Updated March 6, 2025 • Official district boundaries</div>
+        <div class="version-display">v3.0.1 • Updated March 6, 2025 • Fixed syntax error</div>
     </div>
     
     <div id="map"></div>
@@ -174,121 +174,50 @@
                 .then(([staticData, osmData, berlinDistricts]) => {
                     console.log('Loading map data...');
                     
-                    // 1. Add Berlin districts as base layer FIRST
+                    // 1. Add Berlin districts (EXACT COPY from working test page)
                     if (berlinDistricts && berlinDistricts.features) {
                         console.log(`Adding ${berlinDistricts.features.length} Berlin districts`);
-                        console.log('District data:', berlinDistricts);
-                        console.log('First district:', berlinDistricts.features[0]);
                         
+                        // Add each district
                         berlinDistricts.features.forEach((district, index) => {
-                            const id = `district-${district.properties.name ? district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase() : index}`;
+                            const id = `district-${district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
                             
-                            // Add source for district polygon
-                            try {
-                                map.addSource(id, {
-                                    'type': 'geojson',
-                                    'data': district
-                                });
-                                console.log(`Added source for ${district.properties.name}`);
+                            // Add source
+                            map.addSource(id, {
+                                'type': 'geojson',
+                                'data': district
+                            });
                             
-                            // Add fill layer with color based on BBQ status
                             const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
-                                           district.properties.bbq_status === 'limited' ? '#fbbf24' : 
-                                           district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
+                                            district.properties.bbq_status === 'limited' ? '#fbbf24' : 
+                                            district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
                             
-                            // Add fill layer ON TOP of everything
+                            // Add fill layer ON TOP
                             map.addLayer({
                                 'id': id,
                                 'type': 'fill',
                                 'source': id,
-                                'layout': {},
                                 'paint': {
                                     'fill-color': fillColor,
                                     'fill-opacity': 0.4
                                 }
-                            }); // No second parameter = add on top
-                            console.log(`Added fill layer for ${district.properties.name} with color ${fillColor}`);
+                            });
                             
-                            // Verify layer was added
-                            const addedLayer = map.getLayer(id);
-                            if (!addedLayer) {
-                                console.error(`FAILED: Layer ${id} was not added to map!`);
-                            } else {
-                                console.log(`SUCCESS: Layer ${id} exists on map`);
-                            }
-                            
-                            // Add outline layer ON TOP
+                            // Add outline
                             map.addLayer({
                                 'id': `${id}-outline`,
                                 'type': 'line',
                                 'source': id,
-                                'layout': {},
                                 'paint': {
                                     'line-color': fillColor,
                                     'line-width': 2
                                 }
-                            }); // No second parameter = add on top
-                            
-                            // Add label for district name
-                            if (district.properties.name) {
-                                map.addLayer({
-                                    'id': `${id}-label`,
-                                    'type': 'symbol',
-                                    'source': id,
-                                    'layout': {
-                                        'text-field': district.properties.name,
-                                        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                                        'text-size': 14,
-                                        'text-transform': 'uppercase',
-                                        'text-letter-spacing': 0.1
-                                    },
-                                    'paint': {
-                                        'text-color': '#6b7280',
-                                        'text-halo-color': '#ffffff',
-                                        'text-halo-width': 1
-                                    }
-                                });
-                            }
-                            
-                            // Add click handler for district info
-                            map.on('click', id, (e) => {
-                                const props = district.properties;
-                                const statusColor = props.bbq_status === 'allowed' ? '#22c55e' : 
-                                                  props.bbq_status === 'limited' ? '#f59e0b' : '#dc2626';
-                                const statusText = props.bbq_status === 'allowed' ? 'BBQ Allowed' : 
-                                                 props.bbq_status === 'limited' ? 'Limited BBQ Areas' : 'BBQ Prohibited';
-                                
-                                new mapboxgl.Popup()
-                                    .setLngLat(e.lngLat)
-                                    .setHTML(`
-                                        <div style="padding: 15px; max-width: 300px;">
-                                            <h3 style="margin-top: 0; color: #374151; font-weight: 600;">${props.name}</h3>
-                                            <p style="margin: 8px 0; font-weight: 600; color: ${statusColor};">${statusText}</p>
-                                            ${props.bbq_areas && props.bbq_areas.length > 0 ? 
-                                                `<p style="margin-bottom: 8px;"><strong>BBQ Areas:</strong> ${props.bbq_areas.join(', ')}</p>` : 
-                                                '<p style="margin-bottom: 8px; color: #6b7280;">No designated BBQ areas</p>'
-                                            }
-                                            <p style="margin-bottom: 0; font-size: 0.85em; color: #6b7280;">
-                                                Population: ${props.population.toLocaleString()} • Area: ${props.area_km2} km²
-                                            </p>
-                                        </div>
-                                    `)
-                                    .addTo(map);
                             });
                             
-                            // Change cursor on hover
-                            map.on('mouseenter', id, () => {
-                                map.getCanvas().style.cursor = 'pointer';
-                            });
-                            
-                            map.on('mouseleave', id, () => {
-                                map.getCanvas().style.cursor = '';
-                            });
-                            
-                            } catch (error) {
-                                console.error(`Error adding district ${district.properties.name}:`, error);
-                            }
+                            console.log(`Added ${district.properties.name} (${fillColor})`);
                         });
+                        
+                        console.log('All districts added!');
                     } else {
                         console.warn('No district data found or districts failed to load');
                     }
@@ -482,10 +411,16 @@
                         });
                     }
                     
+                    // Count what we added
+                    const allLayers = map.getStyle().layers;
+                    const districtLayers = allLayers.filter(l => l.id.includes('district')).length;
+                    const osmLayers = allLayers.filter(l => l.id.includes('area-')).length;
+                    console.log(`Summary: ${districtLayers} district layers, ${osmLayers} OSM area layers`);
                     console.log('All markers and polygons added successfully');
                 })
                 .catch(error => {
                     console.error('Error loading locations:', error);
+                    console.error('Full error details:', error.stack);
                     
                     // Fallback to static locations if OSM data fails
                     console.log('Falling back to static locations only');
