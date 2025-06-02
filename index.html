@@ -100,7 +100,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v1.5.0 • Updated February 6, 2025 • District overlay with BBQ status</div>
+        <div class="version-display">v1.6.0 • Updated March 6, 2025 • Simplified district overlay</div>
     </div>
     
     <div id="map"></div>
@@ -165,14 +165,13 @@
             // Fetch all data sources
             const fetchStaticLocations = fetch('./data/locations.json').then(response => response.json());
             const fetchOSMLocations = fetch('https://Bobers.github.io/bob-osm-processor/output/berlin-grilling.json').then(response => response.json());
-            const fetchDistrictRestrictions = fetch('./data/district-restrictions.json').then(response => response.json());
             const fetchBerlinDistricts = fetch('./data/berlin-districts.json')
                 .then(response => response.json())
                 .catch(() => null); // Fallback if districts file doesn't exist
             
             // Process all data sources
-            Promise.all([fetchStaticLocations, fetchOSMLocations, fetchDistrictRestrictions, fetchBerlinDistricts])
-                .then(([staticData, osmData, districtRestrictions, berlinDistricts]) => {
+            Promise.all([fetchStaticLocations, fetchOSMLocations, fetchBerlinDistricts])
+                .then(([staticData, osmData, berlinDistricts]) => {
                     console.log('Loading map data...');
                     
                     // 1. Add Berlin districts as base layer FIRST
@@ -277,77 +276,7 @@
                         console.warn('No district data found or districts failed to load');
                     }
                     
-                    // 2. Add district restrictions on top of base districts
-                    if (districtRestrictions && districtRestrictions.features) {
-                        console.log(`Adding ${districtRestrictions.features.length} district restriction(s)`);
-                        
-                        districtRestrictions.features.forEach(restriction => {
-                            const id = `restriction-${restriction.properties.id}`;
-                            const style = restriction.properties.style;
-                            
-                            // Add source for restriction polygon
-                            map.addSource(id, {
-                                'type': 'geojson',
-                                'data': restriction
-                            });
-                            
-                            // Add fill layer with styling from JSON
-                            map.addLayer({
-                                'id': id,
-                                'type': 'fill',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'fill-color': style.fillColor,
-                                    'fill-opacity': style.fillOpacity
-                                }
-                            });
-                            
-                            // Add outline layer with dashed border
-                            map.addLayer({
-                                'id': `${id}-outline`,
-                                'type': 'line',
-                                'source': id,
-                                'layout': {},
-                                'paint': {
-                                    'line-color': style.strokeColor,
-                                    'line-width': style.strokeWidth,
-                                    'line-dasharray': style.strokeDashArray
-                                }
-                            });
-                            
-                            // Add click handler for restriction polygon
-                            map.on('click', id, (e) => {
-                                const props = restriction.properties;
-                                const coordinates = e.lngLat;
-                                
-                                new mapboxgl.Popup()
-                                    .setLngLat(coordinates)
-                                    .setHTML(`
-                                        <div style="padding: 15px; max-width: 300px;">
-                                            <h3 style="margin-top: 0; color: #dc2626; font-weight: 600;">${props.title}</h3>
-                                            <h4 style="margin: 8px 0; color: #666;">${props.name} District</h4>
-                                            <p style="margin-bottom: 10px;">${props.description}</p>
-                                            <p style="margin-bottom: 10px; font-size: 0.9em; color: #555;">${props.details}</p>
-                                            <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
-                                            <p style="margin-bottom: 0; font-style: italic; color: #059669;">💡 ${props.alternative_suggestion}</p>
-                                        </div>
-                                    `)
-                                    .addTo(map);
-                            });
-                            
-                            // Change cursor to pointer when over restriction polygon
-                            map.on('mouseenter', id, () => {
-                                map.getCanvas().style.cursor = 'pointer';
-                            });
-                            
-                            map.on('mouseleave', id, () => {
-                                map.getCanvas().style.cursor = '';
-                            });
-                        });
-                    }
-                    
-                    // 3. Add manually curated locations
+                    // 2. Add manually curated locations
                     staticData.locations.forEach(location => {
                         // Create a popup with location details
                         const popup = new mapboxgl.Popup({ offset: 25 })
@@ -372,7 +301,7 @@
                         .addTo(map);
                     });
                     
-                    // 2. Add OSM data locations
+                    // 3. Add OSM data locations
                     osmData.features.forEach(feature => {
                         // Only process features with Point geometry (skip polygons for now)
                         if (feature.geometry.type === 'Point') {
