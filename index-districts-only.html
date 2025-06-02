@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GrillMaps - Districts Only</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .header h1 { margin: 0; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔥 GrillMaps Berlin - Districts Only Test</h1>
+    </div>
+    <div id="map"></div>
+    
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
+        
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [13.4050, 52.5200],
+            zoom: 10.5,
+            projection: 'mercator'
+        });
+        
+        map.on('load', async () => {
+            console.log('Map loaded - loading ONLY districts');
+            
+            try {
+                // Load ONLY districts
+                const response = await fetch('./data/berlin-districts-proper.json');
+                const berlinDistricts = await response.json();
+                
+                console.log(`Loaded ${berlinDistricts.features.length} districts`);
+                
+                // Add each district
+                berlinDistricts.features.forEach((district, index) => {
+                    const id = `district-${district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
+                    
+                    // Add source
+                    map.addSource(id, {
+                        'type': 'geojson',
+                        'data': district
+                    });
+                    
+                    const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
+                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : 
+                                    district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
+                    
+                    // Add fill layer ON TOP
+                    map.addLayer({
+                        'id': id,
+                        'type': 'fill',
+                        'source': id,
+                        'paint': {
+                            'fill-color': fillColor,
+                            'fill-opacity': 0.4
+                        }
+                    });
+                    
+                    // Add outline
+                    map.addLayer({
+                        'id': `${id}-outline`,
+                        'type': 'line',
+                        'source': id,
+                        'paint': {
+                            'line-color': fillColor,
+                            'line-width': 2
+                        }
+                    });
+                    
+                    console.log(`Added ${district.properties.name} (${fillColor})`);
+                });
+                
+                console.log('All districts added!');
+                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
