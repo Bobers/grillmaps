@@ -44,10 +44,12 @@
             display: inline-block;
         }
         .mapboxgl-popup {
-            max-width: 300px;
+            max-width: 320px;
         }
         .mapboxgl-popup-content {
             padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
         }
         .district-popup {
             padding: 15px;
@@ -303,7 +305,10 @@
                         
                         popupHTML += `</div>`;
                         
-                        new mapboxgl.Popup()
+                        new mapboxgl.Popup({
+                            maxWidth: '320px',
+                            className: 'district-info-popup'
+                        })
                             .setLngLat(e.lngLat)
                             .setHTML(popupHTML)
                             .addTo(map);
