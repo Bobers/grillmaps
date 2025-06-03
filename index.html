@@ -136,23 +136,24 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.4.0 • Updated June 3, 2025 • Added private property rules</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.5.0 • Updated June 3, 2025 • Layered map with BBQ zones</div>
     </div>
     <div id="map"></div>
     
     <div class="legend">
         <div style="font-weight: 600; margin-bottom: 8px;">Districts:</div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; opacity: 0.4;"></span>
-            <span>BBQ Allowed</span>
+            <span class="legend-color" style="background-color: #dc2626; opacity: 0.4;"></span>
+            <span>No Public BBQ</span>
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background-color: #fbbf24; opacity: 0.4;"></span>
-            <span>Limited BBQ</span>
+            <span>Limited Public BBQ</span>
         </div>
+        <div style="margin-top: 10px; font-weight: 600;">BBQ Areas:</div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #dc2626; opacity: 0.4;"></span>
-            <span>BBQ Prohibited</span>
+            <span class="legend-color" style="background-color: #22c55e; opacity: 0.6;"></span>
+            <span>Public BBQ Allowed</span>
         </div>
         <div style="margin-top: 10px; font-weight: 600;">Markers:</div>
         <div class="legend-item">
@@ -195,9 +196,9 @@
                         'data': district
                     });
                     
-                    const fillColor = district.properties.bbq_status === 'allowed' ? '#22c55e' : 
-                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : 
-                                    district.properties.bbq_status === 'prohibited' ? '#dc2626' : '#e5e7eb';
+                    // Updated color scheme: red for prohibited, yellow for limited
+                    const fillColor = district.properties.bbq_status === 'prohibited' ? '#dc2626' : 
+                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : '#e5e7eb';
                     
                     // Add fill layer ON TOP
                     map.addLayer({
@@ -325,6 +326,80 @@
                 });
                 
                 console.log('All districts added!');
+                
+                // Load and display BBQ areas as green polygons
+                try {
+                    const bbqAreasResponse = await fetch('./data/bbq-areas.json');
+                    const bbqAreasData = await bbqAreasResponse.json();
+                    
+                    // Add BBQ areas source
+                    map.addSource('bbq-areas', {
+                        'type': 'geojson',
+                        'data': bbqAreasData
+                    });
+                    
+                    // Add BBQ areas fill layer (green)
+                    map.addLayer({
+                        'id': 'bbq-areas-fill',
+                        'type': 'fill',
+                        'source': 'bbq-areas',
+                        'paint': {
+                            'fill-color': '#22c55e',
+                            'fill-opacity': 0.6
+                        }
+                    });
+                    
+                    // Add BBQ areas outline
+                    map.addLayer({
+                        'id': 'bbq-areas-outline',
+                        'type': 'line',
+                        'source': 'bbq-areas',
+                        'paint': {
+                            'line-color': '#16a34a',
+                            'line-width': 2
+                        }
+                    });
+                    
+                    // Add click handler for BBQ areas
+                    map.on('click', 'bbq-areas-fill', (e) => {
+                        const properties = e.features[0].properties;
+                        
+                        const popupHTML = `
+                            <div class="district-popup">
+                                <h3>${properties.name}</h3>
+                                <span class="bbq-status allowed">BBQ Allowed</span>
+                                <div style="margin-top: 10px;">
+                                    <p style="margin: 5px 0;"><strong>District:</strong> ${properties.district}</p>
+                                    <p style="margin: 5px 0;"><strong>Description:</strong> ${properties.description}</p>
+                                    <p style="margin: 5px 0;"><strong>Rules:</strong> ${properties.rules}</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        new mapboxgl.Popup({
+                            maxWidth: '300px'
+                        })
+                            .setLngLat(e.lngLat)
+                            .setHTML(popupHTML)
+                            .addTo(map);
+                        
+                        // Stop event propagation to prevent district popup
+                        e.stopPropagation();
+                    });
+                    
+                    // Change cursor on BBQ area hover
+                    map.on('mouseenter', 'bbq-areas-fill', () => {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                    
+                    map.on('mouseleave', 'bbq-areas-fill', () => {
+                        map.getCanvas().style.cursor = '';
+                    });
+                    
+                    console.log(`Added ${bbqAreasData.features.length} BBQ areas`);
+                } catch (error) {
+                    console.error('Error loading BBQ areas:', error);
+                }
                 
                 // Load manual locations
                 const locationsResponse = await fetch('./data/locations.json');
