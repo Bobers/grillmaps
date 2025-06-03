@@ -43,13 +43,62 @@
             margin-right: 8px;
             display: inline-block;
         }
+        .mapboxgl-popup {
+            max-width: 300px;
+        }
+        .mapboxgl-popup-content {
+            padding: 0;
+        }
+        .district-popup {
+            padding: 15px;
+        }
+        .district-popup h3 {
+            margin: 0 0 10px 0;
+            color: #1a1a1a;
+            font-size: 1.2rem;
+        }
+        .district-popup .bbq-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .district-popup .bbq-status.allowed {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+        .district-popup .bbq-status.limited {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+        .district-popup .bbq-status.prohibited {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        .district-popup .bbq-areas {
+            margin-top: 10px;
+        }
+        .district-popup .bbq-areas h4 {
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .district-popup .bbq-areas ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .district-popup .bbq-areas li {
+            margin-bottom: 3px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.1.0 • Updated March 6, 2025 • Simplified version</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.2.0 • Updated June 3, 2025 • Added district info popups</div>
     </div>
     <div id="map"></div>
     
@@ -135,6 +184,49 @@
                     });
                     
                     console.log(`Added ${district.properties.name} (${fillColor})`);
+                    
+                    // Add click handler for district
+                    map.on('click', id, (e) => {
+                        const properties = district.properties;
+                        const statusClass = properties.bbq_status || 'unknown';
+                        const statusText = properties.bbq_status ? 
+                            properties.bbq_status.charAt(0).toUpperCase() + properties.bbq_status.slice(1) : 
+                            'Unknown';
+                        
+                        let popupHTML = `
+                            <div class="district-popup">
+                                <h3>${properties.name}</h3>
+                                <span class="bbq-status ${statusClass}">${statusText}</span>
+                        `;
+                        
+                        // Add BBQ areas if they exist
+                        if (properties.bbq_areas && properties.bbq_areas.length > 0) {
+                            popupHTML += `
+                                <div class="bbq-areas">
+                                    <h4>BBQ Areas:</h4>
+                                    <ul>
+                                        ${properties.bbq_areas.map(area => `<li>${area}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            `;
+                        }
+                        
+                        popupHTML += `</div>`;
+                        
+                        new mapboxgl.Popup()
+                            .setLngLat(e.lngLat)
+                            .setHTML(popupHTML)
+                            .addTo(map);
+                    });
+                    
+                    // Change cursor to pointer on hover
+                    map.on('mouseenter', id, () => {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                    
+                    map.on('mouseleave', id, () => {
+                        map.getCanvas().style.cursor = '';
+                    });
                 });
                 
                 console.log('All districts added!');
