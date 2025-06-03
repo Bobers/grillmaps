@@ -3,9 +3,10 @@
   "metadata": {
     "title": "Berlin Administrative Districts",
     "description": "District boundaries from Nominatim",
-    "last_updated": "2025-06-02",
-    "version": "3.0.0",
-    "source": "OpenStreetMap Nominatim"
+    "last_updated": "2025-06-03",
+    "version": "3.1.0",
+    "source": "OpenStreetMap Nominatim",
+    "notes": "Updated with official Berlin grilling areas from berlin.de"
   },
   "features": [
     {
@@ -14,12 +15,22 @@
         "name": "Mitte",
         "bbq_status": "limited",
         "bbq_areas": [
-          "Monbijoupark",
-          "James-Simon-Park",
-          "Tiergarten"
+          "Monbijoupark"
         ],
         "osm_id": 16347,
-        "display_name": "Mitte, Berlin, Deutschland"
+        "display_name": "Mitte, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            {
+              "name": "Monbijoupark",
+              "note": "Only in small signposted area on Oranienburger Straße"
+            }
+          ],
+          "prohibited_areas": [
+            "Tiergarten"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -3105,13 +3116,26 @@
       "type": "Feature",
       "properties": {
         "name": "Friedrichshain-Kreuzberg",
-        "bbq_status": "allowed",
+        "bbq_status": "limited",
         "bbq_areas": [
           "Görlitzer Park",
-          "Volkspark Friedrichshain"
+          "Volkspark Friedrichshain (Neuer Hain)"
         ],
         "osm_id": 55764,
-        "display_name": "Friedrichshain-Kreuzberg, Berlin, Deutschland"
+        "display_name": "Friedrichshain-Kreuzberg, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            {
+              "name": "Görlitzer Park",
+              "note": "Designated area on meadow opposite artificial turf sports pitch"
+            },
+            {
+              "name": "Volkspark Friedrichshain (Neuer Hain)",
+              "note": "Must reserve barbecue pitches online in advance"
+            }
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -5427,11 +5451,19 @@
         "name": "Pankow",
         "bbq_status": "limited",
         "bbq_areas": [
-          "Volkspark Prenzlauer Berg",
-          "Bürgerpark Pankow"
+          "Mauerpark"
         ],
         "osm_id": 164723,
-        "display_name": "Pankow, Berlin, Deutschland"
+        "display_name": "Pankow, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            {
+              "name": "Mauerpark",
+              "note": "Near Bernauer Straße entrance. June/Sept: 12-8 PM, July/Aug: 12-9 PM"
+            }
+          ]
+        }
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -13575,11 +13607,24 @@
         "name": "Charlottenburg-Wilmersdorf",
         "bbq_status": "limited",
         "bbq_areas": [
-          "Lietzenseepark",
-          "Preußenpark"
+          "Goslarer Ufer",
+          "Rudolf-Mosse-Platz"
         ],
         "osm_id": 404538,
-        "display_name": "Charlottenburg-Wilmersdorf, Berlin, Deutschland"
+        "display_name": "Charlottenburg-Wilmersdorf, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            {
+              "name": "Goslarer Ufer",
+              "note": "Only near old Charlottenburg gasworks"
+            },
+            {
+              "name": "Rudolf-Mosse-Platz",
+              "note": "Grilling allowed"
+            }
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -16707,7 +16752,14 @@
           "Bullengraben"
         ],
         "osm_id": 16343,
-        "display_name": "Spandau, Berlin, Deutschland"
+        "display_name": "Spandau, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Spektepark",
+            "Bullengraben"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -20751,7 +20803,14 @@
           "Schlachtensee"
         ],
         "osm_id": 55734,
-        "display_name": "Steglitz-Zehlendorf, Berlin, Teltow, Deutschland"
+        "display_name": "Steglitz-Zehlendorf, Berlin, Teltow, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Stadtpark Steglitz",
+            "Schlachtensee"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -24901,13 +24960,21 @@
       "type": "Feature",
       "properties": {
         "name": "Tempelhof-Schöneberg",
-        "bbq_status": "allowed",
+        "bbq_status": "limited",
         "bbq_areas": [
-          "Tempelhofer Feld",
-          "Volkspark Mariendorf"
+          "Tempelhofer Feld"
         ],
         "osm_id": 158437,
-        "display_name": "Tempelhof-Schöneberg, Berlin, Teltow, Deutschland"
+        "display_name": "Tempelhof-Schöneberg, Berlin, Teltow, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            {
+              "name": "Tempelhofer Feld",
+              "note": "3 designated areas near Tempelhofer Damm, Oderstraße, and Columbiadamm entrances"
+            }
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -27361,13 +27428,20 @@
       "type": "Feature",
       "properties": {
         "name": "Neukölln",
-        "bbq_status": "allowed",
+        "bbq_status": "limited",
         "bbq_areas": [
           "Volkspark Hasenheide",
           "Britzer Garten"
         ],
         "osm_id": 162902,
-        "display_name": "Neukölln, Berlin, Deutschland"
+        "display_name": "Neukölln, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Volkspark Hasenheide",
+            "Britzer Garten"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -29409,10 +29483,20 @@
       "type": "Feature",
       "properties": {
         "name": "Treptow-Köpenick",
-        "bbq_status": "prohibited",
-        "bbq_areas": [],
+        "bbq_status": "limited",
+        "bbq_areas": [
+          "Müggelsee",
+          "Plänterwald"
+        ],
         "osm_id": 55754,
-        "display_name": "Treptow-Köpenick, Berlin, Deutschland"
+        "display_name": "Treptow-Köpenick, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Müggelsee",
+            "Plänterwald"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -37052,7 +37136,14 @@
           "Kienbergpark"
         ],
         "osm_id": 164712,
-        "display_name": "Marzahn-Hellersdorf, Berlin, Deutschland"
+        "display_name": "Marzahn-Hellersdorf, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Gärten der Welt",
+            "Kienbergpark"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -40798,13 +40889,15 @@
       "type": "Feature",
       "properties": {
         "name": "Lichtenberg",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Fennpfuhlpark",
-          "Stadtpark Lichtenberg"
-        ],
+        "bbq_status": "prohibited",
+        "bbq_areas": [],
         "osm_id": 404554,
-        "display_name": "Lichtenberg, Berlin, Deutschland"
+        "display_name": "Lichtenberg, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "prohibited",
+          "bbq_areas": [],
+          "note": "General ban on barbecues in all public green spaces since October 2022"
+        }
       },
       "geometry": {
         "type": "Polygon",
@@ -44780,7 +44873,14 @@
           "Schäfersee"
         ],
         "osm_id": 16334,
-        "display_name": "Reinickendorf, Berlin, Deutschland"
+        "display_name": "Reinickendorf, Berlin, Deutschland",
+        "bbq_details": {
+          "bbq_status": "limited",
+          "bbq_areas": [
+            "Tegeler See",
+            "Schäfersee"
+          ]
+        }
       },
       "geometry": {
         "type": "Polygon",
