@@ -136,29 +136,32 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.5.0 • Updated June 3, 2025 • Layered map with BBQ zones</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.6.0 • Updated June 3, 2025 • Complete 2025 district data</div>
     </div>
     <div id="map"></div>
     
     <div class="legend">
         <div style="font-weight: 600; margin-bottom: 8px;">Districts:</div>
         <div class="legend-item">
+            <span class="legend-color" style="background-color: #22c55e; opacity: 0.4;"></span>
+            <span>BBQ Areas Available</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #fbbf24; opacity: 0.4;"></span>
+            <span>Limited BBQ Areas</span>
+        </div>
+        <div class="legend-item">
             <span class="legend-color" style="background-color: #dc2626; opacity: 0.4;"></span>
             <span>No Public BBQ</span>
         </div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #fbbf24; opacity: 0.4;"></span>
-            <span>Limited Public BBQ</span>
+            <span class="legend-color" style="background-color: #9ca3af; opacity: 0.4;"></span>
+            <span>No Info Available</span>
         </div>
-        <div style="margin-top: 10px; font-weight: 600;">BBQ Areas:</div>
+        <div style="margin-top: 10px; font-weight: 600;">BBQ Zones:</div>
         <div class="legend-item">
             <span class="legend-color" style="background-color: #22c55e; opacity: 0.6;"></span>
-            <span>Public BBQ Allowed</span>
-        </div>
-        <div style="margin-top: 10px; font-weight: 600;">Markers:</div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; border-radius: 50%;"></span>
-            <span>Verified Spots</span>
+            <span>Designated BBQ Area</span>
         </div>
     </div>
     
@@ -196,9 +199,11 @@
                         'data': district
                     });
                     
-                    // Updated color scheme: red for prohibited, yellow for limited
+                    // Updated color scheme: red for prohibited, yellow for limited, green for allowed, gray for unknown
                     const fillColor = district.properties.bbq_status === 'prohibited' ? '#dc2626' : 
-                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : '#e5e7eb';
+                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : 
+                                    district.properties.bbq_status === 'allowed' ? '#22c55e' :
+                                    district.properties.bbq_status === 'unknown' ? '#9ca3af' : '#e5e7eb';
                     
                     // Add fill layer ON TOP
                     map.addLayer({

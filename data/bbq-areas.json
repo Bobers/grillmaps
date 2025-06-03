@@ -302,6 +302,78 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Blücherplatz BBQ Area",
+        "district": "Friedrichshain-Kreuzberg",
+        "description": "Meadow between Waterloo-Ufer and Zossener Straße",
+        "rules": "Designated grilling area"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              13.395,
+              52.495
+            ],
+            [
+              13.397,
+              52.495
+            ],
+            [
+              13.397,
+              52.496
+            ],
+            [
+              13.395,
+              52.496
+            ],
+            [
+              13.395,
+              52.495
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Familienfarm Lübars BBQ Area",
+        "district": "Reinickendorf",
+        "description": "Grilling areas with covered seating",
+        "rules": "Family-friendly BBQ area"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              13.35,
+              52.62
+            ],
+            [
+              13.352,
+              52.62
+            ],
+            [
+              13.352,
+              52.621
+            ],
+            [
+              13.35,
+              52.621
+            ],
+            [
+              13.35,
+              52.62
+            ]
+          ]
+        ]
+      }
     }
   ]
 }

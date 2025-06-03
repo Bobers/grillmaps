@@ -3135,15 +3135,16 @@
       "type": "Feature",
       "properties": {
         "name": "Friedrichshain-Kreuzberg",
-        "bbq_status": "limited",
+        "bbq_status": "allowed",
         "bbq_areas": [
           "Görlitzer Park",
-          "Volkspark Friedrichshain (Neuer Hain)"
+          "Volkspark Friedrichshain (Neuer Hain)",
+          "Blücherplatz"
         ],
         "osm_id": 55764,
         "display_name": "Friedrichshain-Kreuzberg, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
+          "bbq_status": "allowed",
           "bbq_areas": [
             {
               "name": "Görlitzer Park",
@@ -3151,9 +3152,14 @@
             },
             {
               "name": "Volkspark Friedrichshain (Neuer Hain)",
-              "note": "Must reserve barbecue pitches online in advance"
+              "note": "46 numbered BBQ plates. Must reserve online & pay deposit. Season until end October"
+            },
+            {
+              "name": "Blücherplatz",
+              "note": "Meadow between Waterloo-Ufer and Zossener Straße"
             }
-          ]
+          ],
+          "note": "3 official grilling areas. Updated 2025"
         },
         "private_property_rules": {
           "private": {
@@ -16822,19 +16828,14 @@
       "type": "Feature",
       "properties": {
         "name": "Spandau",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Spektepark",
-          "Bullengraben"
-        ],
+        "bbq_status": "prohibited",
+        "bbq_areas": [],
         "osm_id": 16343,
         "display_name": "Spandau, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
-          "bbq_areas": [
-            "Spektepark",
-            "Bullengraben"
-          ]
+          "bbq_status": "prohibited",
+          "bbq_areas": [],
+          "note": "No designated public grilling areas"
         },
         "private_property_rules": {
           "private": {
@@ -20892,19 +20893,14 @@
       "type": "Feature",
       "properties": {
         "name": "Steglitz-Zehlendorf",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Stadtpark Steglitz",
-          "Schlachtensee"
-        ],
+        "bbq_status": "prohibited",
+        "bbq_areas": [],
         "osm_id": 55734,
         "display_name": "Steglitz-Zehlendorf, Berlin, Teltow, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
-          "bbq_areas": [
-            "Stadtpark Steglitz",
-            "Schlachtensee"
-          ]
+          "bbq_status": "prohibited",
+          "bbq_areas": [],
+          "note": "No designated public grilling areas"
         },
         "private_property_rules": {
           "private": {
@@ -27561,19 +27557,14 @@
       "type": "Feature",
       "properties": {
         "name": "Neukölln",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Volkspark Hasenheide",
-          "Britzer Garten"
-        ],
+        "bbq_status": "unknown",
+        "bbq_areas": [],
         "osm_id": 162902,
         "display_name": "Neukölln, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
-          "bbq_areas": [
-            "Volkspark Hasenheide",
-            "Britzer Garten"
-          ]
+          "bbq_status": "unknown",
+          "bbq_areas": [],
+          "note": "No official information available - check with district office"
         },
         "private_property_rules": {
           "private": {
@@ -37296,19 +37287,14 @@
       "type": "Feature",
       "properties": {
         "name": "Marzahn-Hellersdorf",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Gärten der Welt",
-          "Kienbergpark"
-        ],
+        "bbq_status": "unknown",
+        "bbq_areas": [],
         "osm_id": 164712,
         "display_name": "Marzahn-Hellersdorf, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
-          "bbq_areas": [
-            "Gärten der Welt",
-            "Kienbergpark"
-          ]
+          "bbq_status": "unknown",
+          "bbq_areas": [],
+          "note": "No official grilling areas found - check with district office"
         },
         "private_property_rules": {
           "private": {
@@ -45071,19 +45057,21 @@
       "type": "Feature",
       "properties": {
         "name": "Reinickendorf",
-        "bbq_status": "limited",
+        "bbq_status": "allowed",
         "bbq_areas": [
-          "Tegeler See",
-          "Schäfersee"
+          "Familienfarm Lübars"
         ],
         "osm_id": 16334,
         "display_name": "Reinickendorf, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
+          "bbq_status": "allowed",
           "bbq_areas": [
-            "Tegeler See",
-            "Schäfersee"
-          ]
+            {
+              "name": "Familienfarm Lübars",
+              "note": "Grilling areas with covered seating available"
+            }
+          ],
+          "note": "Designated grilling areas available"
         },
         "private_property_rules": {
           "private": {

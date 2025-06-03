@@ -26,7 +26,7 @@ const privatePropertyRules = {
   }
 };
 
-// Official BBQ data from berlin.de
+// Official BBQ data from berlin.de - Updated June 2025
 const officialBBQData = {
   'Mitte': {
     bbq_status: 'limited',
@@ -40,7 +40,7 @@ const officialBBQData = {
     prohibited_areas: ['Tiergarten']
   },
   'Friedrichshain-Kreuzberg': {
-    bbq_status: 'limited',
+    bbq_status: 'allowed',
     bbq_areas: [
       {
         name: 'Görlitzer Park',
@@ -48,9 +48,14 @@ const officialBBQData = {
       },
       {
         name: 'Volkspark Friedrichshain (Neuer Hain)',
-        note: 'Must reserve barbecue pitches online in advance'
+        note: '46 numbered BBQ plates. Must reserve online & pay deposit. Season until end October'
+      },
+      {
+        name: 'Blücherplatz',
+        note: 'Meadow between Waterloo-Ufer and Zossener Straße'
       }
-    ]
+    ],
+    note: '3 official grilling areas. Updated 2025'
   },
   'Pankow': {
     bbq_status: 'limited',
@@ -88,18 +93,20 @@ const officialBBQData = {
     bbq_areas: [],
     note: 'General ban on barbecues in all public green spaces since October 2022'
   },
-  // Keep existing data for districts not mentioned in the official source
   'Spandau': {
-    bbq_status: 'limited',
-    bbq_areas: ['Spektepark', 'Bullengraben']
+    bbq_status: 'prohibited',
+    bbq_areas: [],
+    note: 'No designated public grilling areas'
   },
   'Steglitz-Zehlendorf': {
-    bbq_status: 'limited',
-    bbq_areas: ['Stadtpark Steglitz', 'Schlachtensee']
+    bbq_status: 'prohibited',
+    bbq_areas: [],
+    note: 'No designated public grilling areas'
   },
   'Neukölln': {
-    bbq_status: 'limited',
-    bbq_areas: ['Volkspark Hasenheide', 'Britzer Garten']
+    bbq_status: 'unknown',
+    bbq_areas: [],
+    note: 'No official information available - check with district office'
   },
   'Treptow-Köpenick': {
     bbq_status: 'prohibited',
@@ -107,12 +114,19 @@ const officialBBQData = {
     note: 'No public grilling areas. Grilling prohibited in all public green spaces including Treptower Park and Schlesischer Busch'
   },
   'Marzahn-Hellersdorf': {
-    bbq_status: 'limited',
-    bbq_areas: ['Gärten der Welt', 'Kienbergpark']
+    bbq_status: 'unknown',
+    bbq_areas: [],
+    note: 'No official grilling areas found - check with district office'
   },
   'Reinickendorf': {
-    bbq_status: 'limited',
-    bbq_areas: ['Tegeler See', 'Schäfersee']
+    bbq_status: 'allowed',
+    bbq_areas: [
+      {
+        name: 'Familienfarm Lübars',
+        note: 'Grilling areas with covered seating available'
+      }
+    ],
+    note: 'Designated grilling areas available'
   }
 };
 
