@@ -92,13 +92,49 @@
         .district-popup .bbq-areas li {
             margin-bottom: 3px;
         }
+        .district-popup .private-rules {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .district-popup .private-rules h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .district-popup .rule-section {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+        }
+        .district-popup .rule-section h5 {
+            margin: 0 0 4px 0;
+            font-size: 0.85rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+        .district-popup .rule-section p {
+            margin: 0 0 4px 0;
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+        .district-popup .rule-tips {
+            margin: 4px 0 0 0;
+            padding-left: 16px;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        .district-popup .rule-tips li {
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.3.1 • Updated June 3, 2025 • Treptow-Köpenick prohibited</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.4.0 • Updated June 3, 2025 • Added private property rules</div>
     </div>
     <div id="map"></div>
     
@@ -238,6 +274,29 @@
                             popupHTML += `
                                 <div style="margin-top: 10px; padding: 8px; background-color: #fef3c7; border-radius: 4px;">
                                     <small style="color: #92400e;"><strong>Note:</strong> ${properties.bbq_details.note}</small>
+                                </div>
+                            `;
+                        }
+                        
+                        // Add private property rules
+                        if (properties.private_property_rules) {
+                            popupHTML += `
+                                <div class="private-rules">
+                                    <h4>Private Property Rules</h4>
+                                    <div class="rule-section">
+                                        <h5>🏠 Private Property</h5>
+                                        <p>${properties.private_property_rules.private.general}</p>
+                                        <ul class="rule-tips">
+                                            ${properties.private_property_rules.private.tips.map(tip => `<li>${tip}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                    <div class="rule-section">
+                                        <h5>🏢 Rental Property</h5>
+                                        <p>${properties.private_property_rules.rental.general}</p>
+                                        <ul class="rule-tips">
+                                            ${properties.private_property_rules.rental.tips.map(tip => `<li>${tip}</li>`).join('')}
+                                        </ul>
+                                    </div>
                                 </div>
                             `;
                         }

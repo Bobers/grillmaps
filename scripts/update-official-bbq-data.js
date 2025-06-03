@@ -5,6 +5,27 @@ const path = require('path');
 const dataPath = path.join(__dirname, '../data/berlin-districts-nominatim.json');
 const districtsData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
+// Common private property rules across Berlin
+const privatePropertyRules = {
+  private: {
+    general: "Allowed on private property, but must respect neighbors",
+    tips: [
+      "Keep noise levels reasonable",
+      "Avoid excessive smoke",
+      "Best times: 12:00-20:00"
+    ]
+  },
+  rental: {
+    general: "Check house rules (Hausordnung) and rental contract",
+    tips: [
+      "Many properties restrict to electric grills only",
+      "Balcony grilling often prohibited",
+      "Ask property management if unclear",
+      "Garden areas may have specific BBQ zones"
+    ]
+  }
+};
+
 // Official BBQ data from berlin.de
 const officialBBQData = {
   'Mitte': {
@@ -115,6 +136,9 @@ districtsData.features = districtsData.features.map(district => {
     
     // Add detailed BBQ info as a new property
     district.properties.bbq_details = officialData;
+    
+    // Add private property rules
+    district.properties.private_property_rules = privatePropertyRules;
   }
   
   return district;
