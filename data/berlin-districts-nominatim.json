@@ -29483,19 +29483,14 @@
       "type": "Feature",
       "properties": {
         "name": "Treptow-Köpenick",
-        "bbq_status": "limited",
-        "bbq_areas": [
-          "Müggelsee",
-          "Plänterwald"
-        ],
+        "bbq_status": "prohibited",
+        "bbq_areas": [],
         "osm_id": 55754,
         "display_name": "Treptow-Köpenick, Berlin, Deutschland",
         "bbq_details": {
-          "bbq_status": "limited",
-          "bbq_areas": [
-            "Müggelsee",
-            "Plänterwald"
-          ]
+          "bbq_status": "prohibited",
+          "bbq_areas": [],
+          "note": "No public grilling areas. Grilling prohibited in all public green spaces including Treptower Park and Schlesischer Busch"
         }
       },
       "geometry": {

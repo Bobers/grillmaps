@@ -81,8 +81,9 @@ const officialBBQData = {
     bbq_areas: ['Volkspark Hasenheide', 'Britzer Garten']
   },
   'Treptow-Köpenick': {
-    bbq_status: 'limited',
-    bbq_areas: ['Müggelsee', 'Plänterwald']
+    bbq_status: 'prohibited',
+    bbq_areas: [],
+    note: 'No public grilling areas. Grilling prohibited in all public green spaces including Treptower Park and Schlesischer Busch'
   },
   'Marzahn-Hellersdorf': {
     bbq_status: 'limited',
