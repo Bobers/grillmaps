@@ -136,7 +136,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.6.0 • Updated June 3, 2025 • Complete 2025 district data</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.6.1 • Updated June 3, 2025 • Static points hidden for verification</div>
     </div>
     <div id="map"></div>
     
@@ -163,6 +163,13 @@
             <span class="legend-color" style="background-color: #22c55e; opacity: 0.6;"></span>
             <span>Designated BBQ Area</span>
         </div>
+        <!-- Manual location markers temporarily hidden for verification
+        <div style="margin-top: 10px; font-weight: 600;">Markers:</div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #22c55e; border-radius: 50%;"></span>
+            <span>Verified Spots</span>
+        </div>
+        -->
     </div>
     
     <script>
@@ -406,7 +413,8 @@
                     console.error('Error loading BBQ areas:', error);
                 }
                 
-                // Load manual locations
+                // Manual locations - temporarily hidden for verification
+                /*
                 const locationsResponse = await fetch('./data/locations.json');
                 const locationsData = await locationsResponse.json();
                 
@@ -430,6 +438,8 @@
                 });
                 
                 console.log(`Added ${locationsData.locations.length} manual locations`);
+                */
+                console.log('Manual locations temporarily hidden for verification');
                 
             } catch (error) {
                 console.error('Error:', error);
