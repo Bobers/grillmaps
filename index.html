@@ -401,15 +401,15 @@
             `;
         }
         
-        // Function to create grill icon element (styled like official Berlin icon)
+        // Function to create official Berlin grill icon element
         function createGrillIconElement() {
             const iconDiv = document.createElement('div');
             iconDiv.style.cssText = `
-                width: 32px;
-                height: 32px;
+                width: 40px;
+                height: 40px;
                 background: white;
-                border: 2px solid #ea580c;
-                border-radius: 50%;
+                border: 2px solid #333;
+                border-radius: 4px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -419,10 +419,17 @@
                 position: relative;
             `;
             
-            // Simple grill icon inspired by official Berlin style
-            iconDiv.innerHTML = `
-                <div style="color: #ea580c; font-size: 18px; font-weight: bold;">🔥</div>
+            // Use the official Berlin grill icon (downloaded from WMS)
+            const iconImg = document.createElement('img');
+            iconImg.src = './data/official-grill-icon.png';
+            iconImg.style.cssText = `
+                width: 36px;
+                height: auto;
+                object-fit: contain;
             `;
+            iconImg.alt = 'Official Berlin Grill Icon';
+            
+            iconDiv.appendChild(iconImg);
             
             // Add hover effect
             iconDiv.addEventListener('mouseenter', () => {
