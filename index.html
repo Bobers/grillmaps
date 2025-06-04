@@ -401,15 +401,15 @@
             `;
         }
         
-        // Function to create grill icon element (based on official Berlin FIS-Broker icon)
+        // Function to create official Berlin grill icon element
         function createGrillIconElement() {
             const iconDiv = document.createElement('div');
             iconDiv.style.cssText = `
                 width: 32px;
                 height: 32px;
                 background: white;
-                border: 2px solid #ea580c;
-                border-radius: 50%;
+                border: 2px solid #333;
+                border-radius: 4px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -418,25 +418,17 @@
                 transition: transform 0.2s ease;
             `;
             
-            // Add grill SVG icon (similar to official Berlin icon)
-            iconDiv.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2">
-                    <!-- Grill body -->
-                    <ellipse cx="12" cy="16" rx="8" ry="3" fill="#f97316" stroke="#ea580c"/>
-                    <!-- Grill grate -->
-                    <line x1="6" y1="16" x2="18" y2="16" stroke="#ea580c" stroke-width="1"/>
-                    <line x1="8" y1="14" x2="8" y2="18" stroke="#ea580c" stroke-width="1"/>
-                    <line x1="12" y1="14" x2="12" y2="18" stroke="#ea580c" stroke-width="1"/>
-                    <line x1="16" y1="14" x2="16" y2="18" stroke="#ea580c" stroke-width="1"/>
-                    <!-- Legs -->
-                    <line x1="7" y1="19" x2="6" y2="22" stroke="#ea580c" stroke-width="2"/>
-                    <line x1="17" y1="19" x2="18" y2="22" stroke="#ea580c" stroke-width="2"/>
-                    <!-- Flames -->
-                    <path d="M10 12 Q11 8 12 12 Q13 8 14 12" stroke="#f97316" stroke-width="1.5" fill="none"/>
-                    <path d="M8 13 Q9 9 10 13" stroke="#f97316" stroke-width="1" fill="none"/>
-                    <path d="M14 13 Q15 9 16 13" stroke="#f97316" stroke-width="1" fill="none"/>
-                </svg>
+            // Use official Berlin grill icon (licensed under dl-zero-de/2.0)
+            const iconImg = document.createElement('img');
+            iconImg.src = 'https://gdi.berlin.de/services/wms/grillflaechen?REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=1.3.0&LAYER=grillflaechen&FORMAT=image/png';
+            iconImg.style.cssText = `
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
             `;
+            iconImg.alt = 'Official Berlin Grill Icon';
+            
+            iconDiv.appendChild(iconImg);
             
             // Add hover effect
             iconDiv.addEventListener('mouseenter', () => {
