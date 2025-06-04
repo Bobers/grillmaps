@@ -206,6 +206,13 @@
         .info-item strong {
             color: #374151;
         }
+        
+        /* Hover popup styling */
+        .hover-popup .mapboxgl-popup-content {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #f97316;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -331,14 +338,38 @@
                         maxWidth: '320px'
                     }).setHTML(createOfficialAreaPopupHTML(feature.properties));
                     
-                    // Add marker
-                    new mapboxgl.Marker({
+                    // Add marker with click popup
+                    const marker = new mapboxgl.Marker({
                         element: grillIcon,
                         anchor: 'center'
                     })
                     .setLngLat(center)
                     .setPopup(popup)
                     .addTo(map);
+                    
+                    // Add hover popup functionality
+                    let hoverPopup = null;
+                    
+                    grillIcon.addEventListener('mouseenter', () => {
+                        // Create a temporary popup for hover
+                        hoverPopup = new mapboxgl.Popup({
+                            offset: 25,
+                            closeButton: false,
+                            closeOnClick: false,
+                            maxWidth: '320px',
+                            className: 'hover-popup'
+                        })
+                        .setLngLat(center)
+                        .setHTML(createOfficialAreaPopupHTML(feature.properties))
+                        .addTo(map);
+                    });
+                    
+                    grillIcon.addEventListener('mouseleave', () => {
+                        if (hoverPopup) {
+                            hoverPopup.remove();
+                            hoverPopup = null;
+                        }
+                    });
                 });
                 
                 console.log(`✅ Added ${officialAreasData.features.length} official grilling areas with icons`);
