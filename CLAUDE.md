@@ -4,11 +4,17 @@
 
 ### After Making Updates
 ```bash
-# Always run after making changes
+# ALWAYS UPDATE VERSION FIRST (in index.html header)
+# Then run after making changes
 git add .
 git commit -m "Description of changes"
 git push origin main
 ```
+
+### IMPORTANT RULE
+**ALWAYS UPDATE THE VERSION NUMBER** in index.html header after every change:
+- Find: `<div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.0`
+- Update: Increment version (v5.1.0 → v5.1.1 for fixes, v5.2.0 for features, v6.0.0 for major changes)
 
 ### Development Workflow
 ```bash
