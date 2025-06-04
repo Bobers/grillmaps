@@ -51,85 +51,6 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        .district-popup {
-            padding: 15px;
-        }
-        .district-popup h3 {
-            margin: 0 0 10px 0;
-            color: #1a1a1a;
-            font-size: 1.2rem;
-        }
-        .district-popup .bbq-status {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-        .district-popup .bbq-status.allowed {
-            background-color: #dcfce7;
-            color: #15803d;
-        }
-        .district-popup .bbq-status.limited {
-            background-color: #fef3c7;
-            color: #b45309;
-        }
-        .district-popup .bbq-status.prohibited {
-            background-color: #fee2e2;
-            color: #b91c1c;
-        }
-        .district-popup .bbq-areas {
-            margin-top: 10px;
-        }
-        .district-popup .bbq-areas h4 {
-            margin: 0 0 5px 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .district-popup .bbq-areas ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        .district-popup .bbq-areas li {
-            margin-bottom: 3px;
-        }
-        .district-popup .private-rules {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #e5e7eb;
-        }
-        .district-popup .private-rules h4 {
-            margin: 0 0 8px 0;
-            font-size: 0.9rem;
-            color: #374151;
-        }
-        .district-popup .rule-section {
-            margin-bottom: 10px;
-            padding: 8px;
-            background-color: #f3f4f6;
-            border-radius: 4px;
-        }
-        .district-popup .rule-section h5 {
-            margin: 0 0 4px 0;
-            font-size: 0.85rem;
-            color: #1f2937;
-            font-weight: 600;
-        }
-        .district-popup .rule-section p {
-            margin: 0 0 4px 0;
-            font-size: 0.8rem;
-            color: #4b5563;
-        }
-        .district-popup .rule-tips {
-            margin: 4px 0 0 0;
-            padding-left: 16px;
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-        .district-popup .rule-tips li {
-            margin-bottom: 2px;
-        }
         
         /* Enhanced popup styles for location markers */
         .grillmap-popup {
@@ -160,6 +81,11 @@
             font-size: 0.8rem;
             display: inline-block;
             font-weight: 500;
+        }
+        
+        .trust-indicator.official {
+            background: #fef3c7;
+            color: #92400e;
         }
         
         .popup-content {
@@ -261,43 +187,44 @@
             color: #6b7280;
             text-align: center;
         }
+        
+        /* Official area specific styles */
+        .official-info {
+            margin: 12px 0;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .info-item {
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+        
+        .info-item strong {
+            color: #374151;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🔥 GrillMaps Berlin</h1>
-        <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Verified grilling spots for expats - your trusted source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v3.7.0 • Updated June 4, 2025 • Enhanced interactions & verified locations</div>
+        <h1>🏛️ Official Berlin Grilling Areas</h1>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.0.0 • Updated June 4, 2025 • Official data only</div>
     </div>
     <div id="map"></div>
     
     <div class="legend">
-        <div style="font-weight: 600; margin-bottom: 8px;">Districts:</div>
+        <div style="font-weight: 600; margin-bottom: 8px;">🏛️ Official Berlin Grilling Areas</div>
         <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; opacity: 0.4;"></span>
-            <span>BBQ Areas Available</span>
+            <span class="legend-color" style="background-color: #f97316; opacity: 0.7;"></span>
+            <span>Designated Grilling Zone</span>
         </div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #fbbf24; opacity: 0.4;"></span>
-            <span>Limited BBQ Areas</span>
-        </div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #dc2626; opacity: 0.4;"></span>
-            <span>No Public BBQ</span>
-        </div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #9ca3af; opacity: 0.4;"></span>
-            <span>No Info Available</span>
-        </div>
-        <div style="margin-top: 10px; font-weight: 600;">BBQ Zones:</div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; opacity: 0.6;"></span>
-            <span>Designated BBQ Area</span>
-        </div>
-        <div style="margin-top: 10px; font-weight: 600;">Markers:</div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #22c55e; border-radius: 50%;"></span>
-            <span>Verified Spots</span>
+        <div style="margin-top: 12px; font-size: 0.75rem; color: #666;">
+            <div>Data Source: Senatsverwaltung Berlin</div>
+            <div>License: dl-zero-de/2.0</div>
         </div>
     </div>
     
@@ -316,305 +243,116 @@
         map.addControl(new mapboxgl.NavigationControl());
         
         map.on('load', async () => {
-            console.log('Map loaded - loading ONLY districts');
+            console.log('Map loaded - loading official Berlin grilling data');
             
+            // Load and display official Berlin grilling areas
             try {
-                // Load ONLY districts
-                const response = await fetch('./data/berlin-districts-nominatim.json');
-                const berlinDistricts = await response.json();
+                const officialAreasResponse = await fetch('./data/official-grilling-areas.json');
+                const officialAreasData = await officialAreasResponse.json();
                 
-                console.log(`Loaded ${berlinDistricts.features.length} districts`);
-                
-                // Add each district
-                berlinDistricts.features.forEach((district, index) => {
-                    const id = `district-${district.properties.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
-                    
-                    // Add source
-                    map.addSource(id, {
-                        'type': 'geojson',
-                        'data': district
-                    });
-                    
-                    // All districts in yellow color
-                    const fillColor = '#fbbf24';
-                    
-                    // Add fill layer ON TOP
-                    map.addLayer({
-                        'id': id,
-                        'type': 'fill',
-                        'source': id,
-                        'paint': {
-                            'fill-color': fillColor,
-                            'fill-opacity': 0.4
-                        }
-                    });
-                    
-                    // Add outline
-                    map.addLayer({
-                        'id': `${id}-outline`,
-                        'type': 'line',
-                        'source': id,
-                        'paint': {
-                            'line-color': fillColor,
-                            'line-width': 2
-                        }
-                    });
-                    
-                    console.log(`Added ${district.properties.name} (${fillColor})`);
-                    
-                    // Add click handler for district
-                    map.on('click', id, (e) => {
-                        const properties = district.properties;
-                        const statusClass = properties.bbq_status || 'unknown';
-                        const statusText = properties.bbq_status ? 
-                            properties.bbq_status.charAt(0).toUpperCase() + properties.bbq_status.slice(1) : 
-                            'Unknown';
-                        
-                        let popupHTML = `
-                            <div class="district-popup">
-                                <h3>${properties.name}</h3>
-                                <span class="bbq-status ${statusClass}">${statusText}</span>
-                        `;
-                        
-                        // Add BBQ areas with detailed info if available
-                        if (properties.bbq_details && properties.bbq_details.bbq_areas && properties.bbq_details.bbq_areas.length > 0) {
-                            popupHTML += `
-                                <div class="bbq-areas">
-                                    <h4>BBQ Areas:</h4>
-                                    <ul>
-                            `;
-                            properties.bbq_details.bbq_areas.forEach(area => {
-                                if (typeof area === 'object') {
-                                    popupHTML += `<li><strong>${area.name}</strong>`;
-                                    if (area.note) {
-                                        popupHTML += `<br><small style="color: #666;">${area.note}</small>`;
-                                    }
-                                    popupHTML += `</li>`;
-                                } else {
-                                    popupHTML += `<li>${area}</li>`;
-                                }
-                            });
-                            popupHTML += `
-                                    </ul>
-                                </div>
-                            `;
-                        } else if (properties.bbq_areas && properties.bbq_areas.length > 0) {
-                            // Fallback to simple list
-                            popupHTML += `
-                                <div class="bbq-areas">
-                                    <h4>BBQ Areas:</h4>
-                                    <ul>
-                                        ${properties.bbq_areas.map(area => `<li>${area}</li>`).join('')}
-                                    </ul>
-                                </div>
-                            `;
-                        }
-                        
-                        // Add special notes if available
-                        if (properties.bbq_details && properties.bbq_details.note) {
-                            popupHTML += `
-                                <div style="margin-top: 10px; padding: 8px; background-color: #fef3c7; border-radius: 4px;">
-                                    <small style="color: #92400e;"><strong>Note:</strong> ${properties.bbq_details.note}</small>
-                                </div>
-                            `;
-                        }
-                        
-                        // Add private property rules
-                        if (properties.private_property_rules) {
-                            popupHTML += `
-                                <div class="private-rules">
-                                    <h4>Private Property Rules</h4>
-                                    <div class="rule-section">
-                                        <h5>🏠 Private Property</h5>
-                                        <p>${properties.private_property_rules.private.general}</p>
-                                        <ul class="rule-tips">
-                                            ${properties.private_property_rules.private.tips.map(tip => `<li>${tip}</li>`).join('')}
-                                        </ul>
-                                    </div>
-                                    <div class="rule-section">
-                                        <h5>🏢 Rental Property</h5>
-                                        <p>${properties.private_property_rules.rental.general}</p>
-                                        <ul class="rule-tips">
-                                            ${properties.private_property_rules.rental.tips.map(tip => `<li>${tip}</li>`).join('')}
-                                        </ul>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                        
-                        popupHTML += `</div>`;
-                        
-                        new mapboxgl.Popup({
-                            maxWidth: '320px',
-                            className: 'district-info-popup'
-                        })
-                            .setLngLat(e.lngLat)
-                            .setHTML(popupHTML)
-                            .addTo(map);
-                    });
-                    
-                    // Enhanced hover effects for districts
-                    map.on('mouseenter', id, () => {
-                        map.getCanvas().style.cursor = 'pointer';
-                        // Increase opacity on hover
-                        map.setPaintProperty(id, 'fill-opacity', 0.6);
-                        map.setPaintProperty(`${id}-outline`, 'line-width', 3);
-                    });
-                    
-                    map.on('mouseleave', id, () => {
-                        map.getCanvas().style.cursor = '';
-                        // Reset opacity on mouse leave
-                        map.setPaintProperty(id, 'fill-opacity', 0.4);
-                        map.setPaintProperty(`${id}-outline`, 'line-width', 2);
-                    });
+                // Add official areas source
+                map.addSource('official-areas', {
+                    'type': 'geojson',
+                    'data': officialAreasData
                 });
                 
-                console.log('All districts added!');
+                // Add official areas fill layer (distinctive orange color)
+                map.addLayer({
+                    'id': 'official-areas-fill',
+                    'type': 'fill',
+                    'source': 'official-areas',
+                    'paint': {
+                        'fill-color': '#f97316',
+                        'fill-opacity': 0.7
+                    }
+                });
                 
-                // Load and display BBQ areas as green polygons
-                try {
-                    const bbqAreasResponse = await fetch('./data/bbq-areas.json');
-                    const bbqAreasData = await bbqAreasResponse.json();
-                    
-                    // Add BBQ areas source
-                    map.addSource('bbq-areas', {
-                        'type': 'geojson',
-                        'data': bbqAreasData
-                    });
-                    
-                    // Add BBQ areas fill layer (green)
-                    map.addLayer({
-                        'id': 'bbq-areas-fill',
-                        'type': 'fill',
-                        'source': 'bbq-areas',
-                        'paint': {
-                            'fill-color': '#22c55e',
-                            'fill-opacity': 0.6
-                        }
-                    });
-                    
-                    // Add BBQ areas outline
-                    map.addLayer({
-                        'id': 'bbq-areas-outline',
-                        'type': 'line',
-                        'source': 'bbq-areas',
-                        'paint': {
-                            'line-color': '#16a34a',
-                            'line-width': 2
-                        }
-                    });
-                    
-                    // Add click handler for BBQ areas
-                    map.on('click', 'bbq-areas-fill', (e) => {
-                        const properties = e.features[0].properties;
-                        
-                        const popupHTML = `
-                            <div class="district-popup">
-                                <h3>${properties.name}</h3>
-                                <span class="bbq-status allowed">BBQ Allowed</span>
-                                <div style="margin-top: 10px;">
-                                    <p style="margin: 5px 0;"><strong>District:</strong> ${properties.district}</p>
-                                    <p style="margin: 5px 0;"><strong>Description:</strong> ${properties.description}</p>
-                                    <p style="margin: 5px 0;"><strong>Rules:</strong> ${properties.rules}</p>
-                                </div>
-                            </div>
-                        `;
-                        
-                        new mapboxgl.Popup({
-                            maxWidth: '300px'
-                        })
-                            .setLngLat(e.lngLat)
-                            .setHTML(popupHTML)
-                            .addTo(map);
-                        
-                        // Stop event propagation to prevent district popup
-                        e.stopPropagation();
-                    });
-                    
-                    // Change cursor on BBQ area hover
-                    map.on('mouseenter', 'bbq-areas-fill', () => {
-                        map.getCanvas().style.cursor = 'pointer';
-                    });
-                    
-                    map.on('mouseleave', 'bbq-areas-fill', () => {
-                        map.getCanvas().style.cursor = '';
-                    });
-                    
-                    console.log(`Added ${bbqAreasData.features.length} BBQ areas`);
-                } catch (error) {
-                    console.error('Error loading BBQ areas:', error);
-                }
+                // Add official areas outline
+                map.addLayer({
+                    'id': 'official-areas-outline',
+                    'type': 'line',
+                    'source': 'official-areas',
+                    'paint': {
+                        'line-color': '#ea580c',
+                        'line-width': 2,
+                        'line-opacity': 0.8
+                    }
+                });
                 
-                // Load and display manual locations with enhanced popups
-                try {
-                    const locationsResponse = await fetch('./data/locations.json');
-                    const locationsData = await locationsResponse.json();
+                // Add click handler for official areas
+                map.on('click', 'official-areas-fill', (e) => {
+                    const properties = e.features[0].properties;
                     
-                    locationsData.locations.forEach(location => {
-                        // Create enhanced popup with copy functionality
-                        const popup = new mapboxgl.Popup({ 
-                            offset: 25,
-                            closeButton: true,
-                            closeOnClick: false,
-                            maxWidth: '320px'
-                        }).setHTML(createLocationPopupHTML(location));
-                        
-                        // Create custom marker with status-based color
-                        const markerColor = location.status === 'verified' ? '#22c55e' : '#f59e0b';
-                        
-                        new mapboxgl.Marker({
-                            color: markerColor,
-                            scale: 1.2
-                        })
-                        .setLngLat(location.coordinates)
-                        .setPopup(popup)
+                    const popupHTML = createOfficialAreaPopupHTML(properties);
+                    
+                    new mapboxgl.Popup({
+                        maxWidth: '320px'
+                    })
+                        .setLngLat(e.lngLat)
+                        .setHTML(popupHTML)
                         .addTo(map);
-                    });
                     
-                    console.log(`Added ${locationsData.locations.length} manual locations with enhanced popups`);
-                } catch (error) {
-                    console.error('Error loading manual locations:', error);
-                }
+                    // Stop event propagation
+                    e.stopPropagation();
+                });
                 
+                // Add hover effects for official areas
+                map.on('mouseenter', 'official-areas-fill', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                    map.setPaintProperty('official-areas-fill', 'fill-opacity', 0.8);
+                });
+                
+                map.on('mouseleave', 'official-areas-fill', () => {
+                    map.getCanvas().style.cursor = '';
+                    map.setPaintProperty('official-areas-fill', 'fill-opacity', 0.7);
+                });
+                
+                console.log(`✅ Added ${officialAreasData.features.length} official grilling areas`);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('❌ Error loading official grilling areas:', error);
             }
         });
         
-        // Function to create enhanced popup HTML for location markers
-        function createLocationPopupHTML(location) {
-            const equipmentDisplay = formatEquipmentType(location.equipment);
-            const accessibilityDisplay = formatAccessibility(location.accessibility);
+        // Function to create popup HTML for official grilling areas
+        function createOfficialAreaPopupHTML(properties) {
+            const original = properties.metadata?.original_properties || {};
             
             return `
                 <div class="grillmap-popup">
                     <div class="popup-header">
-                        <h3 class="popup-title">${escapeHTML(location.name)}</h3>
-                        <div class="trust-indicator">✅ ${location.status === 'verified' ? 'Verified' : 'Pending'}</div>
+                        <h3 class="popup-title">${escapeHTML(properties.address || properties.name)}</h3>
+                        <div class="trust-indicator official">🏛️ Official Area</div>
                     </div>
                     
                     <div class="popup-content">
-                        <div class="equipment-info">🔥 ${equipmentDisplay}</div>
-                        <div class="description">${escapeHTML(location.description)}</div>
+                        <div class="equipment-info">🔥 ${escapeHTML(original.grillarea || 'Grilling Area')}</div>
+                        <div class="description">Official Berlin grilling area managed by ${escapeHTML(properties.authority)}</div>
                         
-                        ${location.expat_notes ? `
-                            <div class="expat-notes">
-                                <strong>💡 Expat Tips:</strong> ${escapeHTML(location.expat_notes)}
+                        <div class="official-info">
+                            <div class="info-item">
+                                <strong>📍 District:</strong> ${escapeHTML(properties.district)}
+                            </div>
+                            <div class="info-item">
+                                <strong>💰 Fee:</strong> ${properties.fee_required ? 'Yes' : 'No'}
+                            </div>
+                            <div class="info-item">
+                                <strong>📅 Reservation:</strong> ${properties.reservation_required ? 'Required' : 'Not required'}
+                            </div>
+                        </div>
+                        
+                        ${properties.address ? `
+                            <div class="address-section">
+                                <div class="address-text">${escapeHTML(properties.address)}</div>
+                                <button class="copy-button" onclick="copyAddressToClipboard('${escapeHTML(properties.address).replace(/'/g, "\\'")}')">
+                                    📋 Copy Address
+                                </button>
                             </div>
                         ` : ''}
                         
-                        <div class="address-section">
-                            <div class="address-label">📍 Address:</div>
-                            <div class="address-text">${escapeHTML(location.address)}</div>
-                            <button class="copy-button" onclick="copyAddressToClipboard('${escapeHTML(location.address).replace(/'/g, "\\'")}')">
-                                📋 Copy Address
-                            </button>
-                        </div>
-                        
-                        ${location.source_url ? `
+                        ${original.regeln ? `
                             <div class="source-link">
-                                <a href="${escapeHTML(location.source_url)}" target="_blank" rel="noopener noreferrer">
-                                    🔗 Official Source
+                                <a href="${escapeHTML(original.regeln)}" target="_blank" rel="noopener noreferrer">
+                                    📋 Official Rules & Info
                                 </a>
                             </div>
                         ` : ''}
@@ -622,31 +360,13 @@
                     
                     <div class="popup-footer">
                         <div class="meta-info">
-                            Updated: ${location.last_updated} | ${accessibilityDisplay}
+                            Official ID: ${properties.official_id} | Updated: ${properties.last_updated}
                         </div>
                     </div>
                 </div>
             `;
         }
         
-        // Utility functions
-        function formatEquipmentType(equipment) {
-            switch(equipment) {
-                case 'charcoal_gas_ok': return 'Charcoal & Gas OK';
-                case 'gas_only': return 'Gas Only';
-                case 'charcoal_only': return 'Charcoal Only';
-                default: return 'Check On-Site';
-            }
-        }
-        
-        function formatAccessibility(accessibility) {
-            switch(accessibility) {
-                case 'wheelchair_friendly': return '♿ Accessible';
-                case 'limited_access': return '⚠️ Limited Access';
-                case 'stairs_only': return '🚶 Stairs Required';
-                default: return 'Access Unknown';
-            }
-        }
         
         function escapeHTML(text) {
             if (!text) return '';
