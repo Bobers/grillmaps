@@ -206,11 +206,8 @@
                         'data': district
                     });
                     
-                    // Updated color scheme: red for prohibited, yellow for limited, green for allowed, gray for unknown
-                    const fillColor = district.properties.bbq_status === 'prohibited' ? '#dc2626' : 
-                                    district.properties.bbq_status === 'limited' ? '#fbbf24' : 
-                                    district.properties.bbq_status === 'allowed' ? '#22c55e' :
-                                    district.properties.bbq_status === 'unknown' ? '#9ca3af' : '#e5e7eb';
+                    // All districts in yellow color
+                    const fillColor = '#fbbf24';
                     
                     // Add fill layer ON TOP
                     map.addLayer({
