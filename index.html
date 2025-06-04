@@ -213,13 +213,108 @@
             border: 2px solid #f97316;
             border-radius: 8px;
         }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .header p {
+                font-size: 0.8rem;
+                margin: 0.25rem 0 0 0;
+            }
+            
+            .header div {
+                font-size: 0.7rem;
+            }
+            
+            .legend {
+                bottom: 20px;
+                right: 5px;
+                font-size: 0.75rem;
+                padding: 8px;
+                max-width: 180px;
+            }
+            
+            .legend-item {
+                margin-bottom: 3px;
+            }
+            
+            .mapboxgl-popup {
+                max-width: 280px;
+            }
+            
+            .grillmap-popup {
+                padding: 12px;
+                max-width: 260px;
+            }
+            
+            .popup-title {
+                font-size: 1rem;
+            }
+            
+            .copy-button {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 0.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .header p {
+                font-size: 0.75rem;
+            }
+            
+            .legend {
+                bottom: 10px;
+                right: 5px;
+                font-size: 0.7rem;
+                padding: 6px;
+                max-width: 160px;
+            }
+            
+            .mapboxgl-popup {
+                max-width: 260px;
+            }
+            
+            .grillmap-popup {
+                padding: 10px;
+                max-width: 240px;
+            }
+            
+            .popup-title {
+                font-size: 0.95rem;
+                line-height: 1.2;
+            }
+            
+            .equipment-info, .description {
+                font-size: 0.85rem;
+            }
+            
+            .info-item {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🏛️ Official Berlin Grilling Areas</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.2 • Updated June 4, 2025 • Fixed disappearing icons on hover</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.2.0 • Updated June 4, 2025 • Mobile UI improvements</div>
     </div>
     <div id="map"></div>
     
@@ -413,9 +508,14 @@
         // Function to create exact Berlin grill icon (based on official WMS rendering)
         function createGrillIconElement() {
             const iconDiv = document.createElement('div');
+            
+            // Responsive icon size
+            const isMobile = window.innerWidth <= 768;
+            const iconSize = isMobile ? 36 : 28;
+            
             iconDiv.style.cssText = `
-                width: 28px;
-                height: 28px;
+                width: ${iconSize}px;
+                height: ${iconSize}px;
                 background: white;
                 border: 1px solid #ddd;
                 border-radius: 2px;
