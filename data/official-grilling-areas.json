@@ -1,0 +1,811 @@
+{
+  "type": "FeatureCollection",
+  "generator": "official-berlin-wfs",
+  "generated": "2025-06-04T16:43:56.348Z",
+  "source": "Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin",
+  "license": "dl-zero-de/2.0",
+  "attribution": "© Geoportal Berlin / Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen",
+  "count": 6,
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.39415542,
+                52.46951035
+              ],
+              [
+                13.39352456,
+                52.46998375
+              ],
+              [
+                13.39296997,
+                52.47042461
+              ],
+              [
+                13.39288418,
+                52.4704812
+              ],
+              [
+                13.39288137,
+                52.47055817
+              ],
+              [
+                13.39317438,
+                52.47056435
+              ],
+              [
+                13.39551315,
+                52.47062063
+              ],
+              [
+                13.39555846,
+                52.46990655
+              ],
+              [
+                13.39555831,
+                52.4699065
+              ],
+              [
+                13.39554585,
+                52.46990614
+              ],
+              [
+                13.39550996,
+                52.4699047
+              ],
+              [
+                13.39547412,
+                52.46990288
+              ],
+              [
+                13.39543833,
+                52.46990068
+              ],
+              [
+                13.39540262,
+                52.4698981
+              ],
+              [
+                13.39536698,
+                52.46989514
+              ],
+              [
+                13.39533143,
+                52.46989181
+              ],
+              [
+                13.39529598,
+                52.4698881
+              ],
+              [
+                13.39526064,
+                52.46988401
+              ],
+              [
+                13.39522543,
+                52.46987955
+              ],
+              [
+                13.39519034,
+                52.46987472
+              ],
+              [
+                13.3951554,
+                52.46986952
+              ],
+              [
+                13.39512061,
+                52.46986394
+              ],
+              [
+                13.39508599,
+                52.469858
+              ],
+              [
+                13.39505154,
+                52.46985169
+              ],
+              [
+                13.39501727,
+                52.46984502
+              ],
+              [
+                13.3949832,
+                52.46983799
+              ],
+              [
+                13.39494933,
+                52.4698306
+              ],
+              [
+                13.39491568,
+                52.46982285
+              ],
+              [
+                13.39488226,
+                52.46981474
+              ],
+              [
+                13.39484906,
+                52.46980628
+              ],
+              [
+                13.39481612,
+                52.46979747
+              ],
+              [
+                13.39478343,
+                52.46978831
+              ],
+              [
+                13.39475101,
+                52.46977881
+              ],
+              [
+                13.39471886,
+                52.46976896
+              ],
+              [
+                13.39468699,
+                52.46975878
+              ],
+              [
+                13.39465542,
+                52.46974825
+              ],
+              [
+                13.39462415,
+                52.4697374
+              ],
+              [
+                13.3945932,
+                52.46972622
+              ],
+              [
+                13.39456257,
+                52.46971471
+              ],
+              [
+                13.39453227,
+                52.46970287
+              ],
+              [
+                13.39450231,
+                52.46969072
+              ],
+              [
+                13.3944727,
+                52.46967825
+              ],
+              [
+                13.39444345,
+                52.46966547
+              ],
+              [
+                13.39441457,
+                52.46965238
+              ],
+              [
+                13.39438607,
+                52.46963899
+              ],
+              [
+                13.39435795,
+                52.4696253
+              ],
+              [
+                13.39433022,
+                52.46961131
+              ],
+              [
+                13.39430289,
+                52.46959703
+              ],
+              [
+                13.39427598,
+                52.46958246
+              ],
+              [
+                13.39424948,
+                52.46956761
+              ],
+              [
+                13.39422341,
+                52.46955248
+              ],
+              [
+                13.39419777,
+                52.46953707
+              ],
+              [
+                13.39417257,
+                52.4695214
+              ],
+              [
+                13.39415542,
+                52.46951035
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Tempelhof-Schöneberg",
+        "address": "Grillbereich Tempelhofer Feld - Eingang Tempelhofer Damm",
+        "official_id": "official-1",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Grün Berlin GmbH",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "07002",
+          "bezirk": "Tempelhof-Schöneberg",
+          "bezeichn": "Grillbereich",
+          "adresse": "Grillbereich Tempelhofer Feld - Eingang Tempelhofer Damm",
+          "grillarea": "Frei wählbar",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://gruen-berlin.de/projekte/parks/tempelhofer-feld/service-infos/grillen-auf-dem-tempelhofer-feld",
+          "zustaendig": "Grün Berlin GmbH",
+          "datum": "2022-07-25"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.40150549,
+                52.48007077
+              ],
+              [
+                13.40170339,
+                52.48016248
+              ],
+              [
+                13.4019216,
+                52.48028014
+              ],
+              [
+                13.40209255,
+                52.48036025
+              ],
+              [
+                13.40223156,
+                52.48041561
+              ],
+              [
+                13.40238975,
+                52.48047336
+              ],
+              [
+                13.40256218,
+                52.48052489
+              ],
+              [
+                13.40271141,
+                52.4805638
+              ],
+              [
+                13.4028904,
+                52.48060365
+              ],
+              [
+                13.40302966,
+                52.48062799
+              ],
+              [
+                13.40322307,
+                52.48065627
+              ],
+              [
+                13.40342647,
+                52.48067506
+              ],
+              [
+                13.40360479,
+                52.48068495
+              ],
+              [
+                13.40376495,
+                52.48068818
+              ],
+              [
+                13.40392267,
+                52.48068657
+              ],
+              [
+                13.4041842,
+                52.48067191
+              ],
+              [
+                13.40443659,
+                52.48064377
+              ],
+              [
+                13.4046057,
+                52.48061771
+              ],
+              [
+                13.40469044,
+                52.4805996
+              ],
+              [
+                13.40479085,
+                52.48055978
+              ],
+              [
+                13.40493155,
+                52.4804959
+              ],
+              [
+                13.40529726,
+                52.48031313
+              ],
+              [
+                13.40572793,
+                52.48009006
+              ],
+              [
+                13.40546635,
+                52.47976674
+              ],
+              [
+                13.40526474,
+                52.47979558
+              ],
+              [
+                13.40497528,
+                52.47983178
+              ],
+              [
+                13.40466572,
+                52.47986664
+              ],
+              [
+                13.40434852,
+                52.47989499
+              ],
+              [
+                13.40407451,
+                52.47991535
+              ],
+              [
+                13.40238523,
+                52.48001795
+              ],
+              [
+                13.40150549,
+                52.48007077
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Tempelhof-Schöneberg",
+        "address": "Grillbereich Tempelhofer Feld - Eingang Columbiadamm",
+        "official_id": "official-2",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Grün Berlin GmbH",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "07001",
+          "bezirk": "Tempelhof-Schöneberg",
+          "bezeichn": "Grillbereich",
+          "adresse": "Grillbereich Tempelhofer Feld - Eingang Columbiadamm",
+          "grillarea": "Frei wählbar",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://gruen-berlin.de/projekte/parks/tempelhofer-feld/service-infos/grillen-auf-dem-tempelhofer-feld",
+          "zustaendig": "Grün Berlin GmbH",
+          "datum": "2022-07-25"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.3044289,
+                52.47522037
+              ],
+              [
+                13.30443282,
+                52.47525233
+              ],
+              [
+                13.3044798,
+                52.47563483
+              ],
+              [
+                13.30447982,
+                52.47563496
+              ],
+              [
+                13.30441665,
+                52.47560026
+              ],
+              [
+                13.30397306,
+                52.47535652
+              ],
+              [
+                13.30369253,
+                52.47520237
+              ],
+              [
+                13.30367746,
+                52.47519409
+              ],
+              [
+                13.30367385,
+                52.47519211
+              ],
+              [
+                13.30367382,
+                52.47519208
+              ],
+              [
+                13.30366699,
+                52.47518564
+              ],
+              [
+                13.30366209,
+                52.47517858
+              ],
+              [
+                13.30365926,
+                52.4751711
+              ],
+              [
+                13.30365859,
+                52.47516344
+              ],
+              [
+                13.30366009,
+                52.47515582
+              ],
+              [
+                13.30366372,
+                52.47514848
+              ],
+              [
+                13.30366938,
+                52.47514163
+              ],
+              [
+                13.30367688,
+                52.47513548
+              ],
+              [
+                13.30368601,
+                52.47513021
+              ],
+              [
+                13.3036965,
+                52.47512598
+              ],
+              [
+                13.30369778,
+                52.47512585
+              ],
+              [
+                13.30386032,
+                52.47510928
+              ],
+              [
+                13.30386092,
+                52.47510922
+              ],
+              [
+                13.30390665,
+                52.47510456
+              ],
+              [
+                13.30390745,
+                52.47510448
+              ],
+              [
+                13.30391789,
+                52.47510342
+              ],
+              [
+                13.3039482,
+                52.47510033
+              ],
+              [
+                13.30440839,
+                52.47505343
+              ],
+              [
+                13.3044289,
+                52.47522037
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Charlottenburg-Wilmersdorf",
+        "address": "Rudolf-Mosse-Straße 6",
+        "official_id": "official-3",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Bezirksamt Charlottenburg-Wilmersdorf von Berlin\r\nStraßen- und Grünflächenamt\r\nFachbereich Grünflächen",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "040001",
+          "bezirk": "Charlottenburg-Wilmersdorf",
+          "bezeichn": "Grillplatz",
+          "adresse": "Rudolf-Mosse-Straße 6",
+          "grillarea": "Frei wählbar",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://www.berlin.de/sen/uvk/natur-und-gruen/stadtgruen/oeffentliche-gruen-und-erholungsanlagen/besondere-nutzungen/#Grillen",
+          "zustaendig": "Bezirksamt Charlottenburg-Wilmersdorf von Berlin\r\nStraßen- und Grünflächenamt\r\nFachbereich Grünflächen",
+          "datum": "2023-02-16"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.44299171,
+                52.52912676
+              ],
+              [
+                13.44222725,
+                52.52985234
+              ],
+              [
+                13.44190079,
+                52.52972854
+              ],
+              [
+                13.44266927,
+                52.52899686
+              ],
+              [
+                13.44299171,
+                52.52912676
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Friedrichshain-Kreuzberg",
+        "address": "Volkspark Friedrichshain am Cafe Neuer Hain",
+        "official_id": "official-4",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Cafe Neuer Hain",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "02101",
+          "bezirk": "Friedrichshain-Kreuzberg",
+          "bezeichn": "Grillwiese ",
+          "adresse": "Volkspark Friedrichshain am Cafe Neuer Hain",
+          "grillarea": "Buchung notwendig",
+          "gebuehr": "Pfand",
+          "buchen": "https://www.neuer-hain.de/grillen-im-volkspark",
+          "regeln": "https://www.berlin.de/sen/uvk/natur-und-gruen/stadtgruen/oeffentliche-gruen-und-erholungsanlagen/besondere-nutzungen/#Grillen",
+          "zustaendig": "Cafe Neuer Hain",
+          "datum": "2022-03-10"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.44223177,
+                52.4951308
+              ],
+              [
+                13.4423574,
+                52.49523778
+              ],
+              [
+                13.44204578,
+                52.49537834
+              ],
+              [
+                13.44201447,
+                52.49539402
+              ],
+              [
+                13.44207012,
+                52.49543564
+              ],
+              [
+                13.44186072,
+                52.49554886
+              ],
+              [
+                13.44174146,
+                52.49547568
+              ],
+              [
+                13.44162854,
+                52.49536107
+              ],
+              [
+                13.44223177,
+                52.4951308
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Friedrichshain-Kreuzberg",
+        "address": "Görlitzer Park - Wiese gegenüber dem Kunstrasensportplatz und gegenüber dem Rodelhügel ",
+        "official_id": "official-5",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Grünflächenamt Friedrichshain-Kreuzberg",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "02102",
+          "bezirk": "Friedrichshain-Kreuzberg",
+          "bezeichn": "Grillwiese ",
+          "adresse": "Görlitzer Park - Wiese gegenüber dem Kunstrasensportplatz und gegenüber dem Rodelhügel ",
+          "grillarea": "Frei wählbar",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://www.berlin.de/sen/uvk/natur-und-gruen/stadtgruen/oeffentliche-gruen-und-erholungsanlagen/besondere-nutzungen/#Grillen",
+          "zustaendig": "Grünflächenamt Friedrichshain-Kreuzberg",
+          "datum": "2022-03-10"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                13.39330037,
+                52.49734183
+              ],
+              [
+                13.3933214,
+                52.4971706
+              ],
+              [
+                13.39410014,
+                52.49711045
+              ],
+              [
+                13.39410161,
+                52.49727297
+              ],
+              [
+                13.39407477,
+                52.49740049
+              ],
+              [
+                13.39330037,
+                52.49734183
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Grilling Area",
+        "district": "Friedrichshain-Kreuzberg",
+        "address": "Blücherplatz -Wiese zwischen Waterloo-Ufer und Zossener Straße",
+        "official_id": "official-6",
+        "grill_type": "unknown",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": null,
+        "booking_url": null,
+        "authority": "Grünflächenamt Friedrichshain-Kreuzberg",
+        "data_source": "official_berlin_wfs",
+        "last_updated": "2025-06-04",
+        "verification_status": "official"
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "02103",
+          "bezirk": "Friedrichshain-Kreuzberg",
+          "bezeichn": "Grillwiese ",
+          "adresse": "Blücherplatz -Wiese zwischen Waterloo-Ufer und Zossener Straße",
+          "grillarea": "Frei wählbar",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://www.berlin.de/sen/uvk/natur-und-gruen/stadtgruen/oeffentliche-gruen-und-erholungsanlagen/besondere-nutzungen/#Grillen",
+          "zustaendig": "Grünflächenamt Friedrichshain-Kreuzberg",
+          "datum": "2022-03-10"
+        },
+        "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
+        "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    }
+  ]
+}
