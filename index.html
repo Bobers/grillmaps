@@ -219,7 +219,7 @@
     <div class="header">
         <h1>🏛️ Official Berlin Grilling Areas</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.1 • Updated June 4, 2025 • Fixed popup conflicts on icon clicks</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.2 • Updated June 4, 2025 • Fixed disappearing icons on hover</div>
     </div>
     <div id="map"></div>
     
@@ -347,53 +347,7 @@
                     .setPopup(popup)
                     .addTo(map);
                     
-                    // Add hover popup functionality (only if no click popup is open)
-                    let hoverPopup = null;
-                    let clickPopupOpen = false;
-                    
-                    // Track when click popup opens/closes
-                    marker.getPopup().on('open', () => {
-                        clickPopupOpen = true;
-                        if (hoverPopup) {
-                            hoverPopup.remove();
-                            hoverPopup = null;
-                        }
-                    });
-                    
-                    marker.getPopup().on('close', () => {
-                        clickPopupOpen = false;
-                    });
-                    
-                    grillIcon.addEventListener('mouseenter', () => {
-                        // Only show hover popup if click popup is not open
-                        if (!clickPopupOpen) {
-                            hoverPopup = new mapboxgl.Popup({
-                                offset: 25,
-                                closeButton: false,
-                                closeOnClick: false,
-                                maxWidth: '320px',
-                                className: 'hover-popup'
-                            })
-                            .setLngLat(center)
-                            .setHTML(createOfficialAreaPopupHTML(feature.properties))
-                            .addTo(map);
-                        }
-                    });
-                    
-                    grillIcon.addEventListener('mouseleave', () => {
-                        if (hoverPopup && !clickPopupOpen) {
-                            hoverPopup.remove();
-                            hoverPopup = null;
-                        }
-                    });
-                    
-                    grillIcon.addEventListener('click', () => {
-                        // Close hover popup when clicking
-                        if (hoverPopup) {
-                            hoverPopup.remove();
-                            hoverPopup = null;
-                        }
-                    });
+                    // Simple click-only popup behavior (no hover complications)
                 });
                 
                 console.log(`✅ Added ${officialAreasData.features.length} official grilling areas with icons`);
@@ -490,9 +444,9 @@
                 </svg>
             `;
             
-            // Add hover effect
+            // Simple hover effect (just visual scaling)
             iconDiv.addEventListener('mouseenter', () => {
-                iconDiv.style.transform = 'scale(1.15)';
+                iconDiv.style.transform = 'scale(1.1)';
             });
             
             iconDiv.addEventListener('mouseleave', () => {
