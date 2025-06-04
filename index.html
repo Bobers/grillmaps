@@ -347,24 +347,48 @@
                     .setPopup(popup)
                     .addTo(map);
                     
-                    // Add hover popup functionality
+                    // Add hover popup functionality (only if no click popup is open)
                     let hoverPopup = null;
+                    let clickPopupOpen = false;
+                    
+                    // Track when click popup opens/closes
+                    marker.getPopup().on('open', () => {
+                        clickPopupOpen = true;
+                        if (hoverPopup) {
+                            hoverPopup.remove();
+                            hoverPopup = null;
+                        }
+                    });
+                    
+                    marker.getPopup().on('close', () => {
+                        clickPopupOpen = false;
+                    });
                     
                     grillIcon.addEventListener('mouseenter', () => {
-                        // Create a temporary popup for hover
-                        hoverPopup = new mapboxgl.Popup({
-                            offset: 25,
-                            closeButton: false,
-                            closeOnClick: false,
-                            maxWidth: '320px',
-                            className: 'hover-popup'
-                        })
-                        .setLngLat(center)
-                        .setHTML(createOfficialAreaPopupHTML(feature.properties))
-                        .addTo(map);
+                        // Only show hover popup if click popup is not open
+                        if (!clickPopupOpen) {
+                            hoverPopup = new mapboxgl.Popup({
+                                offset: 25,
+                                closeButton: false,
+                                closeOnClick: false,
+                                maxWidth: '320px',
+                                className: 'hover-popup'
+                            })
+                            .setLngLat(center)
+                            .setHTML(createOfficialAreaPopupHTML(feature.properties))
+                            .addTo(map);
+                        }
                     });
                     
                     grillIcon.addEventListener('mouseleave', () => {
+                        if (hoverPopup && !clickPopupOpen) {
+                            hoverPopup.remove();
+                            hoverPopup = null;
+                        }
+                    });
+                    
+                    grillIcon.addEventListener('click', () => {
+                        // Close hover popup when clicking
                         if (hoverPopup) {
                             hoverPopup.remove();
                             hoverPopup = null;
