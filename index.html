@@ -188,13 +188,49 @@
             text-align: center;
         }
         
-        /* Official area specific styles */
-        .official-info {
+        /* Enhanced popup sections */
+        .grilling-rules {
+            margin: 12px 0;
+            padding: 10px;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .grilling-rules h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: #92400e;
+            font-weight: 600;
+        }
+        
+        .rule-item {
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+        
+        .rule-item strong {
+            color: #92400e;
+        }
+        
+        .info-section {
             margin: 12px 0;
             background: #f8fafc;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
+        }
+        
+        .info-section h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .official-info {
+            margin: 12px 0;
         }
         
         .info-item {
@@ -205,6 +241,19 @@
         
         .info-item strong {
             color: #374151;
+        }
+        
+        .official-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        
+        .official-link:hover {
+            text-decoration: underline;
         }
         
         /* Hover popup styling */
@@ -314,7 +363,7 @@
     <div class="header">
         <h1>🏛️ Official Berlin Grilling Areas</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.2.0 • Updated June 4, 2025 • Mobile UI improvements</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.2.1 • Updated June 4, 2025 • Enhanced popup design</div>
     </div>
     <div id="map"></div>
     
@@ -451,56 +500,82 @@
             }
         });
         
-        // Function to create popup HTML for official grilling areas
+        // Function to create enhanced popup HTML for official grilling areas
         function createOfficialAreaPopupHTML(properties) {
             const original = properties.metadata?.original_properties || {};
             
             return `
                 <div class="grillmap-popup">
                     <div class="popup-header">
-                        <h3 class="popup-title">${escapeHTML(properties.address || properties.name)}</h3>
-                        <div class="trust-indicator official">🏛️ Official Area</div>
+                        <h3 class="popup-title">${escapeHTML(extractLocationName(properties, original))}</h3>
+                        <div class="trust-indicator">🏛️ Official Berlin Area</div>
                     </div>
                     
                     <div class="popup-content">
-                        <div class="equipment-info">🔥 ${escapeHTML(original.grillarea || 'Grilling Area')}</div>
-                        <div class="description">Official Berlin grilling area managed by ${escapeHTML(properties.authority)}</div>
+                        <div class="equipment-info">🔥 ${escapeHTML(original.grillarea || 'Official Grilling Zone')}</div>
+                        <div class="description">Designated grilling area managed by ${escapeHTML(properties.authority)}</div>
                         
-                        <div class="official-info">
-                            <div class="info-item">
-                                <strong>📍 District:</strong> ${escapeHTML(properties.district)}
-                            </div>
-                            <div class="info-item">
-                                <strong>💰 Fee:</strong> ${properties.fee_required ? 'Yes' : 'No'}
-                            </div>
-                            <div class="info-item">
-                                <strong>📅 Reservation:</strong> ${properties.reservation_required ? 'Required' : 'Not required'}
-                            </div>
+                        ${createGrillingRulesSection(original)}
+                        
+                        <div class="address-section">
+                            <div class="address-label">📍 Location:</div>
+                            <div class="address-text">${escapeHTML(properties.address)}</div>
+                            <button class="copy-button" onclick="copyAddressToClipboard('${escapeHTML(properties.address).replace(/'/g, "\\'")}')">
+                                📋 Copy Address for Navigation
+                            </button>
                         </div>
                         
-                        ${properties.address ? `
-                            <div class="address-section">
-                                <div class="address-text">${escapeHTML(properties.address)}</div>
-                                <button class="copy-button" onclick="copyAddressToClipboard('${escapeHTML(properties.address).replace(/'/g, "\\'")}')">
-                                    📋 Copy Address
-                                </button>
+                        <div class="official-info">
+                            <div class="info-section">
+                                <h4>📋 Grilling Information</h4>
+                                <div class="info-item"><strong>District:</strong> ${escapeHTML(properties.district)}</div>
+                                <div class="info-item"><strong>Fee Required:</strong> ${properties.fee_required ? 'Yes' : 'Free'}</div>
+                                <div class="info-item"><strong>Reservation:</strong> ${properties.reservation_required ? 'Required' : 'Walk-in allowed'}</div>
+                                <div class="info-item"><strong>Grill Type:</strong> ${escapeHTML(original.grillarea || 'Designated area')}</div>
                             </div>
-                        ` : ''}
-                        
-                        ${original.regeln ? `
-                            <div class="source-link">
-                                <a href="${escapeHTML(original.regeln)}" target="_blank" rel="noopener noreferrer">
-                                    📋 Official Rules & Info
-                                </a>
-                            </div>
-                        ` : ''}
+                        </div>
                     </div>
                     
                     <div class="popup-footer">
+                        ${original.regeln ? `
+                            <a href="${escapeHTML(original.regeln)}" target="_blank" rel="noopener noreferrer" class="official-link">
+                                📋 Official Rules & Guidelines →
+                            </a>
+                        ` : ''}
                         <div class="meta-info">
-                            Official ID: ${properties.official_id} | Updated: ${properties.last_updated}
+                            Official ID: ${properties.official_id}<br>
+                            Last Updated: ${properties.last_updated}
                         </div>
                     </div>
+                </div>
+            `;
+        }
+        
+        // Helper functions for popup content
+        function extractLocationName(properties, original) {
+            if (original.bezeichn && original.adresse) {
+                return `${original.bezeichn} - ${original.adresse}`;
+            }
+            return properties.address || properties.name || 'Official Grilling Area';
+        }
+        
+        function createGrillingRulesSection(original) {
+            if (!original.grillarea) return '';
+            
+            return `
+                <div class="grilling-rules">
+                    <h4>🔥 Grilling Rules</h4>
+                    <div class="rule-item">
+                        <strong>Area Type:</strong> ${escapeHTML(original.grillarea)}
+                    </div>
+                    <div class="rule-item">
+                        <strong>Booking:</strong> ${original.buchen && original.buchen !== '-' ? escapeHTML(original.buchen) : 'Not required'}
+                    </div>
+                    ${original.gebuehr ? `
+                        <div class="rule-item">
+                            <strong>Fees:</strong> ${escapeHTML(original.gebuehr === 'nein' ? 'Free' : original.gebuehr)}
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
