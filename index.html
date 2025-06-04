@@ -212,7 +212,7 @@
     <div class="header">
         <h1>🏛️ Official Berlin Grilling Areas</h1>
         <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.0.0 • Updated June 4, 2025 • Official data only</div>
+        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.0 • Updated June 4, 2025 • Official data with grill icons</div>
     </div>
     <div id="map"></div>
     
@@ -221,6 +221,15 @@
         <div class="legend-item">
             <span class="legend-color" style="background-color: #f97316; opacity: 0.7;"></span>
             <span>Designated Grilling Zone</span>
+        </div>
+        <div class="legend-item">
+            <div style="width: 20px; height: 20px; background: white; border: 2px solid #ea580c; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#f97316" stroke="#ea580c" stroke-width="2">
+                    <ellipse cx="12" cy="16" rx="6" ry="2"/>
+                    <path d="M10 12 Q12 8 14 12" stroke="#f97316" stroke-width="1" fill="none"/>
+                </svg>
+            </div>
+            <span>Grill Location Marker</span>
         </div>
         <div style="margin-top: 12px; font-size: 0.75rem; color: #666;">
             <div>Data Source: Senatsverwaltung Berlin</div>
@@ -307,7 +316,32 @@
                     map.setPaintProperty('official-areas-fill', 'fill-opacity', 0.7);
                 });
                 
-                console.log(`✅ Added ${officialAreasData.features.length} official grilling areas`);
+                // Add grill icons at the center of each area
+                officialAreasData.features.forEach(feature => {
+                    const center = getPolygonCenter(feature.geometry);
+                    
+                    // Create custom grill icon marker
+                    const grillIcon = createGrillIconElement();
+                    
+                    // Create popup for the marker
+                    const popup = new mapboxgl.Popup({ 
+                        offset: 25,
+                        closeButton: true,
+                        closeOnClick: false,
+                        maxWidth: '320px'
+                    }).setHTML(createOfficialAreaPopupHTML(feature.properties));
+                    
+                    // Add marker
+                    new mapboxgl.Marker({
+                        element: grillIcon,
+                        anchor: 'center'
+                    })
+                    .setLngLat(center)
+                    .setPopup(popup)
+                    .addTo(map);
+                });
+                
+                console.log(`✅ Added ${officialAreasData.features.length} official grilling areas with icons`);
             } catch (error) {
                 console.error('❌ Error loading official grilling areas:', error);
             }
@@ -367,6 +401,90 @@
             `;
         }
         
+        // Function to create grill icon element (based on official Berlin FIS-Broker icon)
+        function createGrillIconElement() {
+            const iconDiv = document.createElement('div');
+            iconDiv.style.cssText = `
+                width: 32px;
+                height: 32px;
+                background: white;
+                border: 2px solid #ea580c;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                transition: transform 0.2s ease;
+            `;
+            
+            // Add grill SVG icon (similar to official Berlin icon)
+            iconDiv.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2">
+                    <!-- Grill body -->
+                    <ellipse cx="12" cy="16" rx="8" ry="3" fill="#f97316" stroke="#ea580c"/>
+                    <!-- Grill grate -->
+                    <line x1="6" y1="16" x2="18" y2="16" stroke="#ea580c" stroke-width="1"/>
+                    <line x1="8" y1="14" x2="8" y2="18" stroke="#ea580c" stroke-width="1"/>
+                    <line x1="12" y1="14" x2="12" y2="18" stroke="#ea580c" stroke-width="1"/>
+                    <line x1="16" y1="14" x2="16" y2="18" stroke="#ea580c" stroke-width="1"/>
+                    <!-- Legs -->
+                    <line x1="7" y1="19" x2="6" y2="22" stroke="#ea580c" stroke-width="2"/>
+                    <line x1="17" y1="19" x2="18" y2="22" stroke="#ea580c" stroke-width="2"/>
+                    <!-- Flames -->
+                    <path d="M10 12 Q11 8 12 12 Q13 8 14 12" stroke="#f97316" stroke-width="1.5" fill="none"/>
+                    <path d="M8 13 Q9 9 10 13" stroke="#f97316" stroke-width="1" fill="none"/>
+                    <path d="M14 13 Q15 9 16 13" stroke="#f97316" stroke-width="1" fill="none"/>
+                </svg>
+            `;
+            
+            // Add hover effect
+            iconDiv.addEventListener('mouseenter', () => {
+                iconDiv.style.transform = 'scale(1.1)';
+            });
+            
+            iconDiv.addEventListener('mouseleave', () => {
+                iconDiv.style.transform = 'scale(1)';
+            });
+            
+            return iconDiv;
+        }
+        
+        // Function to calculate polygon center
+        function getPolygonCenter(geometry) {
+            if (geometry.type === 'Point') {
+                return geometry.coordinates;
+            }
+            
+            if (geometry.type === 'Polygon') {
+                const coordinates = geometry.coordinates[0];
+                let x = 0, y = 0;
+                const numPoints = coordinates.length - 1; // Exclude last point (same as first)
+                
+                for (let i = 0; i < numPoints; i++) {
+                    x += coordinates[i][0];
+                    y += coordinates[i][1];
+                }
+                
+                return [x / numPoints, y / numPoints];
+            }
+            
+            if (geometry.type === 'MultiPolygon') {
+                // Use the first polygon's center
+                const firstPolygon = geometry.coordinates[0][0];
+                let x = 0, y = 0;
+                const numPoints = firstPolygon.length - 1;
+                
+                for (let i = 0; i < numPoints; i++) {
+                    x += firstPolygon[i][0];
+                    y += firstPolygon[i][1];
+                }
+                
+                return [x / numPoints, y / numPoints];
+            }
+            
+            return [0, 0]; // fallback
+        }
         
         function escapeHTML(text) {
             if (!text) return '';
