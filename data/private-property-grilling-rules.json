@@ -1,0 +1,136 @@
+{
+  "private_property_rules": {
+    "title": "Private Property & Balcony Grilling Rules",
+    "last_updated": "2025-01-31", 
+    "source": "German Rental Law and Fire Safety Regulations",
+    "sections": [
+      {
+        "title": "🏠 Private Gardens & Properties",
+        "rules": [
+          "Generally allowed with property owner permission",
+          "Must follow fire safety regulations",
+          "Maintain safe distance from buildings and vegetation",
+          "Consider neighbors - avoid excessive smoke/noise",
+          "Check local fire danger warnings before grilling",
+          "Property owner liable for fire damage"
+        ]
+      },
+      {
+        "title": "🏢 Balcony Grilling Rules",
+        "rules": [
+          "Check your rental contract - some explicitly prohibit grilling",
+          "Hausordnung (house rules) may restrict or ban grilling",
+          "Electric grills generally more accepted than charcoal/gas",
+          "Must avoid disturbing neighbors with smoke or smell",
+          "Keep fire extinguisher or water nearby",
+          "Never leave grill unattended on balcony"
+        ]
+      },
+      {
+        "title": "⚖️ Rental Contract Considerations",
+        "rules": [
+          "Some contracts explicitly prohibit all grilling",
+          "Others may allow electric grills only",
+          "Violation can result in warnings or lease termination",
+          "Always ask landlord for written permission",
+          "Check building insurance coverage for grill damage",
+          "Subletting agreements may have additional restrictions"
+        ]
+      },
+      {
+        "title": "🔥 Safety Requirements for Balconies",
+        "rules": [
+          "Use only on stable, non-flammable surfaces",
+          "Minimum 1 meter from walls and railings",
+          "No grilling directly under balcony above",
+          "Ensure adequate ventilation",
+          "Never use indoor grills on covered balconies",
+          "Check wind direction to avoid smoke in neighboring apartments"
+        ]
+      },
+      {
+        "title": "👥 Neighbor Relations",
+        "rules": [
+          "Inform neighbors before grilling sessions",
+          "Avoid grilling during peak meal times (12-2 PM, 6-8 PM)",
+          "Choose less windy days to minimize smoke drift",
+          "Consider shared courtyard grilling areas if available",
+          "Stop immediately if neighbors complain about smoke",
+          "Maintain good relationships - offer to share food!"
+        ]
+      },
+      {
+        "title": "🏗️ Building Type Restrictions",
+        "rules": [
+          "High-rise buildings often prohibit balcony grilling",
+          "Historic buildings may have stricter fire regulations",
+          "Social housing may have blanket grilling bans",
+          "Student housing typically prohibits all open flames",
+          "Luxury buildings may have designated grilling areas",
+          "Check with Hausverwaltung (property management)"
+        ]
+      },
+      {
+        "title": "⚡ Recommended Grill Types",
+        "rules": [
+          "Electric grills: Most widely accepted",
+          "Small gas grills: Often allowed with precautions",
+          "Charcoal grills: Frequently prohibited or restricted",
+          "Smokeless grills: Best for apartment living",
+          "Indoor/outdoor grills: Good compromise option",
+          "Avoid disposable grills on balconies"
+        ]
+      },
+      {
+        "title": "📋 Before You Grill Checklist",
+        "rules": [
+          "✓ Check rental contract and house rules",
+          "✓ Get written permission from landlord if required",
+          "✓ Inform neighbors of your plans",
+          "✓ Check weather and fire danger warnings",
+          "✓ Ensure fire safety equipment is ready",
+          "✓ Plan for smoke management and cleanup"
+        ]
+      },
+      {
+        "title": "🚨 What to Do If...",
+        "rules": [
+          "Neighbors complain: Stop immediately and discuss solutions",
+          "Landlord objects: Seek written clarification of rules",
+          "Fire department visits: Cooperate fully and review safety",
+          "Damage occurs: Report to insurance immediately",
+          "Unsure about rules: Ask Mieterverein (tenant association)",
+          "Want to challenge restrictions: Consult legal advice"
+        ]
+      }
+    ],
+    "helpful_contacts": [
+      {
+        "service": "Mieterverein Berlin (Tenant Association)",
+        "contact": "030 2262 61 30",
+        "description": "Advice on rental rights and restrictions"
+      },
+      {
+        "service": "Fire Department Safety Consultation",
+        "contact": "030 387 10",
+        "description": "Questions about fire safety regulations"
+      },
+      {
+        "service": "Hausverwaltung",
+        "contact": "Check your rental documents",
+        "description": "Property management for building-specific rules"
+      }
+    ],
+    "alternatives": {
+      "title": "🌟 Alternatives to Home Grilling",
+      "options": [
+        "Use designated public grilling areas (see map)",
+        "Join community grilling events in parks",
+        "Rent garden plots with grilling rights",
+        "Visit friends with private gardens",
+        "Use indoor grill options (electric, smokeless)",
+        "Organize group trips to grilling-friendly locations"
+      ]
+    }
+  }
+}

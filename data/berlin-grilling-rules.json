@@ -1,0 +1,106 @@
+{
+  "general_rules": {
+    "title": "General Grilling Rules in Berlin",
+    "last_updated": "2025-01-31",
+    "source": "Berlin Environmental and Safety Regulations",
+    "sections": [
+      {
+        "title": "🔥 Where You Can Grill",
+        "rules": [
+          "Only in designated grilling areas shown on this map",
+          "Private property with owner permission",
+          "Balconies (with restrictions - see Private Property section)",
+          "Some camping areas and beaches outside Berlin city limits"
+        ]
+      },
+      {
+        "title": "🚫 Where Grilling is Prohibited",
+        "rules": [
+          "All public parks and green spaces (except designated areas)",
+          "Forests and wooded areas",
+          "Near buildings, dry vegetation, or flammable materials",
+          "Children's playgrounds and sports facilities",
+          "Near water treatment facilities",
+          "On public streets, sidewalks, or bike paths"
+        ]
+      },
+      {
+        "title": "🔥 Fire Safety Requirements",
+        "rules": [
+          "Keep water or sand nearby for emergencies",
+          "Never leave fire unattended",
+          "Completely extinguish fire before leaving",
+          "Check weather conditions - no grilling during fire warnings",
+          "Maintain 3-meter safety distance from vegetation",
+          "Do not grill during high wind conditions"
+        ]
+      },
+      {
+        "title": "🌱 Environmental Protection",
+        "rules": [
+          "Use only approved charcoal or gas",
+          "No burning of wood, paper, or garbage",
+          "Dispose of ash and coals only when completely cold",
+          "Take all trash with you - leave no trace",
+          "Protect grass and vegetation",
+          "No dumping of grease or food waste"
+        ]
+      },
+      {
+        "title": "🕐 Time Restrictions",
+        "rules": [
+          "Generally allowed from 8:00 AM to 10:00 PM",
+          "Some areas may have shorter hours",
+          "Respect quiet hours in residential areas",
+          "Check specific location rules for variations"
+        ]
+      },
+      {
+        "title": "🚨 Fire Ban Periods",
+        "rules": [
+          "Complete grilling ban during official fire warnings",
+          "Usually affects July-August during dry weather",
+          "Check current fire danger level before grilling",
+          "Violations during fire bans result in heavy fines"
+        ]
+      },
+      {
+        "title": "💰 Fines and Penalties",
+        "rules": [
+          "Illegal grilling: €5 - €5,000 depending on damage",
+          "Grilling during fire ban: €500 - €25,000",
+          "Causing fire damage: Criminal charges possible",
+          "Littering: €20 - €80",
+          "Noise violations after 10 PM: €25 - €5,000"
+        ]
+      },
+      {
+        "title": "👥 Social Considerations",
+        "rules": [
+          "Keep noise levels reasonable",
+          "Share space respectfully with others",
+          "No excessive alcohol consumption",
+          "Supervise children at all times",
+          "Clean up thoroughly after use"
+        ]
+      }
+    ],
+    "emergency_contacts": [
+      {
+        "service": "Fire Emergency",
+        "number": "112",
+        "description": "For fires or medical emergencies"
+      },
+      {
+        "service": "Police",
+        "number": "110", 
+        "description": "For safety issues or violations"
+      },
+      {
+        "service": "Berlin Fire Department (Non-Emergency)",
+        "number": "030 387 10",
+        "description": "For fire safety questions"
+      }
+    ]
+  }
+}

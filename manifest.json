@@ -11,22 +11,6 @@
   "lang": "en",
   "dir": "ltr",
   "categories": ["lifestyle", "travel", "food"],
-  "screenshots": [
-    {
-      "src": "/icons/screenshot-wide.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "GrillMaps desktop view"
-    },
-    {
-      "src": "/icons/screenshot-narrow.png", 
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "GrillMaps mobile view"
-    }
-  ],
   "icons": [
     {
       "src": "/icons/icon-72x72.svg",
@@ -102,14 +86,5 @@
         }
       ]
     }
-  ],
-  "share_target": {
-    "action": "/share/",
-    "method": "POST",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  }
+  ]
 }

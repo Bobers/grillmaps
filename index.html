@@ -297,6 +297,33 @@
             color: var(--text-primary);
         }
 
+        .location-detail, .address-detail {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 0.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .info-item {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.5rem;
+            background: #f8fafc;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .last-updated {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
         .description {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -335,6 +362,124 @@
             .install-prompt { bottom: 90px; }
         }
 
+        /* Rules Modal Styles */
+        .rules-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .rules-modal-content {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            max-height: 80vh;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .rules-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rules-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .rules-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .rules-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .rules-body {
+            padding: 1rem;
+            max-height: calc(80vh - 80px);
+            overflow-y: auto;
+        }
+
+        .rules-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .rules-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.25rem;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rules-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .rules-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contact-item {
+            padding: 0.75rem;
+            background: #f8fafc;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .rules-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
             :root {
@@ -343,6 +488,10 @@
                 --text-primary: #f9fafb;
                 --text-secondary: #d1d5db;
                 --border-color: #374151;
+            }
+
+            .contact-item {
+                background: #374151;
             }
         }
 
@@ -394,13 +543,13 @@
             <div class="nav-icon">❤️</div>
             <div class="nav-label">Favorites</div>
         </div>
-        <div class="nav-item" data-action="nearby">
-            <div class="nav-icon">📍</div>
-            <div class="nav-label">Nearby</div>
+        <div class="nav-item" data-action="general-rules">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">General Rules</div>
         </div>
-        <div class="nav-item" data-action="settings">
-            <div class="nav-icon">⚙️</div>
-            <div class="nav-label">Settings</div>
+        <div class="nav-item" data-action="private-rules">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Private Property</div>
         </div>
     </div>
 
@@ -477,7 +626,11 @@
         }
 
         // Mapbox Configuration
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXIzIiwiYSI6ImNsOXFyazg1NzBqZGMzcHByZnI3NnBiYXQifQ.8JCNLsKrAT_nQwE0_p3lMQ';
+        // Use appropriate token based on environment
+        const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        mapboxgl.accessToken = isLocalDev 
+            ? 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmM4cncxdDA3d3EycnNhanRibmx1dzUifQ._oSYl_KFeLzwHsWboHvwqQ' // Local dev only
+            : 'pk.eyJ1IjoiYm9iZXIzIiwiYSI6ImNsOXFyazg1NzBqZGMzcHByZnI3NnBiYXQifQ.8JCNLsKrAT_nQwE0_p3lMQ'; // Production
 
         // Application State with PWA Features
         let map = null;
@@ -489,30 +642,33 @@
         // Enhanced App Initialization
         async function initializeApp() {
             try {
+                console.log('Starting app initialization...');
                 showLoading(true);
                 
                 // Load location data with offline fallback
+                console.log('Loading location data...');
                 locations = await loadLocationData();
+                console.log('Loaded locations:', locations.length);
                 
                 // Initialize map with enhanced error handling
+                console.log('Creating map...');
                 map = await createEnhancedMap();
+                console.log('Map created and loaded successfully');
                 
                 // Add map controls and features
                 addMapControls(map);
                 setupMapInteractions(map);
                 
-                // Add markers after map loads
-                map.on('load', () => {
-                    addMarkersToMap(map, locations);
-                    showLoading(false);
-                    
-                    // Track PWA usage
-                    trackPWAUsage();
-                });
+                // Map is already loaded when createEnhancedMap resolves
+                addPolygonsToMap(map, locations);
+                addMarkersToMap(map, locations);
+                showLoading(false);
+                trackPWAUsage();
                 
                 // Enhanced error handling
                 map.on('error', (e) => {
                     console.error('Map error:', e);
+                    showLoading(false);
                     if (navigator.onLine) {
                         showError('Map failed to load. Please refresh the page.');
                     } else {
@@ -525,7 +681,8 @@
                 
             } catch (error) {
                 console.error('App initialization failed:', error);
-                showError(error.message);
+                showLoading(false);
+                showError(error.message || 'Failed to initialize the application');
             }
         }
 
@@ -620,11 +777,11 @@
                 case 'favorites':
                     showFavorites();
                     break;
-                case 'nearby':
-                    findNearbySpots();
+                case 'general-rules':
+                    showGeneralRules();
                     break;
-                case 'settings':
-                    showSettings();
+                case 'private-rules':
+                    showPrivatePropertyRules();
                     break;
             }
         }
@@ -649,11 +806,97 @@
 
         // Setup map interactions
         function setupMapInteractions(map) {
+            // Add a click handler for the map itself (empty areas)
             map.on('click', (e) => {
-                // Close any open popups when clicking on map
-                if (currentPopup) {
+                // Check if we clicked on a feature
+                const features = map.queryRenderedFeatures(e.point, {
+                    layers: ['grilling-areas-fill']
+                });
+                
+                // If no features were clicked, close any open popup
+                if (features.length === 0 && currentPopup) {
                     currentPopup.remove();
                     currentPopup = null;
+                }
+            });
+        }
+
+        // Add polygon overlays to map
+        function addPolygonsToMap(map, locations) {
+            // Create GeoJSON source for grilling areas
+            const grillingAreasData = {
+                type: 'FeatureCollection',
+                features: locations.map((location, index) => ({
+                    type: 'Feature',
+                    properties: {
+                        id: index,
+                        name: location.properties?.name || `Grilling Area ${index + 1}`,
+                        description: location.properties?.description || ''
+                    },
+                    geometry: location.geometry
+                }))
+            };
+
+            // Add source
+            map.addSource('grilling-areas', {
+                type: 'geojson',
+                data: grillingAreasData
+            });
+
+            // Add fill layer (semi-transparent green)
+            map.addLayer({
+                id: 'grilling-areas-fill',
+                type: 'fill',
+                source: 'grilling-areas',
+                paint: {
+                    'fill-color': '#22c55e',
+                    'fill-opacity': 0.2
+                }
+            });
+
+            // Add border layer (solid green outline)
+            map.addLayer({
+                id: 'grilling-areas-border',
+                type: 'line',
+                source: 'grilling-areas',
+                paint: {
+                    'line-color': '#16a34a',
+                    'line-width': 2,
+                    'line-opacity': 0.8
+                }
+            });
+
+            // Add hover effects
+            map.on('mouseenter', 'grilling-areas-fill', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'grilling-areas-fill', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            // Add click handler for polygons
+            map.on('click', 'grilling-areas-fill', (e) => {
+                // Stop propagation to prevent map click event
+                e.originalEvent.stopPropagation();
+                
+                const feature = e.features[0];
+                const coordinates = e.lngLat;
+                
+                // Find the corresponding location data
+                const locationIndex = feature.properties.id;
+                const location = locations[locationIndex];
+                
+                if (location) {
+                    // Close existing popup
+                    if (currentPopup) {
+                        currentPopup.remove();
+                    }
+                    
+                    // Create and show popup
+                    const popup = createPopupContent(location);
+                    popup.setLngLat(coordinates).addTo(map);
+                    currentPopup = popup;
                 }
             });
         }
@@ -661,7 +904,32 @@
         // Add markers to map
         function addMarkersToMap(map, locations) {
             locations.forEach((location, index) => {
-                const popup = createPopupContent(location);
+                // Calculate center point for polygon geometry
+                let centerCoords;
+                if (location.geometry.type === 'Point') {
+                    centerCoords = location.geometry.coordinates;
+                } else if (location.geometry.type === 'Polygon' || location.geometry.type === 'MultiPolygon') {
+                    // Calculate centroid of the polygon
+                    const bounds = new mapboxgl.LngLatBounds();
+                    
+                    // Helper function to process coordinates
+                    const processCoords = (coords) => {
+                        if (Array.isArray(coords[0]) && typeof coords[0][0] === 'number') {
+                            // This is an array of coordinates
+                            coords.forEach(coord => bounds.extend(coord));
+                        } else {
+                            // This is nested arrays, recurse
+                            coords.forEach(nested => processCoords(nested));
+                        }
+                    };
+                    
+                    processCoords(location.geometry.coordinates);
+                    centerCoords = bounds.getCenter();
+                    centerCoords = [centerCoords.lng, centerCoords.lat];
+                } else {
+                    console.warn('Unsupported geometry type:', location.geometry.type);
+                    return;
+                }
                 
                 // Create custom marker
                 const el = document.createElement('div');
@@ -673,14 +941,23 @@
                     user-select: none;
                 `;
                 
+                // Create marker WITHOUT automatic popup
                 const marker = new mapboxgl.Marker(el)
-                    .setLngLat(location.geometry.coordinates)
-                    .setPopup(popup)
+                    .setLngLat(centerCoords)
                     .addTo(map);
                 
-                // Store popup reference
-                el.addEventListener('click', () => {
-                    if (currentPopup) currentPopup.remove();
+                // Handle marker clicks manually
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent map click event
+                    
+                    // Close existing popup
+                    if (currentPopup) {
+                        currentPopup.remove();
+                    }
+                    
+                    // Create new popup
+                    const popup = createPopupContent(location);
+                    popup.setLngLat(centerCoords).addTo(map);
                     currentPopup = popup;
                 });
             });
@@ -690,6 +967,16 @@
         function createPopupContent(location) {
             const props = location.properties;
             
+            // Format specific information based on actual data
+            const districtInfo = props.district ? `📍 ${props.district}` : '';
+            const addressInfo = props.address ? `🏠 ${props.address}` : '';
+            const authorityInfo = props.authority ? `🏛️ Managed by: ${props.authority}` : '';
+            const feeInfo = props.fee_required !== undefined ? 
+                (props.fee_required ? '💰 Fee required' : '🆓 Free access') : '';
+            const reservationInfo = props.reservation_required !== undefined ?
+                (props.reservation_required ? '📅 Reservation required' : '🚶‍♂️ Walk-in allowed') : '';
+            const lastUpdated = props.last_updated ? `🔄 Updated: ${props.last_updated}` : '';
+            
             const popupHTML = `
                 <div class="grillmap-popup">
                     <div class="popup-header">
@@ -698,13 +985,24 @@
                     </div>
                     <div class="popup-content">
                         <div class="equipment-info">🔥 Official Grilling Zone</div>
+                        ${districtInfo ? `<div class="location-detail">${districtInfo}</div>` : ''}
+                        ${addressInfo ? `<div class="address-detail">${addressInfo}</div>` : ''}
                         <div class="description">${props.description || 'Government-designated grilling area in Berlin.'}</div>
+                        
+                        <div class="info-grid">
+                            ${feeInfo ? `<div class="info-item">${feeInfo}</div>` : ''}
+                            ${reservationInfo ? `<div class="info-item">${reservationInfo}</div>` : ''}
+                            ${authorityInfo ? `<div class="info-item">${authorityInfo}</div>` : ''}
+                        </div>
+                        
                         ${props.expat_notes ? `
                             <div class="expat-notes">
                                 <strong>💡 Expat Tips:</strong>
                                 ${props.expat_notes}
                             </div>
                         ` : ''}
+                        
+                        ${lastUpdated ? `<div class="last-updated">${lastUpdated}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -714,6 +1012,130 @@
                 closeOnClick: false,
                 maxWidth: '320px'
             }).setHTML(popupHTML);
+        }
+
+        // Show general grilling rules
+        async function showGeneralRules() {
+            try {
+                const response = await fetch('./data/berlin-grilling-rules.json');
+                const data = await response.json();
+                const rules = data.general_rules;
+                
+                showRulesModal(rules.title, formatRulesContent(rules));
+            } catch (error) {
+                console.error('Failed to load general rules:', error);
+                showRulesModal('General Grilling Rules', getDefaultGeneralRules());
+            }
+        }
+
+        // Show private property grilling rules
+        async function showPrivatePropertyRules() {
+            try {
+                const response = await fetch('./data/private-property-grilling-rules.json');
+                const data = await response.json();
+                const rules = data.private_property_rules;
+                
+                showRulesModal(rules.title, formatRulesContent(rules));
+            } catch (error) {
+                console.error('Failed to load private property rules:', error);
+                showRulesModal('Private Property Grilling Rules', getDefaultPrivatePropertyRules());
+            }
+        }
+
+        // Format rules content for display
+        function formatRulesContent(rules) {
+            let content = '';
+            
+            rules.sections.forEach(section => {
+                content += `<div class="rules-section">
+                    <h3 class="rules-section-title">${section.title}</h3>
+                    <ul class="rules-list">`;
+                
+                section.rules.forEach(rule => {
+                    content += `<li class="rules-item">${rule}</li>`;
+                });
+                
+                content += `</ul></div>`;
+            });
+            
+            if (rules.emergency_contacts) {
+                content += `<div class="rules-section">
+                    <h3 class="rules-section-title">🚨 Emergency Contacts</h3>
+                    <ul class="contact-list">`;
+                
+                rules.emergency_contacts.forEach(contact => {
+                    content += `<li class="contact-item">
+                        <strong>${contact.service}:</strong> ${contact.number}
+                        <br><small>${contact.description}</small>
+                    </li>`;
+                });
+                
+                content += `</ul></div>`;
+            }
+            
+            if (rules.helpful_contacts) {
+                content += `<div class="rules-section">
+                    <h3 class="rules-section-title">📞 Helpful Contacts</h3>
+                    <ul class="contact-list">`;
+                
+                rules.helpful_contacts.forEach(contact => {
+                    content += `<li class="contact-item">
+                        <strong>${contact.service}:</strong> ${contact.contact}
+                        <br><small>${contact.description}</small>
+                    </li>`;
+                });
+                
+                content += `</ul></div>`;
+            }
+            
+            if (rules.alternatives) {
+                content += `<div class="rules-section">
+                    <h3 class="rules-section-title">${rules.alternatives.title}</h3>
+                    <ul class="rules-list">`;
+                
+                rules.alternatives.options.forEach(option => {
+                    content += `<li class="rules-item">${option}</li>`;
+                });
+                
+                content += `</ul></div>`;
+            }
+            
+            content += `<div class="rules-footer">
+                <small>Last updated: ${rules.last_updated}</small>
+            </div>`;
+            
+            return content;
+        }
+
+        // Show rules modal
+        function showRulesModal(title, content) {
+            const modal = document.createElement('div');
+            modal.className = 'rules-modal';
+            modal.innerHTML = `
+                <div class="rules-modal-content">
+                    <div class="rules-header">
+                        <h2 class="rules-title">${title}</h2>
+                        <button class="rules-close" onclick="this.closest('.rules-modal').remove()">×</button>
+                    </div>
+                    <div class="rules-body">
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Show favorites (placeholder)
+        function showFavorites() {
+            showRulesModal('Favorites', '<p>Favorites feature coming soon! You\'ll be able to save your preferred grilling spots here.</p>');
         }
 
         // Utility functions
