@@ -47,37 +47,47 @@
         }
 
         :root {
-            /* Brand Colors */
-            --primary-color: #059669;
-            --primary-light: #10b981;
-            --primary-dark: #047857;
-            --primary-surface: #ecfdf5;
-            --primary-border: #d1fae5;
+            /* Enhanced Brand Colors - Cohesive Green Theme */
+            --primary-color: #2d5a27;
+            --primary-light: #4ade80;
+            --primary-dark: #1a3d16;
+            --primary-surface: #f0fdf4;
+            --primary-border: #bbf7d0;
             
-            /* Semantic Colors */
-            --success-color: #059669;
-            --success-light: #ecfdf5;
-            --warning-color: #d97706;
-            --warning-light: #fef3c7;
+            /* Semantic Colors with Better Contrast */
+            --success-color: #2d5a27;
+            --success-light: #f0fdf4;
+            --success-border: #bbf7d0;
+            
+            --warning-color: #ea580c;
+            --warning-light: #fff7ed;
+            --warning-border: #fed7aa;
+            
             --error-color: #dc2626;
             --error-light: #fef2f2;
-            --info-color: #0284c7;
+            --error-border: #fecaca;
+            
+            --info-color: #0369a1;
             --info-light: #f0f9ff;
+            --info-border: #bae6fd;
             
-            /* Neutral Colors */
-            --background-color: #fafafa;
+            /* Neutral Colors - Lighter & More Accessible */
+            --background-color: #fefefe;
             --surface-color: #ffffff;
-            --surface-elevated: #f8fafc;
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
-            --border-color: #e5e7eb;
-            --border-light: #f3f4f6;
+            --surface-elevated: #f8f9fa;
+            --modal-background: #ffffff;
+            --modal-overlay: rgba(15, 23, 42, 0.4);
             
-            /* Shadows & Effects */
-            --shadow-light: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-medium: 0 4px 12px rgba(0,0,0,0.15);
-            --shadow-large: 0 10px 25px rgba(0,0,0,0.15);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            /* Enhanced Shadows & Effects */
+            --shadow-light: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-medium: 0 4px 12px rgba(15, 23, 42, 0.12);
+            --shadow-large: 0 10px 30px rgba(15, 23, 42, 0.15);
             --border-radius: 8px;
             --border-radius-large: 12px;
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -384,29 +394,31 @@
             .install-prompt { bottom: 90px; }
         }
 
-        /* Rules Modal Styles */
+        /* Rules Modal Styles - Light & Accessible */
         .rules-modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--modal-overlay);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2000;
             padding: 1rem;
+            backdrop-filter: blur(4px);
         }
 
         .rules-modal-content {
-            background: var(--surface-color);
-            border-radius: var(--border-radius);
-            max-width: 600px;
-            max-height: 80vh;
+            background: var(--modal-background);
+            border-radius: var(--border-radius-large);
+            max-width: 650px;
+            max-height: 85vh;
             width: 100%;
             overflow: hidden;
-            box-shadow: var(--shadow-medium);
+            box-shadow: var(--shadow-large);
+            border: 1px solid var(--border-color);
         }
 
         .rules-header {
@@ -452,46 +464,100 @@
 
         .rules-section {
             margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
         .rules-section-title {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 0.25rem;
+            margin: 0;
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0;
+        }
+
+        /* Section-specific styling */
+        .rules-section.allowed {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+        }
+
+        .rules-section.allowed .rules-section-title {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .rules-section.prohibited {
+            background: var(--error-light);
+            border: 1px solid var(--error-border);
+        }
+
+        .rules-section.prohibited .rules-section-title {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .rules-section.safety {
+            background: var(--warning-light);
+            border: 1px solid var(--warning-border);
+        }
+
+        .rules-section.safety .rules-section-title {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .rules-section.info {
+            background: var(--info-light);
+            border: 1px solid var(--info-border);
+        }
+
+        .rules-section.info .rules-section-title {
+            background: var(--info-color);
+            color: white;
         }
 
         .rules-list {
             list-style: none;
-            padding: 0;
+            padding: 1rem;
             margin: 0;
         }
 
         .rules-item {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 0.9rem;
-            line-height: 1.4;
+            line-height: 1.5;
+            color: var(--text-primary);
         }
 
         .rules-item:last-child {
             border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .rules-item:first-child {
+            padding-top: 0;
         }
 
         .contact-list {
             list-style: none;
-            padding: 0;
+            padding: 1rem;
             margin: 0;
         }
 
         .contact-item {
-            padding: 0.75rem;
-            background: var(--surface-elevated);
-            margin-bottom: 0.5rem;
-            border-radius: 6px;
-            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            background: var(--surface-color);
+            margin-bottom: 0.75rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
         }
 
         .rules-footer {
@@ -502,24 +568,32 @@
             color: var(--text-secondary);
         }
 
-        /* Dark mode support */
+        /* Dark mode support - Softer & More Accessible */
         @media (prefers-color-scheme: dark) {
             :root {
-                --background-color: #0f172a;
-                --surface-color: #1e293b;
-                --surface-elevated: #334155;
+                --background-color: #1e293b;
+                --surface-color: #334155;
+                --surface-elevated: #475569;
+                --modal-background: #334155;
+                --modal-overlay: rgba(0, 0, 0, 0.6);
+                
                 --text-primary: #f1f5f9;
                 --text-secondary: #cbd5e1;
                 --text-muted: #94a3b8;
-                --border-color: #475569;
-                --border-light: #64748b;
+                --border-color: #64748b;
+                --border-light: #94a3b8;
                 
-                /* Adjust semantic colors for dark mode */
-                --success-light: #022c22;
-                --warning-light: #451a03;
-                --error-light: #450a0a;
-                --info-light: #0c4a6e;
-                --primary-surface: #022c22;
+                /* Adjust semantic colors for dark mode - softer backgrounds */
+                --success-light: rgba(34, 197, 94, 0.1);
+                --success-border: rgba(34, 197, 94, 0.3);
+                --warning-light: rgba(234, 88, 12, 0.1);
+                --warning-border: rgba(234, 88, 12, 0.3);
+                --error-light: rgba(220, 38, 38, 0.1);
+                --error-border: rgba(220, 38, 38, 0.3);
+                --info-light: rgba(3, 105, 161, 0.1);
+                --info-border: rgba(3, 105, 161, 0.3);
+                --primary-surface: rgba(45, 90, 39, 0.1);
+                --primary-border: rgba(45, 90, 39, 0.3);
             }
         }
 
@@ -550,7 +624,7 @@
     <div class="header">
         <h1>🔥 GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v6.2.0 • Updated February 6, 2025 • Improved Color System</div>
+        <div class="version-display">v6.3.0 • Updated February 6, 2025 • Enhanced UX & Accessibility</div>
     </div>
 
     <!-- Map Container -->
@@ -1072,7 +1146,23 @@
             let content = '';
             
             rules.sections.forEach(section => {
-                content += `<div class="rules-section">
+                // Determine section type based on title for semantic styling
+                let sectionClass = 'rules-section';
+                const title = section.title.toLowerCase();
+                
+                if (title.includes('where you can grill') || title.includes('allowed') || title.includes('permitted')) {
+                    sectionClass += ' allowed';
+                } else if (title.includes('prohibited') || title.includes('forbidden') || title.includes('not allowed')) {
+                    sectionClass += ' prohibited';
+                } else if (title.includes('fire safety') || title.includes('safety') || title.includes('precautions')) {
+                    sectionClass += ' safety';
+                } else if (title.includes('environment') || title.includes('protection') || title.includes('clean up')) {
+                    sectionClass += ' info';
+                } else {
+                    sectionClass += ' info';
+                }
+                
+                content += `<div class="${sectionClass}">
                     <h3 class="rules-section-title">${section.title}</h3>
                     <ul class="rules-list">`;
                 
@@ -1084,7 +1174,7 @@
             });
             
             if (rules.emergency_contacts) {
-                content += `<div class="rules-section">
+                content += `<div class="rules-section safety">
                     <h3 class="rules-section-title">🚨 Emergency Contacts</h3>
                     <ul class="contact-list">`;
                 
@@ -1099,7 +1189,7 @@
             }
             
             if (rules.helpful_contacts) {
-                content += `<div class="rules-section">
+                content += `<div class="rules-section info">
                     <h3 class="rules-section-title">📞 Helpful Contacts</h3>
                     <ul class="contact-list">`;
                 
@@ -1114,7 +1204,7 @@
             }
             
             if (rules.alternatives) {
-                content += `<div class="rules-section">
+                content += `<div class="rules-section info">
                     <h3 class="rules-section-title">${rules.alternatives.title}</h3>
                     <ul class="rules-list">`;
                 
