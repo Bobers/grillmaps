@@ -626,11 +626,8 @@
         }
 
         // Mapbox Configuration
-        // Use appropriate token based on environment
-        const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        mapboxgl.accessToken = isLocalDev 
-            ? 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmM4cncxdDA3d3EycnNhanRibmx1dzUifQ._oSYl_KFeLzwHsWboHvwqQ' // Local dev only
-            : 'pk.eyJ1IjoiYm9iZXIzIiwiYSI6ImNsOXFyazg1NzBqZGMzcHByZnI3NnBiYXQifQ.8JCNLsKrAT_nQwE0_p3lMQ'; // Production
+        // Use token that works for grillmaps.vercel.app
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmM4cncxdDA3d3EycnNhanRibmx1dzUifQ._oSYl_KFeLzwHsWboHvwqQ';
 
         // Application State with PWA Features
         let map = null;
