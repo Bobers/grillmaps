@@ -612,6 +612,20 @@
                 border: 2px solid var(--success-color);
             }
         }
+
+        /* Grill icon styling */
+        .custom-marker img {
+            filter: contrast(1.1) brightness(0.9);
+        }
+
+        .custom-marker:hover {
+            transform: scale(1.1);
+            transition: var(--transition);
+        }
+
+        .header img {
+            filter: brightness(0) invert(1);
+        }
     </style>
 </head>
 <body>
@@ -622,9 +636,9 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>🔥 GrillMaps Berlin</h1>
+        <h1><img src="/icons/grill-icon.png" alt="Grill" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: middle;"> GrillMaps Berlin</h1>
         <p>Verified grilling spots for expats - your trusted source</p>
-        <div class="version-display">v6.3.0 • Updated February 6, 2025 • Enhanced UX & Accessibility</div>
+        <div class="version-display">v6.3.1 • Updated February 6, 2025 • Custom Grill Icons</div>
     </div>
 
     <!-- Map Container -->
@@ -1030,14 +1044,22 @@
                     return;
                 }
                 
-                // Create custom marker
+                // Create custom marker with grill icon
                 const el = document.createElement('div');
                 el.className = 'custom-marker';
-                el.innerHTML = '🔥';
+                el.innerHTML = `<img src="/icons/grill-icon.png" alt="Grill" style="width: 24px; height: 24px;">`;
                 el.style.cssText = `
-                    font-size: 24px;
                     cursor: pointer;
                     user-select: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: white;
+                    border: 2px solid var(--primary-color);
+                    border-radius: 50%;
+                    width: 32px;
+                    height: 32px;
+                    box-shadow: var(--shadow-medium);
                 `;
                 
                 // Create marker WITHOUT automatic popup
@@ -1083,7 +1105,7 @@
                         <span class="trust-indicator official">📋 Official Berlin Data</span>
                     </div>
                     <div class="popup-content">
-                        <div class="equipment-info">🔥 Official Grilling Zone</div>
+                        <div class="equipment-info"><img src="/icons/grill-icon.png" alt="Grill" style="width: 16px; height: 16px; margin-right: 6px; vertical-align: middle;"> Official Grilling Zone</div>
                         ${districtInfo ? `<div class="location-detail">${districtInfo}</div>` : ''}
                         ${addressInfo ? `<div class="address-detail">${addressInfo}</div>` : ''}
                         <div class="description">${props.description || 'Government-designated grilling area in Berlin.'}</div>
