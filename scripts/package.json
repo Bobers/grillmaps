@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "name": "grillmaps-scripts",
-  "version": "1.0.0",
-  "description": "Data fetching scripts for GrillMaps"
-}
