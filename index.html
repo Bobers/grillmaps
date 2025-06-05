@@ -1,743 +1,789 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>GrillMaps Berlin - Verified Grilling Spots for Expats</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA Theme Colors -->
+    <meta name="theme-color" content="#22c55e">
+    <meta name="msapplication-TileColor" content="#22c55e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="GrillMaps">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.svg">
+    
+    <!-- Mapbox GL JS - Current Version -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css' rel='stylesheet' />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/data/official-grilling-areas.json" as="fetch" crossorigin>
+    <link rel="preload" href="/icons/icon-192x192.svg" as="image">
+    
+    <!-- Meta Tags for Social Sharing -->
+    <meta name="description" content="The most reliable grilling guide for Berlin expats. Manually verified locations with expat-specific tips. Works offline as a PWA.">
+    <meta property="og:title" content="GrillMaps Berlin - Verified Grilling Spots">
+    <meta property="og:description" content="Find legal grilling spots in Berlin. Curated for expats, by expats. Install as app for offline access.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/icons/icon-512x512.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+    
     <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #22c55e;
+            --primary-dark: #16a34a;
+            --secondary-color: #f59e0b;
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-medium: 0 4px 12px rgba(0,0,0,0.15);
+            --border-radius: 8px;
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            background: var(--background-color);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overscroll-behavior: none;
+        }
+
+        /* PWA Install Button */
+        .install-prompt {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .install-prompt:hover {
+            background: var(--primary-dark);
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        /* Header with PWA Features */
         .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-bottom: 0.25rem;
+        }
+
+        .version-display {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* Connection Status Indicator */
+        .connection-status {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .connection-status.show {
+            transform: translateY(0);
+        }
+
+        .connection-status.online {
+            background: var(--primary-color);
+        }
+
+        /* Enhanced Map Container */
+        #map {
+            width: 100%;
+            height: calc(100vh - 100px);
+            position: relative;
+            touch-action: pan-x pan-y;
+        }
+
+        /* Bottom Navigation (PWA Pattern) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            padding: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+        }
+
+        .nav-item:hover {
+            background: #f3f4f6;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            background: #dcfce7;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Enhanced Loading State with Skeleton */
+        .loading-overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-        .header h1 { margin: 0; font-size: 1.5rem; }
-        .legend {
-            position: absolute;
-            bottom: 40px;
-            right: 10px;
-            background: rgba(255,255,255,0.9);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 0.8rem;
-        }
-        .legend-item {
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
         }
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            margin-right: 8px;
-            display: inline-block;
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
         }
-        .mapboxgl-popup {
-            max-width: 320px;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Enhanced Popup Styles */
         .mapboxgl-popup-content {
             padding: 0;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        /* Enhanced popup styles for location markers */
-        .grillmap-popup {
-            padding: 16px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
             font-family: inherit;
-            max-width: 300px;
+            max-width: 320px;
+            background: var(--surface-color);
         }
-        
+
+        .grillmap-popup {
+            padding: 1rem;
+        }
+
         .popup-header {
-            margin-bottom: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 10px;
+            margin-bottom: 0.75rem;
         }
-        
+
         .popup-title {
-            color: #22c55e;
+            color: var(--primary-color);
             font-weight: 600;
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            line-height: 1.3;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.2;
         }
-        
+
         .trust-indicator {
             background: #dcfce7;
             color: #166534;
-            padding: 4px 8px;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.8rem;
             display: inline-block;
             font-weight: 500;
         }
-        
+
         .trust-indicator.official {
             background: #fef3c7;
             color: #92400e;
         }
-        
+
         .popup-content {
-            margin-bottom: 12px;
+            margin-bottom: 0.75rem;
         }
-        
+
         .equipment-info {
             font-size: 0.9rem;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             font-weight: 500;
-            color: #374151;
+            color: var(--text-primary);
         }
-        
+
         .description {
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
             line-height: 1.4;
-            color: #4b5563;
         }
-        
+
         .expat-notes {
-            background: #fef3c7;
-            border-left: 3px solid #f59e0b;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 0.85rem;
-            line-height: 1.4;
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+            padding: 0.5rem;
+            margin: 0.75rem 0;
+            font-size: 0.8rem;
             border-radius: 0 4px 4px 0;
         }
-        
+
         .expat-notes strong {
-            color: #92400e;
+            color: #0369a1;
+            display: block;
+            margin-bottom: 0.25rem;
         }
-        
-        .address-section {
-            margin: 12px 0;
-        }
-        
-        .address-label {
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            color: #374151;
-        }
-        
-        .address-text {
-            background: #f3f4f6;
-            padding: 8px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            line-height: 1.3;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .copy-button {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            width: 100%;
-        }
-        
-        .copy-button:hover {
-            background: #16a34a;
-        }
-        
-        .copy-button:active {
-            transform: translateY(1px);
-        }
-        
-        .source-link {
-            margin: 10px 0;
-        }
-        
-        .source-link a {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .source-link a:hover {
-            text-decoration: underline;
-        }
-        
-        .popup-footer {
-            border-top: 1px solid #e5e7eb;
-            padding-top: 8px;
-        }
-        
-        .meta-info {
-            font-size: 0.75rem;
-            color: #6b7280;
-            text-align: center;
-        }
-        
-        /* Enhanced popup sections */
-        .grilling-rules {
-            margin: 12px 0;
-            padding: 10px;
-            background: #fef3c7;
-            border-left: 3px solid #f59e0b;
-            border-radius: 0 4px 4px 0;
-        }
-        
-        .grilling-rules h4 {
-            margin: 0 0 8px 0;
-            font-size: 0.9rem;
-            color: #92400e;
-            font-weight: 600;
-        }
-        
-        .rule-item {
-            margin-bottom: 4px;
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-        
-        .rule-item strong {
-            color: #92400e;
-        }
-        
-        .info-section {
-            margin: 12px 0;
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .info-section h4 {
-            margin: 0 0 10px 0;
-            font-size: 0.9rem;
-            color: #374151;
-            font-weight: 600;
-        }
-        
-        .official-info {
-            margin: 12px 0;
-        }
-        
-        .info-item {
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-        
-        .info-item strong {
-            color: #374151;
-        }
-        
-        .official-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        
-        .official-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Hover popup styling */
-        .hover-popup .mapboxgl-popup-content {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #f97316;
-            border-radius: 8px;
-        }
-        
-        /* Mobile responsive styles */
+
+        /* Enhanced responsive design */
         @media (max-width: 768px) {
-            .header {
-                padding: 0.75rem;
+            .header h1 { font-size: 1.2rem; }
+            .header p { font-size: 0.8rem; }
+            #map { 
+                height: calc(100vh - 140px); /* Account for bottom nav */
             }
-            
-            .header h1 {
-                font-size: 1.2rem;
-                margin-bottom: 0.25rem;
-            }
-            
-            .header p {
-                font-size: 0.8rem;
-                margin: 0.25rem 0 0 0;
-            }
-            
-            .header div {
-                font-size: 0.7rem;
-            }
-            
-            .legend {
-                bottom: 20px;
-                right: 5px;
-                font-size: 0.75rem;
-                padding: 8px;
-                max-width: 180px;
-            }
-            
-            .legend-item {
-                margin-bottom: 3px;
-            }
-            
-            .mapboxgl-popup {
-                max-width: 280px;
-            }
-            
-            .grillmap-popup {
-                padding: 12px;
-                max-width: 260px;
-            }
-            
-            .popup-title {
-                font-size: 1rem;
-            }
-            
-            .copy-button {
-                padding: 10px 12px;
-                font-size: 0.9rem;
+            .mapboxgl-popup-content { max-width: 280px; }
+        }
+
+        @media (max-width: 480px) {
+            .header { padding: 0.75rem; }
+            #map { height: calc(100vh - 130px); }
+            .install-prompt { bottom: 90px; }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #111827;
+                --surface-color: #1f2937;
+                --text-primary: #f9fafb;
+                --text-secondary: #d1d5db;
+                --border-color: #374151;
             }
         }
-        
-        @media (max-width: 480px) {
-            .header {
-                padding: 0.5rem;
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
-            
-            .header h1 {
-                font-size: 1.1rem;
-            }
-            
-            .header p {
-                font-size: 0.75rem;
-            }
-            
-            .legend {
-                bottom: 10px;
-                right: 5px;
-                font-size: 0.7rem;
-                padding: 6px;
-                max-width: 160px;
-            }
-            
-            .mapboxgl-popup {
-                max-width: 260px;
-            }
-            
-            .grillmap-popup {
-                padding: 10px;
-                max-width: 240px;
-            }
-            
-            .popup-title {
-                font-size: 0.95rem;
-                line-height: 1.2;
-            }
-            
-            .equipment-info, .description {
-                font-size: 0.85rem;
-            }
-            
-            .info-item {
-                font-size: 0.8rem;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .trust-indicator {
+                border: 2px solid #166534;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Connection Status -->
+    <div class="connection-status" id="connectionStatus">
+        📱 You're offline - some features may be limited
+    </div>
+
+    <!-- Header -->
     <div class="header">
-        <h1>🏛️ Official Berlin Grilling Areas</h1>
-        <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.9rem;">Government-designated grilling zones - your authoritative source</p>
-        <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.2.1 • Updated June 4, 2025 • Enhanced popup design</div>
+        <h1>🔥 GrillMaps Berlin</h1>
+        <p>Verified grilling spots for expats - your trusted source</p>
+        <div class="version-display">v6.0.0 • Updated January 31, 2025 • PWA Enhanced</div>
     </div>
-    <div id="map"></div>
-    
-    <div class="legend">
-        <div style="font-weight: 600; margin-bottom: 8px;">🏛️ Official Berlin Grilling Areas</div>
-        <div class="legend-item">
-            <span class="legend-color" style="background-color: #f97316; opacity: 0.7;"></span>
-            <span>Designated Grilling Zone</span>
-        </div>
-        <div class="legend-item">
-            <div style="width: 20px; height: 20px; background: white; border: 2px solid #ea580c; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="#f97316" stroke="#ea580c" stroke-width="2">
-                    <ellipse cx="12" cy="16" rx="6" ry="2"/>
-                    <path d="M10 12 Q12 8 14 12" stroke="#f97316" stroke-width="1" fill="none"/>
-                </svg>
-            </div>
-            <span>Grill Location Marker</span>
-        </div>
-        <div style="margin-top: 12px; font-size: 0.75rem; color: #666;">
-            <div>Data Source: Senatsverwaltung Berlin</div>
-            <div>License: dl-zero-de/2.0</div>
+
+    <!-- Map Container -->
+    <div id="map">
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Berlin grilling spots...</div>
         </div>
     </div>
-    
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-action="map">
+            <div class="nav-icon">🗺️</div>
+            <div class="nav-label">Map</div>
+        </div>
+        <div class="nav-item" data-action="favorites">
+            <div class="nav-icon">❤️</div>
+            <div class="nav-label">Favorites</div>
+        </div>
+        <div class="nav-item" data-action="nearby">
+            <div class="nav-icon">📍</div>
+            <div class="nav-label">Nearby</div>
+        </div>
+        <div class="nav-item" data-action="settings">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-label">Settings</div>
+        </div>
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <button class="install-prompt" id="installPrompt">
+        <span>📱</span>
+        <span>Install GrillMaps App</span>
+    </button>
+
+    <!-- Enhanced JavaScript with PWA Features -->
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M5czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
-        
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [13.4050, 52.5200],
-            zoom: 10.5,
-            projection: 'mercator'
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw/service-worker.js');
+                    console.log('SW registered:', registration);
+                    
+                    // Listen for service worker updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Show update available notification
+                                showUpdateNotification();
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.log('SW registration failed:', error);
+                }
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
         });
-        
-        // Add navigation controls
-        map.addControl(new mapboxgl.NavigationControl());
-        
-        map.on('load', async () => {
-            console.log('Map loaded - loading official Berlin grilling data');
-            
-            // Load and display official Berlin grilling areas
+
+        document.getElementById('installPrompt').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to install prompt: ${outcome}`);
+                deferredPrompt = null;
+                document.getElementById('installPrompt').classList.remove('show');
+            }
+        });
+
+        // Connection Status Monitoring
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connectionStatus');
+            if (navigator.onLine) {
+                statusElement.textContent = '🌐 Back online - all features available';
+                statusElement.classList.add('online');
+                statusElement.classList.add('show');
+                setTimeout(() => statusElement.classList.remove('show'), 3000);
+            } else {
+                statusElement.textContent = '📱 You\'re offline - cached spots still available';
+                statusElement.classList.remove('online');
+                statusElement.classList.add('show');
+            }
+        }
+
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+
+        // Initialize connection status
+        if (!navigator.onLine) {
+            updateConnectionStatus();
+        }
+
+        // Mapbox Configuration
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXIzIiwiYSI6ImNsOXFyazg1NzBqZGMzcHByZnI3NnBiYXQifQ.8JCNLsKrAT_nQwE0_p3lMQ';
+
+        // Application State with PWA Features
+        let map = null;
+        let currentPopup = null;
+        let locations = [];
+        let userLocation = null;
+        let favorites = JSON.parse(localStorage.getItem('grillmaps-favorites') || '[]');
+
+        // Enhanced App Initialization
+        async function initializeApp() {
             try {
-                const officialAreasResponse = await fetch('./data/official-grilling-areas.json');
-                const officialAreasData = await officialAreasResponse.json();
+                showLoading(true);
                 
-                // Add official areas source
-                map.addSource('official-areas', {
-                    'type': 'geojson',
-                    'data': officialAreasData
+                // Load location data with offline fallback
+                locations = await loadLocationData();
+                
+                // Initialize map with enhanced error handling
+                map = await createEnhancedMap();
+                
+                // Add map controls and features
+                addMapControls(map);
+                setupMapInteractions(map);
+                
+                // Add markers after map loads
+                map.on('load', () => {
+                    addMarkersToMap(map, locations);
+                    showLoading(false);
+                    
+                    // Track PWA usage
+                    trackPWAUsage();
                 });
                 
-                // Add official areas fill layer (distinctive orange color)
-                map.addLayer({
-                    'id': 'official-areas-fill',
-                    'type': 'fill',
-                    'source': 'official-areas',
-                    'paint': {
-                        'fill-color': '#f97316',
-                        'fill-opacity': 0.7
+                // Enhanced error handling
+                map.on('error', (e) => {
+                    console.error('Map error:', e);
+                    if (navigator.onLine) {
+                        showError('Map failed to load. Please refresh the page.');
+                    } else {
+                        showError('Map requires internet connection for initial load.');
                     }
                 });
                 
-                // Add official areas outline
-                map.addLayer({
-                    'id': 'official-areas-outline',
-                    'type': 'line',
-                    'source': 'official-areas',
-                    'paint': {
-                        'line-color': '#ea580c',
-                        'line-width': 2,
-                        'line-opacity': 0.8
-                    }
-                });
+                // Setup bottom navigation
+                setupBottomNavigation();
                 
-                // Add click handler for official areas
-                map.on('click', 'official-areas-fill', (e) => {
-                    const properties = e.features[0].properties;
-                    
-                    const popupHTML = createOfficialAreaPopupHTML(properties);
-                    
-                    new mapboxgl.Popup({
-                        maxWidth: '320px'
-                    })
-                        .setLngLat(e.lngLat)
-                        .setHTML(popupHTML)
-                        .addTo(map);
-                    
-                    // Stop event propagation
-                    e.stopPropagation();
-                });
+            } catch (error) {
+                console.error('App initialization failed:', error);
+                showError(error.message);
+            }
+        }
+
+        // Enhanced data loading with offline support
+        async function loadLocationData() {
+            try {
+                // Try network first
+                const response = await fetch('./data/official-grilling-areas.json');
                 
-                // Add hover effects for official areas
-                map.on('mouseenter', 'official-areas-fill', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                    map.setPaintProperty('official-areas-fill', 'fill-opacity', 0.8);
-                });
+                if (!response.ok) {
+                    throw new Error(`Failed to load location data (${response.status})`);
+                }
                 
-                map.on('mouseleave', 'official-areas-fill', () => {
-                    map.getCanvas().style.cursor = '';
-                    map.setPaintProperty('official-areas-fill', 'fill-opacity', 0.7);
-                });
+                const data = await response.json();
                 
-                // Add grill icons at the center of each area
-                officialAreasData.features.forEach(feature => {
-                    const center = getPolygonCenter(feature.geometry);
+                if (!data.features || !Array.isArray(data.features)) {
+                    throw new Error('Invalid location data format');
+                }
+                
+                console.log(`Loaded ${data.features.length} grilling locations`);
+                return data.features;
+                
+            } catch (error) {
+                console.error('Data loading failed:', error);
+                throw new Error('Unable to load grilling locations. Please check your connection.');
+            }
+        }
+
+        // Enhanced map creation
+        function createEnhancedMap() {
+            return new Promise((resolve, reject) => {
+                try {
+                    const mapInstance = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v11',
+                        center: [13.4050, 52.5200], // Berlin center
+                        zoom: 11,
+                        attributionControl: true,
+                        pitchWithRotate: false,
+                        touchZoomRotate: true,
+                        doubleClickZoom: true,
+                        scrollZoom: true,
+                        dragPan: true,
+                        touchPitch: false
+                    });
                     
-                    // Create custom grill icon marker
-                    const grillIcon = createGrillIconElement();
+                    // Handle map load success
+                    mapInstance.on('load', () => {
+                        resolve(mapInstance);
+                    });
                     
-                    // Create popup for the marker
-                    const popup = new mapboxgl.Popup({ 
-                        offset: 25,
-                        closeButton: true,
-                        closeOnClick: false,
-                        maxWidth: '320px'
-                    }).setHTML(createOfficialAreaPopupHTML(feature.properties));
+                    // Handle map load errors
+                    mapInstance.on('error', (error) => {
+                        reject(error);
+                    });
                     
-                    // Add marker with click popup
-                    const marker = new mapboxgl.Marker({
-                        element: grillIcon,
-                        anchor: 'center'
-                    })
-                    .setLngLat(center)
+                    // Set timeout for map loading
+                    setTimeout(() => {
+                        reject(new Error('Map loading timeout'));
+                    }, 10000);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+
+        // Bottom navigation setup
+        function setupBottomNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                    
+                    // Handle navigation
+                    const action = item.dataset.action;
+                    handleNavigation(action);
+                });
+            });
+        }
+
+        // Navigation handler
+        function handleNavigation(action) {
+            switch(action) {
+                case 'map':
+                    // Already on map view
+                    break;
+                case 'favorites':
+                    showFavorites();
+                    break;
+                case 'nearby':
+                    findNearbySpots();
+                    break;
+                case 'settings':
+                    showSettings();
+                    break;
+            }
+        }
+
+        // Add map controls
+        function addMapControls(map) {
+            // Add navigation control
+            map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+            
+            // Add geolocate control
+            const geolocate = new mapboxgl.GeolocateControl({
+                positionOptions: { enableHighAccuracy: true },
+                trackUserLocation: true,
+                showUserHeading: true
+            });
+            map.addControl(geolocate, 'top-right');
+            
+            geolocate.on('geolocate', (e) => {
+                userLocation = [e.coords.longitude, e.coords.latitude];
+            });
+        }
+
+        // Setup map interactions
+        function setupMapInteractions(map) {
+            map.on('click', (e) => {
+                // Close any open popups when clicking on map
+                if (currentPopup) {
+                    currentPopup.remove();
+                    currentPopup = null;
+                }
+            });
+        }
+
+        // Add markers to map
+        function addMarkersToMap(map, locations) {
+            locations.forEach((location, index) => {
+                const popup = createPopupContent(location);
+                
+                // Create custom marker
+                const el = document.createElement('div');
+                el.className = 'custom-marker';
+                el.innerHTML = '🔥';
+                el.style.cssText = `
+                    font-size: 24px;
+                    cursor: pointer;
+                    user-select: none;
+                `;
+                
+                const marker = new mapboxgl.Marker(el)
+                    .setLngLat(location.geometry.coordinates)
                     .setPopup(popup)
                     .addTo(map);
-                    
-                    // Simple click-only popup behavior (no hover complications)
-                });
                 
-                console.log(`✅ Added ${officialAreasData.features.length} official grilling areas with icons`);
-            } catch (error) {
-                console.error('❌ Error loading official grilling areas:', error);
-            }
-        });
-        
-        // Function to create enhanced popup HTML for official grilling areas
-        function createOfficialAreaPopupHTML(properties) {
-            const original = properties.metadata?.original_properties || {};
+                // Store popup reference
+                el.addEventListener('click', () => {
+                    if (currentPopup) currentPopup.remove();
+                    currentPopup = popup;
+                });
+            });
+        }
+
+        // Create popup content
+        function createPopupContent(location) {
+            const props = location.properties;
             
-            return `
+            const popupHTML = `
                 <div class="grillmap-popup">
                     <div class="popup-header">
-                        <h3 class="popup-title">${escapeHTML(extractLocationName(properties, original))}</h3>
-                        <div class="trust-indicator">🏛️ Official Berlin Area</div>
+                        <h3 class="popup-title">${props.name || 'Grilling Area'}</h3>
+                        <span class="trust-indicator official">📋 Official Berlin Data</span>
                     </div>
-                    
                     <div class="popup-content">
-                        <div class="equipment-info">🔥 ${escapeHTML(original.grillarea || 'Official Grilling Zone')}</div>
-                        <div class="description">Designated grilling area managed by ${escapeHTML(properties.authority)}</div>
-                        
-                        ${createGrillingRulesSection(original)}
-                        
-                        <div class="address-section">
-                            <div class="address-label">📍 Location:</div>
-                            <div class="address-text">${escapeHTML(properties.address)}</div>
-                            <button class="copy-button" onclick="copyAddressToClipboard('${escapeHTML(properties.address).replace(/'/g, "\\'")}')">
-                                📋 Copy Address for Navigation
-                            </button>
-                        </div>
-                        
-                        <div class="official-info">
-                            <div class="info-section">
-                                <h4>📋 Grilling Information</h4>
-                                <div class="info-item"><strong>District:</strong> ${escapeHTML(properties.district)}</div>
-                                <div class="info-item"><strong>Fee Required:</strong> ${properties.fee_required ? 'Yes' : 'Free'}</div>
-                                <div class="info-item"><strong>Reservation:</strong> ${properties.reservation_required ? 'Required' : 'Walk-in allowed'}</div>
-                                <div class="info-item"><strong>Grill Type:</strong> ${escapeHTML(original.grillarea || 'Designated area')}</div>
+                        <div class="equipment-info">🔥 Official Grilling Zone</div>
+                        <div class="description">${props.description || 'Government-designated grilling area in Berlin.'}</div>
+                        ${props.expat_notes ? `
+                            <div class="expat-notes">
+                                <strong>💡 Expat Tips:</strong>
+                                ${props.expat_notes}
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="popup-footer">
-                        ${original.regeln ? `
-                            <a href="${escapeHTML(original.regeln)}" target="_blank" rel="noopener noreferrer" class="official-link">
-                                📋 Official Rules & Guidelines →
-                            </a>
                         ` : ''}
-                        <div class="meta-info">
-                            Official ID: ${properties.official_id}<br>
-                            Last Updated: ${properties.last_updated}
-                        </div>
                     </div>
                 </div>
             `;
-        }
-        
-        // Helper functions for popup content
-        function extractLocationName(properties, original) {
-            if (original.bezeichn && original.adresse) {
-                return `${original.bezeichn} - ${original.adresse}`;
-            }
-            return properties.address || properties.name || 'Official Grilling Area';
-        }
-        
-        function createGrillingRulesSection(original) {
-            if (!original.grillarea) return '';
             
-            return `
-                <div class="grilling-rules">
-                    <h4>🔥 Grilling Rules</h4>
-                    <div class="rule-item">
-                        <strong>Area Type:</strong> ${escapeHTML(original.grillarea)}
-                    </div>
-                    <div class="rule-item">
-                        <strong>Booking:</strong> ${original.buchen && original.buchen !== '-' ? escapeHTML(original.buchen) : 'Not required'}
-                    </div>
-                    ${original.gebuehr ? `
-                        <div class="rule-item">
-                            <strong>Fees:</strong> ${escapeHTML(original.gebuehr === 'nein' ? 'Free' : original.gebuehr)}
-                        </div>
-                    ` : ''}
+            return new mapboxgl.Popup({
+                closeButton: true,
+                closeOnClick: false,
+                maxWidth: '320px'
+            }).setHTML(popupHTML);
+        }
+
+        // Utility functions
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = show ? 'flex' : 'none';
+        }
+
+        function showError(message) {
+            showLoading(false);
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.innerHTML = `
+                <div style="text-align: center; color: #dc2626;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                    <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Error</div>
+                    <div style="font-size: 0.9rem;">${message}</div>
+                    <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #22c55e; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
                 </div>
             `;
+            overlay.style.display = 'flex';
         }
-        
-        // Function to create exact Berlin grill icon (based on official WMS rendering)
-        function createGrillIconElement() {
-            const iconDiv = document.createElement('div');
-            
-            // Responsive icon size
-            const isMobile = window.innerWidth <= 768;
-            const iconSize = isMobile ? 36 : 28;
-            
-            iconDiv.style.cssText = `
-                width: ${iconSize}px;
-                height: ${iconSize}px;
-                background: white;
-                border: 1px solid #ddd;
-                border-radius: 2px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                transition: transform 0.2s ease;
+
+        function showUpdateNotification() {
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: #22c55e; color: white; padding: 1rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 2000;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">Update Available</div>
+                    <div style="font-size: 0.9rem; margin-bottom: 1rem;">A new version of GrillMaps is ready!</div>
+                    <button onclick="location.reload()" style="background: white; color: #22c55e; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; cursor: pointer;">Update Now</button>
+                </div>
             `;
-            
-            // Exact recreation of Berlin's official grill icon from WMS map rendering
-            iconDiv.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 20 20" style="display: block;">
-                    <!-- Flames on top (3 wavy lines as seen in official map) -->
-                    <path d="M6 4 Q6.5 2 7 4 Q7.5 2 8 4" fill="none" stroke="#000" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M9 3 Q9.5 1 10 3 Q10.5 1 11 3" fill="none" stroke="#000" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M12 4 Q12.5 2 13 4 Q13.5 2 14 4" fill="none" stroke="#000" stroke-width="1.2" stroke-linecap="round"/>
-                    
-                    <!-- Grill body (filled circle as seen in official rendering) -->
-                    <circle cx="10" cy="10" r="4" fill="#000"/>
-                    
-                    <!-- Grill legs (two angled lines) -->
-                    <line x1="6.5" y1="14" x2="4" y2="17" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="13.5" y1="14" x2="16" y2="17" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-            `;
-            
-            // Simple hover effect (just visual scaling)
-            iconDiv.addEventListener('mouseenter', () => {
-                iconDiv.style.transform = 'scale(1.1)';
-            });
-            
-            iconDiv.addEventListener('mouseleave', () => {
-                iconDiv.style.transform = 'scale(1)';
-            });
-            
-            return iconDiv;
-        }
-        
-        // Function to calculate polygon center
-        function getPolygonCenter(geometry) {
-            if (geometry.type === 'Point') {
-                return geometry.coordinates;
-            }
-            
-            if (geometry.type === 'Polygon') {
-                const coordinates = geometry.coordinates[0];
-                let x = 0, y = 0;
-                const numPoints = coordinates.length - 1; // Exclude last point (same as first)
-                
-                for (let i = 0; i < numPoints; i++) {
-                    x += coordinates[i][0];
-                    y += coordinates[i][1];
-                }
-                
-                return [x / numPoints, y / numPoints];
-            }
-            
-            if (geometry.type === 'MultiPolygon') {
-                // Use the first polygon's center
-                const firstPolygon = geometry.coordinates[0][0];
-                let x = 0, y = 0;
-                const numPoints = firstPolygon.length - 1;
-                
-                for (let i = 0; i < numPoints; i++) {
-                    x += firstPolygon[i][0];
-                    y += firstPolygon[i][1];
-                }
-                
-                return [x / numPoints, y / numPoints];
-            }
-            
-            return [0, 0]; // fallback
-        }
-        
-        function escapeHTML(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // Enhanced copy to clipboard functionality
-        async function copyAddressToClipboard(address) {
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    await navigator.clipboard.writeText(address);
-                    showCopyFeedback('📋 Address copied!');
-                } else {
-                    // Fallback for older browsers
-                    const textArea = document.createElement('textarea');
-                    textArea.value = address;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    textArea.style.top = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    
-                    try {
-                        document.execCommand('copy');
-                        showCopyFeedback('📋 Address copied!');
-                    } catch (err) {
-                        showCopyFeedback('⚠️ Copy failed - please copy manually');
-                    }
-                    
-                    document.body.removeChild(textArea);
-                }
-            } catch (error) {
-                console.error('Copy failed:', error);
-                showCopyFeedback('⚠️ Copy failed - please copy manually');
-            }
-        }
-        
-        function showCopyFeedback(message) {
-            // Create or update feedback element
-            let feedback = document.getElementById('copy-feedback');
-            if (!feedback) {
-                feedback = document.createElement('div');
-                feedback.id = 'copy-feedback';
-                feedback.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: #22c55e;
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 500;
-                    z-index: 10000;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                `;
-                document.body.appendChild(feedback);
-            }
-            
-            feedback.textContent = message;
-            feedback.style.opacity = '1';
+            document.body.appendChild(notification);
             
             setTimeout(() => {
-                feedback.style.opacity = '0';
-            }, 2000);
+                notification.remove();
+            }, 10000);
         }
+
+        // PWA usage tracking
+        function trackPWAUsage() {
+            // Track if app is installed
+            if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('App is running as PWA');
+            }
+            
+            // Track app start
+            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                console.log('App loaded from service worker');
+            }
+        }
+
+        // Placeholder functions for navigation
+        function showFavorites() {
+            console.log('Favorites feature coming soon!');
+        }
+
+        function findNearbySpots() {
+            if (userLocation && map) {
+                map.flyTo({ center: userLocation, zoom: 14 });
+            } else {
+                console.log('Enable location to find nearby spots');
+            }
+        }
+
+        function showSettings() {
+            console.log('Settings feature coming soon!');
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>

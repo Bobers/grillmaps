@@ -2,17 +2,18 @@
 
 ## Essential Commands
 
-### After Making Updates
+### Git Commands (When Ready to Deploy)
 ```bash
-# ALWAYS UPDATE VERSION FIRST (in index.html header)
-# Then run after making changes
+# Optional: Update version in index.html header first
+# When you're ready to save changes:
 git add .
 git commit -m "Description of changes"
+
+# When you're ready to deploy to live site:
 git push origin main
 ```
 
-### IMPORTANT RULE
-**ALWAYS UPDATE THE VERSION NUMBER** in index.html header after every change:
+### Version Update Guidelines
 - Find: `<div style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">v5.1.0`
 - Update: Increment version (v5.1.0 → v5.1.1 for fixes, v5.2.0 for features, v6.0.0 for major changes)
 
@@ -52,13 +53,16 @@ grillmaps/
 ```
 
 ### Important Notes
-- **Always commit and push after changes** - this deploys to live site
+- **Push to deploy** - `git push` deploys changes to the live site
 - Local server required for development (not file://)
 - Mapbox token is configured in index.html
 - Live site: https://grillmaps.vercel.app
 
-### Quick Deploy Command
+### Quick Commands
 ```bash
-# One-liner for commit and push
-git add . && git commit -m "Update: $(date)" && git push origin main
+# Save changes locally (doesn't deploy)
+git add . && git commit -m "Update: $(date)"
+
+# Deploy to live site when ready
+git push origin main
 ```
