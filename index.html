@@ -23,6 +23,12 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css' rel='stylesheet' />
     
+    <!-- Vercel Analytics (Privacy-First Mode) -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    
     <!-- Preload Critical Resources -->
     <link rel="preload" href="/data/official-grilling-areas.json" as="fetch" crossorigin>
     <link rel="preload" href="/icons/icon-192x192.svg" as="image">
@@ -1271,7 +1277,7 @@
                         <span style="font-size: 1.2rem;">🔒</span>
                         <strong style="color: #16a34a; margin-left: 0.5rem;">Privacy-First Design</strong>
                         <div style="font-size: 0.9rem; color: #374151; margin-top: 0.25rem;">
-                            No tracking • No cookies • No data collection
+                            No tracking • No cookies • Anonymous analytics only
                         </div>
                     </div>
                     
