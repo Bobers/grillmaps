@@ -235,7 +235,7 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Tempelhofer Feld - Tempelhofer Damm Entrance",
         "district": "Tempelhof-Schöneberg",
         "address": "Grillbereich Tempelhofer Feld - Eingang Tempelhofer Damm",
         "official_id": "official-1",
@@ -403,7 +403,7 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Tempelhofer Feld - Columbiadamm Entrance",
         "district": "Tempelhof-Schöneberg",
         "address": "Grillbereich Tempelhofer Feld - Eingang Columbiadamm",
         "official_id": "official-2",
@@ -563,7 +563,7 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Rudolf-Mosse-Straße Grilling Area",
         "district": "Charlottenburg-Wilmersdorf",
         "address": "Rudolf-Mosse-Straße 6",
         "official_id": "official-3",
@@ -627,16 +627,16 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Volkspark Friedrichshain - Cafe Neuer Hain",
         "district": "Friedrichshain-Kreuzberg",
         "address": "Volkspark Friedrichshain am Cafe Neuer Hain",
         "official_id": "official-4",
         "grill_type": "unknown",
         "access_type": "public",
-        "fee_required": false,
-        "reservation_required": false,
+        "fee_required": true,
+        "reservation_required": true,
         "rules_url": null,
-        "booking_url": null,
+        "booking_url": "https://www.neuer-hain.de/grillen-im-volkspark",
         "authority": "Cafe Neuer Hain",
         "data_source": "official_berlin_wfs",
         "last_updated": "2025-06-04",
@@ -707,7 +707,7 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Görlitzer Park - Designated Grilling Area",
         "district": "Friedrichshain-Kreuzberg",
         "address": "Görlitzer Park - Wiese gegenüber dem Kunstrasensportplatz und gegenüber dem Rodelhügel ",
         "official_id": "official-5",
@@ -775,7 +775,7 @@
         ]
       },
       "properties": {
-        "name": "Grilling Area",
+        "name": "Blücherplatz - Waterloo-Ufer Area",
         "district": "Friedrichshain-Kreuzberg",
         "address": "Blücherplatz -Wiese zwischen Waterloo-Ufer und Zossener Straße",
         "official_id": "official-6",

@@ -1095,6 +1095,8 @@
                 (props.fee_required ? '💰 Fee required' : '🆓 Free access') : '';
             const reservationInfo = props.reservation_required !== undefined ?
                 (props.reservation_required ? '📅 Reservation required' : '🚶‍♂️ Walk-in allowed') : '';
+            const bookingInfo = props.booking_url ? 
+                `<a href="${props.booking_url}" target="_blank" rel="noopener" style="color: #16a34a; text-decoration: none; font-weight: 500;">🔗 Book online</a>` : '';
             const lastUpdated = props.last_updated ? `🔄 Updated: ${props.last_updated}` : '';
             
             const popupHTML = `
@@ -1112,6 +1114,7 @@
                         <div class="info-grid">
                             ${feeInfo ? `<div class="info-item">${feeInfo}</div>` : ''}
                             ${reservationInfo ? `<div class="info-item">${reservationInfo}</div>` : ''}
+                            ${bookingInfo ? `<div class="info-item">${bookingInfo}</div>` : ''}
                             ${authorityInfo ? `<div class="info-item">${authorityInfo}</div>` : ''}
                         </div>
                         
