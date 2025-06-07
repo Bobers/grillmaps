@@ -651,15 +651,7 @@
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active" data-action="map">
-            <div class="nav-icon">🗺️</div>
-            <div class="nav-label">Map</div>
-        </div>
-        <div class="nav-item" data-action="favorites">
-            <div class="nav-icon">❤️</div>
-            <div class="nav-label">Favorites</div>
-        </div>
-        <div class="nav-item" data-action="general-rules">
+        <div class="nav-item active" data-action="general-rules">
             <div class="nav-icon">📋</div>
             <div class="nav-label">General Rules</div>
         </div>
@@ -888,12 +880,6 @@
         // Navigation handler
         function handleNavigation(action) {
             switch(action) {
-                case 'map':
-                    // Already on map view
-                    break;
-                case 'favorites':
-                    showFavorites();
-                    break;
                 case 'general-rules':
                     showGeneralRules();
                     break;
@@ -1277,11 +1263,6 @@
             });
         }
 
-        // Show favorites (placeholder)
-        function showFavorites() {
-            showRulesModal('Favorites', '<p>Favorites feature coming soon! You\'ll be able to save your preferred grilling spots here.</p>');
-        }
-
         // Show legal pages
         function showLegalPages() {
             const content = `
@@ -1368,21 +1349,13 @@
             }
         }
 
-        // Placeholder functions for navigation
-        function showFavorites() {
-            console.log('Favorites feature coming soon!');
-        }
-
+        // Utility function for nearby spots
         function findNearbySpots() {
             if (userLocation && map) {
                 map.flyTo({ center: userLocation, zoom: 14 });
             } else {
                 console.log('Enable location to find nearby spots');
             }
-        }
-
-        function showSettings() {
-            console.log('Settings feature coming soon!');
         }
 
         // Initialize app when page loads
