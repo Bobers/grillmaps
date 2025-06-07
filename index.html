@@ -24,6 +24,9 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css' rel='stylesheet' />
     
     <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
     <script defer src="/_vercel/insights/script.js"></script>
     
     <!-- Preload Critical Resources -->
@@ -1361,8 +1364,20 @@
             }
         }
 
+        // Initialize Vercel Analytics
+        function initVercelAnalytics() {
+            // Track page view
+            if (window.va) {
+                window.va('pageview');
+            }
+        }
+
         // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            // Initialize analytics after a short delay to ensure script is loaded
+            setTimeout(initVercelAnalytics, 100);
+        });
     </script>
 </body>
 </html>
