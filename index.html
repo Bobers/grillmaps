@@ -667,6 +667,10 @@
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Private Property</div>
         </div>
+        <div class="nav-item" data-action="legal">
+            <div class="nav-icon">⚖️</div>
+            <div class="nav-label">Legal</div>
+        </div>
     </div>
 
     <!-- PWA Install Prompt -->
@@ -895,6 +899,9 @@
                     break;
                 case 'private-rules':
                     showPrivatePropertyRules();
+                    break;
+                case 'legal':
+                    showLegalPages();
                     break;
             }
         }
@@ -1275,6 +1282,43 @@
             showRulesModal('Favorites', '<p>Favorites feature coming soon! You\'ll be able to save your preferred grilling spots here.</p>');
         }
 
+        // Show legal pages
+        function showLegalPages() {
+            const content = `
+                <div class="legal-links-modal">
+                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: #dcfce7; border-radius: 8px; text-align: center;">
+                        <span style="font-size: 1.2rem;">🔒</span>
+                        <strong style="color: #16a34a; margin-left: 0.5rem;">Privacy-First Design</strong>
+                        <div style="font-size: 0.9rem; color: #374151; margin-top: 0.25rem;">
+                            No tracking • No cookies • No data collection
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <a href="/legal/impressum.html" style="display: block; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #374151; transition: background-color 0.2s;">
+                            <strong style="color: #16a34a;">📋 Impressum</strong><br>
+                            <small>Legal notice (required by German law)</small>
+                        </a>
+                        
+                        <a href="/legal/privacy-policy.html" style="display: block; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #374151; transition: background-color 0.2s;">
+                            <strong style="color: #16a34a;">🔒 Privacy Policy</strong><br>
+                            <small>How we protect your privacy</small>
+                        </a>
+                        
+                        <a href="/legal/terms-of-service.html" style="display: block; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #374151; transition: background-color 0.2s;">
+                            <strong style="color: #16a34a;">📜 Terms of Service</strong><br>
+                            <small>Terms and conditions of use</small>
+                        </a>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: center; color: #9ca3af; font-size: 0.8rem;">
+                        © 2025 GrillMaps Berlin. Made with 🔥 for the Berlin community.
+                    </div>
+                </div>
+            `;
+            showRulesModal('Legal Information', content);
+        }
+
         // Utility functions
         function showLoading(show) {
             const overlay = document.getElementById('loadingOverlay');
@@ -1344,26 +1388,5 @@
         // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
-
-    <!-- Legal Footer -->
-    <footer class="legal-footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 2rem 1rem 1rem; margin-top: 3rem; text-align: center;">
-        <div class="privacy-badge" style="background: #dcfce7; border: 2px solid #22c55e; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; display: inline-block;">
-            <span style="font-size: 1.2rem;">🔒</span>
-            <strong style="color: #16a34a; margin-left: 0.5rem;">Privacy-First Design</strong>
-            <div style="font-size: 0.9rem; color: #374151; margin-top: 0.25rem;">
-                No tracking • No cookies • No data collection
-            </div>
-        </div>
-        
-        <div class="legal-links" style="margin-bottom: 1rem;">
-            <a href="/legal/impressum.html" style="margin: 0 1rem; color: #6b7280; text-decoration: none; font-size: 0.9rem;">Impressum</a>
-            <a href="/legal/privacy-policy.html" style="margin: 0 1rem; color: #6b7280; text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
-            <a href="/legal/terms-of-service.html" style="margin: 0 1rem; color: #6b7280; text-decoration: none; font-size: 0.9rem;">Terms of Service</a>
-        </div>
-        
-        <p style="color: #9ca3af; font-size: 0.8rem; margin: 0;">
-            © 2025 GrillMaps Berlin. Made with 🔥 for the Berlin community.
-        </p>
-    </footer>
 </body>
 </html>
