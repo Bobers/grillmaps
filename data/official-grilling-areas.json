@@ -5,7 +5,7 @@
   "source": "Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin",
   "license": "dl-zero-de/2.0",
   "attribution": "© Geoportal Berlin / Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen",
-  "count": 6,
+  "count": 8,
   "features": [
     {
       "type": "Feature",
@@ -805,6 +805,94 @@
         },
         "source_url": "https://daten.berlin.de/datensaetze/grillflachen-wms-aaeff7f1",
         "fetched_at": "2025-06-04T16:43:56.348Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.40140596167626, 52.54396037523398]
+      },
+      "properties": {
+        "name": "Mauerpark - Designated Grilling Area 1",
+        "district": "Pankow",
+        "address": "Mauerpark, Gleimstraße 55, 10437 Berlin",
+        "official_id": "official-7",
+        "grill_type": "charcoal_only",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": "https://www.mauerpark.info/spielregeln/grillen/",
+        "booking_url": null,
+        "authority": "Freunde des Mauerparks e.V.",
+        "data_source": "manual_verification",
+        "last_updated": "2025-06-09",
+        "verification_status": "official",
+        "hours": {
+          "june_september": "12:00-20:00",
+          "july_august": "12:00-21:00"
+        },
+        "expat_notes": "Popular park with weekend flea market. Charcoal grills only, no gas grills allowed. Dispose charcoal in designated ash containers."
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "manual-001",
+          "bezirk": "Pankow",
+          "bezeichn": "Grillbereich",
+          "adresse": "Mauerpark, Gleimstraße 55, 10437 Berlin",
+          "grillarea": "Ausgewiesene Flächen",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://www.mauerpark.info/spielregeln/grillen/",
+          "zustaendig": "Freunde des Mauerparks e.V.",
+          "datum": "2025-06-09"
+        },
+        "source_url": "https://www.mauerpark.info/spielregeln/grillen/",
+        "fetched_at": "2025-06-09T09:53:00.000Z"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.401708315585967, 52.543263405381076]
+      },
+      "properties": {
+        "name": "Mauerpark - Designated Grilling Area 2",
+        "district": "Pankow",
+        "address": "Mauerpark, Gleimstraße 55, 10437 Berlin",
+        "official_id": "official-8",
+        "grill_type": "charcoal_only",
+        "access_type": "public",
+        "fee_required": false,
+        "reservation_required": false,
+        "rules_url": "https://www.mauerpark.info/spielregeln/grillen/",
+        "booking_url": null,
+        "authority": "Freunde des Mauerparks e.V.",
+        "data_source": "manual_verification",
+        "last_updated": "2025-06-09",
+        "verification_status": "official",
+        "hours": {
+          "june_september": "12:00-20:00",
+          "july_august": "12:00-21:00"
+        },
+        "expat_notes": "Second designated grilling area in Mauerpark. Keep distance from trees and shrubs. Only place grills on designated surfaces, not directly on ground."
+      },
+      "metadata": {
+        "original_properties": {
+          "uid": "manual-002",
+          "bezirk": "Pankow",
+          "bezeichn": "Grillbereich",
+          "adresse": "Mauerpark, Gleimstraße 55, 10437 Berlin",
+          "grillarea": "Ausgewiesene Flächen",
+          "gebuehr": "nein",
+          "buchen": "-",
+          "regeln": "https://www.mauerpark.info/spielregeln/grillen/",
+          "zustaendig": "Freunde des Mauerparks e.V.",
+          "datum": "2025-06-09"
+        },
+        "source_url": "https://www.mauerpark.info/spielregeln/grillen/",
+        "fetched_at": "2025-06-09T09:53:00.000Z"
       }
     }
   ]
