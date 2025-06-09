@@ -5,7 +5,7 @@
   "source": "Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen Berlin",
   "license": "dl-zero-de/2.0",
   "attribution": "© Geoportal Berlin / Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen",
-  "count": 9,
+  "count": 8,
   "features": [
     {
       "type": "Feature",
@@ -893,46 +893,6 @@
         },
         "source_url": "https://www.mauerpark.info/spielregeln/grillen/",
         "fetched_at": "2025-06-09T09:53:00.000Z"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [13.396096551805286, 52.523887346068]
-      },
-      "properties": {
-        "name": "Monbijoupark - Designated Grilling Area",
-        "district": "Mitte",
-        "address": "Monbijoupark, Oranienburger Str., 10117 Berlin",
-        "official_id": "official-9",
-        "grill_type": "unknown",
-        "access_type": "public",
-        "fee_required": false,
-        "reservation_required": false,
-        "rules_url": null,
-        "booking_url": null,
-        "authority": "Bezirksamt Mitte von Berlin, Straßen- und Grünflächenamt",
-        "data_source": "manual_verification",
-        "last_updated": "2025-06-09",
-        "verification_status": "official",
-        "expat_notes": "Central location near Museum Island and Hackescher Markt. Popular with families and tourists. Close to Spree river with nice views."
-      },
-      "metadata": {
-        "original_properties": {
-          "uid": "manual-003",
-          "bezirk": "Mitte",
-          "bezeichn": "Grillbereich",
-          "adresse": "Monbijoupark, Oranienburger Str., 10117 Berlin",
-          "grillarea": "Frei wählbar",
-          "gebuehr": "nein",
-          "buchen": "-",
-          "regeln": "https://www.berlin.de/sen/uvk/natur-und-gruen/stadtgruen/oeffentliche-gruen-und-erholungsanlagen/besondere-nutzungen/#Grillen",
-          "zustaendig": "Bezirksamt Mitte von Berlin, Straßen- und Grünflächenamt",
-          "datum": "2025-06-09"
-        },
-        "source_url": "Manual addition based on user verification",
-        "fetched_at": "2025-06-09T10:00:00.000Z"
       }
     }
   ]
