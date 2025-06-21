@@ -1,5 +1,5 @@
 // Service Worker for GrillMaps PWA
-const CACHE_NAME = 'grillmaps-v6.0.0';
+const CACHE_NAME = 'grillmaps-v6.1.0-20250621';
 const OFFLINE_URL = '/sw/offline.html';
 
 // Resources to cache for offline functionality
@@ -8,12 +8,13 @@ const CORE_CACHE_RESOURCES = [
   '/index.html',
   '/manifest.json',
   '/data/official-grilling-areas.json',
-  '/data/locations.json',
-  '/data/bbq-areas.json',
   '/sw/offline.html',
   '/icons/icon-192x192.svg',
   '/icons/icon-512x512.svg',
-  '/icons/favicon.svg'
+  '/icons/favicon.svg',
+  '/blog/',
+  '/blog/index.html',
+  '/blog/ultimate-grilling-guide-berlin.html'
 ];
 
 // Mapbox resources to cache
@@ -122,15 +123,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Background sync for offline data
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'background-sync') {
-    event.waitUntil(
-      // Sync any pending data when connection is restored
-      syncOfflineData()
-    );
-  }
-});
 
 // Push notification handling
 self.addEventListener('push', (event) => {
@@ -175,12 +167,3 @@ self.addEventListener('notificationclick', (event) => {
   }
 });
 
-// Utility function for background sync
-async function syncOfflineData() {
-  try {
-    // Implement any offline data synchronization here
-    console.log('Background sync completed');
-  } catch (error) {
-    console.error('Background sync failed:', error);
-  }
-}
