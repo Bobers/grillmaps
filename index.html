@@ -720,6 +720,10 @@
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Private Property</div>
         </div>
+        <div class="nav-item" data-action="blog">
+            <div class="nav-icon">📖</div>
+            <div class="nav-label">Blog</div>
+        </div>
         <div class="nav-item" data-action="legal">
             <div class="nav-icon">⚖️</div>
             <div class="nav-label">Legal</div>
@@ -946,6 +950,9 @@
                     break;
                 case 'private-rules':
                     showPrivatePropertyRules();
+                    break;
+                case 'blog':
+                    window.location.href = '/blog';
                     break;
                 case 'legal':
                     showLegalPages();
@@ -1413,14 +1420,6 @@
             }
         }
 
-        // Utility function for nearby spots
-        function findNearbySpots() {
-            if (userLocation && map) {
-                map.flyTo({ center: userLocation, zoom: 14 });
-            } else {
-                console.log('Enable location to find nearby spots');
-            }
-        }
 
         // Initialize Vercel Analytics
         function initVercelAnalytics() {

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrillMaps Blog - Grilling Stories & Guides from Berlin</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA Theme Colors -->
+    <meta name="theme-color" content="#22c55e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Stories, guides, and insights about grilling in Berlin. Real experiences from the city's 7 legal grilling spots.">
+    <meta property="og:title" content="GrillMaps Blog - Berlin Grilling Stories">
+    <meta property="og:description" content="Stories, guides, and insights about grilling in Berlin.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/icons/grill-icon.png" type="image/png">
+    
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Brand Colors - Matching main site */
+            --primary-color: #2d5a27;
+            --primary-light: #4ade80;
+            --primary-dark: #1a3d16;
+            --primary-surface: #f0fdf4;
+            --primary-border: #bbf7d0;
+            
+            /* Semantic Colors */
+            --success-color: #2d5a27;
+            --success-light: #f0fdf4;
+            
+            /* Neutral Colors */
+            --background-color: #fefefe;
+            --surface-color: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            
+            /* Effects */
+            --shadow-light: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-medium: 0 4px 12px rgba(15, 23, 42, 0.12);
+            --border-radius: 8px;
+            --border-radius-large: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-light);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .back-to-map {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--primary-surface);
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-to-map:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-surface) 0%, var(--surface-color) 100%);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Article Card */
+        .article-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-large);
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-border);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-surface) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .article-category {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .article-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .read-more:hover {
+            transform: translateX(4px);
+        }
+
+        .read-more-arrow {
+            margin-left: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .article-card:hover .read-more-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Featured Article */
+        .featured-article {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            background: var(--surface-color);
+            border: 2px solid var(--primary-border);
+            border-radius: var(--border-radius-large);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .featured-article .article-title {
+            font-size: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .featured-article {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            
+            .featured-article .article-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/blog" class="logo">
+                <span class="logo-icon">🔥</span>
+                GrillMaps Blog
+            </a>
+            <a href="/" class="back-to-map">
+                ← Back to Map
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Berlin Grilling Stories</h1>
+        <p>Real experiences, practical guides, and the culture of grilling in Berlin's 7 legal spots</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="blog-grid">
+            <!-- Featured Article -->
+            <article class="featured-article">
+                <div>
+                    <span class="featured-badge">Featured Guide</span>
+                    <h2 class="article-title">The Real Berlin Grilling Guide: Where Smoke Signals Create Community</h2>
+                    <p class="article-excerpt">
+                        The smell hits you first. It's Saturday afternoon at Görlitzer Park, and the air is thick with a dozen different smoke signatures. This is Berlin grilling: a UNESCO-worthy intangible cultural heritage disguised as a simple barbecue. Discover the truth about grilling in Berlin's 7 legal spots.
+                    </p>
+                    <div class="article-meta">
+                        <span class="article-category">Ultimate Guide</span>
+                        <span>•</span>
+                        <span>15 min read</span>
+                    </div>
+                    <a href="/blog/ultimate-grilling-guide-berlin.html" class="read-more">
+                        Read the full guide <span class="read-more-arrow">→</span>
+                    </a>
+                </div>
+                <div class="article-image">
+                    🏙️
+                </div>
+            </article>
+
+            <!-- Coming Soon Articles -->
+            <a href="#" class="article-card" style="pointer-events: none; opacity: 0.6;">
+                <div class="article-image">
+                    🌤️
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-category">Coming Soon</span>
+                    </div>
+                    <h2 class="article-title">Surviving Fire Ban Season</h2>
+                    <p class="article-excerpt">
+                        When the Feuerverbot hits, dreams of weekend grilling vanish. Learn how Berlin's grilling community adapts during fire ban periods.
+                    </p>
+                    <span class="read-more">
+                        Coming soon <span class="read-more-arrow">→</span>
+                    </span>
+                </div>
+            </a>
+
+            <a href="#" class="article-card" style="pointer-events: none; opacity: 0.6;">
+                <div class="article-image">
+                    🌍
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-category">Coming Soon</span>
+                    </div>
+                    <h2 class="article-title">The International Grill: Turkish Mangal Meets German Bratwurst</h2>
+                    <p class="article-excerpt">
+                        How Berlin's multicultural grilling scene creates integration one kebab at a time.
+                    </p>
+                    <span class="read-more">
+                        Coming soon <span class="read-more-arrow">→</span>
+                    </span>
+                </div>
+            </a>
+
+            <a href="#" class="article-card" style="pointer-events: none; opacity: 0.6;">
+                <div class="article-image">
+                    ✈️
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span class="article-category">Coming Soon</span>
+                    </div>
+                    <h2 class="article-title">Tempelhofer Feld: Grilling on Hitler's Failed Airport</h2>
+                    <p class="article-excerpt">
+                        The surreal experience of barbecuing where Lufthansa flights once landed.
+                    </p>
+                    <span class="read-more">
+                        Coming soon <span class="read-more-arrow">→</span>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 GrillMaps Berlin. Made with 🔥 for the Berlin grilling community.</p>
+    </footer>
+</body>
+</html>
