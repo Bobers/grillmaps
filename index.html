@@ -187,25 +187,25 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: rgba(255, 255, 255, 0.2);
+            background: #FF5E5B;
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
             text-decoration: none;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .kofi-button:hover {
             transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #e54e4b;
+            box-shadow: 0 4px 16px rgba(255, 94, 91, 0.4);
         }
 
         .kofi-button svg {
@@ -1341,6 +1341,9 @@
                     </div>
                     <div class="rules-body">
                         ${content}
+                    </div>
+                    <div style="border-top: 1px solid #e2e8f0; padding: 1rem 1.5rem; text-align: center; font-size: 0.8rem; color: #64748b;">
+                        GrillMaps is free and community-supported. <a href="https://ko-fi.com/bobers" target="_blank" rel="noopener noreferrer" style="color: #FF5E5B; font-weight: 600; text-decoration: none;">Buy me a coffee ☕</a> to keep it running.
                     </div>
                 </div>
             `;
