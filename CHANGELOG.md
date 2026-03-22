@@ -1,5 +1,17 @@
 # GrillMaps Berlin — Changelog
 
+## v6.5.0 — 2026-03-22
+
+### Fixed
+- Geolocation button no longer permanently disabled (GRILL-7)
+  - `Permissions-Policy` header had `geolocation=()` blocking the browser API entirely
+  - Changed to `geolocation=(self)` — browser now prompts user for location permission when clicking the button
+
+### Tickets closed
+- GRILL-7: Geolocation button permanently disabled
+
+---
+
 ## v6.4.0 — 2026-03-22
 
 ### Added
