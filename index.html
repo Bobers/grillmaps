@@ -19,6 +19,16 @@
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.svg">
     
+    <!-- Sentry Error Monitoring -->
+    <script src="https://browser.sentry-cdn.com/10.45.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        Sentry.init({
+            dsn: "https://028ee309c3126ee7f45ba558b0aa1ac0@o4511088453812224.ingest.de.sentry.io/4511088998154320",
+            environment: "production",
+            sendDefaultPii: false,
+        });
+    </script>
+
     <!-- Mapbox GL JS - Current Version -->
     <script src='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css' rel='stylesheet' />
@@ -842,6 +852,7 @@
                 // Enhanced error handling
                 map.on('error', (e) => {
                     console.error('Map error:', e);
+                    Sentry.captureException(e.error || new Error(e.message || 'Mapbox map error'));
                     showLoading(false);
                     if (navigator.onLine) {
                         showError('Map failed to load. Please refresh the page.');
@@ -881,6 +892,7 @@
                 
             } catch (error) {
                 console.error('Data loading failed:', error);
+                Sentry.captureException(error);
                 throw new Error('Unable to load grilling locations. Please check your connection.');
             }
         }

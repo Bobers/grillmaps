@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Real Berlin Grilling Guide: Where Smoke Signals Create Community | GrillMaps Blog</title>
     
+    <!-- Sentry Error Monitoring -->
+    <script src="https://browser.sentry-cdn.com/10.45.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        Sentry.init({
+            dsn: "https://028ee309c3126ee7f45ba558b0aa1ac0@o4511088453812224.ingest.de.sentry.io/4511088998154320",
+            environment: "production",
+            sendDefaultPii: false,
+        });
+    </script>
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
-    
+
     <!-- PWA Theme Colors -->
     <meta name="theme-color" content="#22c55e">
     <meta name="apple-mobile-web-app-capable" content="yes">

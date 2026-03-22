@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - GrillMaps Berlin</title>
+    <!-- Sentry Error Monitoring -->
+    <script src="https://browser.sentry-cdn.com/10.45.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        Sentry.init({
+            dsn: "https://028ee309c3126ee7f45ba558b0aa1ac0@o4511088453812224.ingest.de.sentry.io/4511088998154320",
+            environment: "production",
+            sendDefaultPii: false,
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
@@ -153,6 +162,16 @@
             <li><strong>Data processed:</strong> Server requests, IP addresses (anonymized), performance metrics</li>
             <li><strong>Privacy Policy:</strong> <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">https://vercel.com/legal/privacy-policy</a></li>
             <li><strong>Legal Basis:</strong> Art. 6(1)(f) GDPR (legitimate interest in service provision)</li>
+        </ul>
+
+        <h3>4.3 Sentry Error Monitoring</h3>
+        <p>We use Sentry to capture technical errors that prevent the app from working correctly. This helps us fix bugs faster.</p>
+        <ul>
+            <li><strong>Data processed:</strong> JavaScript error messages, stack traces, browser type, OS type. No personal data or location data is sent.</li>
+            <li><strong>IP addresses:</strong> Not stored or transmitted (sendDefaultPii: false)</li>
+            <li><strong>Server location:</strong> EU (Frankfurt) — DSGVO compliant</li>
+            <li><strong>Privacy Policy:</strong> <a href="https://sentry.io/privacy/" target="_blank" rel="noopener">https://sentry.io/privacy/</a></li>
+            <li><strong>Legal Basis:</strong> Art. 6(1)(f) GDPR (legitimate interest in maintaining service stability)</li>
         </ul>
 
         <h2>5. What We DON'T Do</h2>

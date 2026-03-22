@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrillMaps - Offline</title>
+    <!-- Sentry Error Monitoring -->
+    <script src="https://browser.sentry-cdn.com/10.45.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        Sentry.init({
+            dsn: "https://028ee309c3126ee7f45ba558b0aa1ac0@o4511088453812224.ingest.de.sentry.io/4511088998154320",
+            environment: "production",
+            sendDefaultPii: false,
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', system-ui, sans-serif;
