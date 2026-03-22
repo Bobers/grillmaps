@@ -1,5 +1,16 @@
 # GrillMaps Berlin — Changelog
 
+## v6.4.0 — 2026-03-22
+
+### Added
+- Ko-fi button in header now uses brand color `#FF5E5B` — clearly visible against green background (GRILL-2)
+- Ko-fi support nudge added to footer of both Rules modals (General Rules + Private Property) (GRILL-2)
+
+### Tickets closed
+- GRILL-2: Ko-fi visibility + Rules modal nudge
+
+---
+
 ## v6.3.0 — 2026-03-22
 
 ### Security

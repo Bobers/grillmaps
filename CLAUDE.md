@@ -7,7 +7,7 @@ Interactive map of official, government-verified grilling spots in Berlin. Targe
 - **Repo:** https://github.com/Bobers/grillmaps
 - **Hosting:** Vercel (auto-deploys on push to `main`, no build step)
 - **Stack:** Vanilla HTML/CSS/JS, Mapbox GL JS v3.12.0, static JSON data files
-- **Version:** v6.3.0 (Updated March 22, 2026)
+- **Version:** v6.4.0 (Updated March 22, 2026)
 
 ## Deployment
 Push to `main` → Vercel auto-deploys. No build command, no npm, no bundler. Static files served as-is.
