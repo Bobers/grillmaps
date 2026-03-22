@@ -1,5 +1,21 @@
 # GrillMaps Berlin — Changelog
 
+## v6.3.0 — 2026-03-22
+
+### Security
+- Hardened CSP headers in `vercel.json` — replaced `default-src *` wildcard with explicit allowlist, removed `unsafe-eval` (GRILL-9)
+- Added `escapeHtml()` to `index.html` — applied to all GeoJSON popup data and rules modal JSON; `booking_url` validated to http/https only (GRILL-10)
+
+### Deferred
+- SRI hashes for CDN scripts (GRILL-11) — needs testing pipeline before shipping
+- Mapbox token domain restriction — caused production outage, needs careful rollout
+
+### Tickets closed
+- GRILL-9: CSP hardening
+- GRILL-10: XSS escaping
+
+---
+
 ## v6.2.0 — 2026-03-22
 
 ### Added
