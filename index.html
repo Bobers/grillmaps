@@ -815,7 +815,7 @@
 
         // Mapbox Configuration
         // Use token that works for grillmaps.vercel.app
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmNqeHdhNjFxZzUya3M1czI3d2VkZnYifQ.U5o08Jy49X6c3eD-6wI0Rg';
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYm9iZXJzIiwiYSI6ImNtYmM4cncxdDA3d3EycnNhanRibmx1dzUifQ._oSYl_KFeLzwHsWboHvwqQ';
 
         // Application State with PWA Features
         let map = null;
@@ -1158,48 +1158,56 @@
             });
         }
 
+        // Escape HTML to prevent XSS when inserting data-driven content into DOM
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text ?? '';
+            return div.innerHTML;
+        }
+
         // Create popup content
         function createPopupContent(location) {
             const props = location.properties;
-            
+
             // Format specific information based on actual data
-            const districtInfo = props.district ? `📍 ${props.district}` : '';
-            const addressInfo = props.address ? `🏠 ${props.address}` : '';
-            const authorityInfo = props.authority ? `🏛️ Managed by: ${props.authority}` : '';
-            const feeInfo = props.fee_required !== undefined ? 
+            const districtInfo = props.district ? `📍 ${escapeHtml(props.district)}` : '';
+            const addressInfo = props.address ? `🏠 ${escapeHtml(props.address)}` : '';
+            const authorityInfo = props.authority ? `🏛️ Managed by: ${escapeHtml(props.authority)}` : '';
+            const feeInfo = props.fee_required !== undefined ?
                 (props.fee_required ? '💰 Fee required' : '🆓 Free access') : '';
             const reservationInfo = props.reservation_required !== undefined ?
                 (props.reservation_required ? '📅 Reservation required' : '🚶‍♂️ Walk-in allowed') : '';
-            const bookingInfo = props.booking_url ? 
-                `<a href="${props.booking_url}" target="_blank" rel="noopener" style="color: #16a34a; text-decoration: none; font-weight: 500;">🔗 Book online</a>` : '';
-            const lastUpdated = props.last_updated ? `🔄 Updated: ${props.last_updated}` : '';
-            
+            const safeBookingUrl = props.booking_url && /^https?:\/\//i.test(props.booking_url) ? props.booking_url : null;
+            const bookingInfo = safeBookingUrl ?
+                `<a href="${escapeHtml(safeBookingUrl)}" target="_blank" rel="noopener" style="color: #16a34a; text-decoration: none; font-weight: 500;">🔗 Book online</a>` : '';
+            const lastUpdated = props.last_updated ? `🔄 Updated: ${escapeHtml(props.last_updated)}` : '';
+
             const popupHTML = `
                 <div class="grillmap-popup">
                     <div class="popup-header">
-                        <h3 class="popup-title">${props.name || 'Grilling Area'}</h3>
+                        <h3 class="popup-title">${escapeHtml(props.name || 'Grilling Area')}</h3>
                         <span class="trust-indicator official">📋 Official Berlin Data</span>
                     </div>
                     <div class="popup-content">
                         <div class="equipment-info"><img src="/icons/grill-icon.png" alt="Grill" style="width: 16px; height: 16px; margin-right: 6px; vertical-align: middle;"> Official Grilling Zone</div>
                         ${districtInfo ? `<div class="location-detail">${districtInfo}</div>` : ''}
                         ${addressInfo ? `<div class="address-detail">${addressInfo}</div>` : ''}
-                        <div class="description">${props.description || 'Government-designated grilling area in Berlin.'}</div>
-                        
+                        <div class="description">${escapeHtml(props.description || 'Government-designated grilling area in Berlin.')}</div>
+
                         <div class="info-grid">
                             ${feeInfo ? `<div class="info-item">${feeInfo}</div>` : ''}
                             ${reservationInfo ? `<div class="info-item">${reservationInfo}</div>` : ''}
                             ${bookingInfo ? `<div class="info-item">${bookingInfo}</div>` : ''}
                             ${authorityInfo ? `<div class="info-item">${authorityInfo}</div>` : ''}
                         </div>
-                        
+
                         ${props.expat_notes ? `
                             <div class="expat-notes">
                                 <strong>💡 Expat Tips:</strong>
-                                ${props.expat_notes}
+                                ${escapeHtml(props.expat_notes)}
                             </div>
                         ` : ''}
-                        
+
                         ${lastUpdated ? `<div class="last-updated">${lastUpdated}</div>` : ''}
                     </div>
                 </div>
@@ -1262,11 +1270,11 @@
                 }
                 
                 content += `<div class="${sectionClass}">
-                    <h3 class="rules-section-title">${section.title}</h3>
+                    <h3 class="rules-section-title">${escapeHtml(section.title)}</h3>
                     <ul class="rules-list">`;
-                
+
                 section.rules.forEach(rule => {
-                    content += `<li class="rules-item">${rule}</li>`;
+                    content += `<li class="rules-item">${escapeHtml(rule)}</li>`;
                 });
                 
                 content += `</ul></div>`;
@@ -1279,8 +1287,8 @@
                 
                 rules.emergency_contacts.forEach(contact => {
                     content += `<li class="contact-item">
-                        <strong>${contact.service}:</strong> ${contact.number}
-                        <br><small>${contact.description}</small>
+                        <strong>${escapeHtml(contact.service)}:</strong> ${escapeHtml(contact.number)}
+                        <br><small>${escapeHtml(contact.description)}</small>
                     </li>`;
                 });
                 
@@ -1294,8 +1302,8 @@
                 
                 rules.helpful_contacts.forEach(contact => {
                     content += `<li class="contact-item">
-                        <strong>${contact.service}:</strong> ${contact.contact}
-                        <br><small>${contact.description}</small>
+                        <strong>${escapeHtml(contact.service)}:</strong> ${escapeHtml(contact.contact)}
+                        <br><small>${escapeHtml(contact.description)}</small>
                     </li>`;
                 });
                 
@@ -1304,18 +1312,18 @@
             
             if (rules.alternatives) {
                 content += `<div class="rules-section info">
-                    <h3 class="rules-section-title">${rules.alternatives.title}</h3>
+                    <h3 class="rules-section-title">${escapeHtml(rules.alternatives.title)}</h3>
                     <ul class="rules-list">`;
-                
+
                 rules.alternatives.options.forEach(option => {
-                    content += `<li class="rules-item">${option}</li>`;
+                    content += `<li class="rules-item">${escapeHtml(option)}</li>`;
                 });
                 
                 content += `</ul></div>`;
             }
             
             content += `<div class="rules-footer">
-                <small>Last updated: ${rules.last_updated}</small>
+                <small>Last updated: ${escapeHtml(rules.last_updated)}</small>
             </div>`;
             
             return content;
@@ -1328,7 +1336,7 @@
             modal.innerHTML = `
                 <div class="rules-modal-content">
                     <div class="rules-header">
-                        <h2 class="rules-title">${title}</h2>
+                        <h2 class="rules-title">${escapeHtml(title)}</h2>
                         <button class="rules-close" onclick="this.closest('.rules-modal').remove()">×</button>
                     </div>
                     <div class="rules-body">
